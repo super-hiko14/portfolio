@@ -1,0 +1,5 @@
+node_modules/
+.env
+aaa.md
+.vercel
+.env*.local
