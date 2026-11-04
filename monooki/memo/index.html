@@ -2,2189 +2,1378 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>文綴</title>
+<meta name="description" content="ブラウザだけで使える、しずかな書きもの帳。見出し・リスト・Todo・ページごとのフォント。">
+<meta name="theme-color" content="#F2F0ED">
+<link rel="icon" type="image/png" href="memo_icons.png">
+<link rel="apple-touch-icon" href="memo_icons.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="icon" href="memo_icons.png">
-<link rel="icon" type="image/png" href="memo_icons.png">
-<link rel="apple-touch-icon" sizes="1440×1440" href="memo_icons.png">
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;700&family=Shippori+Mincho:wght@400;500;700&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@font-face{font-family:"MaruMinya";src:url(/sozai/fonts/x12y12pxMaruMinya.ttf) format("truetype");font-display:swap}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pixel:"MaruMinya","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  --ui:var(--pixel);
+  --side-w:288px; --gap:12px; --kb:0px;
+  --ease:cubic-bezier(.16,.9,.3,1);
+  --danger:#B8474A;
+}
+/* ── themes: super-hiko14.com のミントが基本 ── */
+body[data-theme="parchment"]{--bg:#dcede1;--paper:#fbfcfa;--ink:#1c231e;--line:#607363;--hover:#eaf3ec;--soft:#c5ddcc}
+body[data-theme="moss"]     {--bg:#efeac4;--paper:#fdfcf3;--ink:#24221a;--line:#7a7350;--hover:#f6f2da;--soft:#e2daa5}
+body[data-theme="rose"]     {--bg:#f2dde2;--paper:#fdf9fa;--ink:#2a1d21;--line:#8a6670;--hover:#f8ebee;--soft:#e7c4cc}
+body[data-theme="slate"]    {--bg:#d8e6f2;--paper:#fafcfd;--ink:#1a2129;--line:#5f7387;--hover:#e8f0f7;--soft:#bfd3e6}
+body[data-theme="mono"]     {--bg:#e3e3e3;--paper:#fcfcfc;--ink:#1d1d1d;--line:#6b6b6b;--hover:#efefef;--soft:#d0d0d0}
+body.dark[data-theme="parchment"]{--bg:#111814;--paper:#1a231d;--ink:#e2eee5;--line:#87a18c;--hover:#232f27;--soft:#2f4136}
+body.dark[data-theme="moss"]     {--bg:#16150e;--paper:#211f17;--ink:#efebd5;--line:#a39b72;--hover:#2c2a1f;--soft:#3e3a28}
+body.dark[data-theme="rose"]     {--bg:#171113;--paper:#22191c;--ink:#f3e5e8;--line:#b08c95;--hover:#2e2327;--soft:#433138}
+body.dark[data-theme="slate"]    {--bg:#0f141a;--paper:#182029;--ink:#e2eaf3;--line:#8499ae;--hover:#222c37;--soft:#2e3b4b}
+body.dark[data-theme="mono"]     {--bg:#111111;--paper:#1b1b1b;--ink:#ececec;--line:#8e8e8e;--hover:#272727;--soft:#383838}
 
-:root {
-  --paper:#F7F5F0; --paper2:#F0EDE6;
-  --ink:#2A2820;   --ink2:#7A7670;
-  --ink3:#B8B4AC;  --ink4:#D8D4CC; --line:#E8E4DC;
-  --hover:rgba(42,40,32,.05); --active:rgba(42,40,32,.10);
-  --shadow:rgba(42,40,32,.12); --acc-fg:#F7F5F0;
-  --ui-font:'Zen Kaku Gothic New',sans-serif;
-  --ed-font:'Noto Serif JP',serif;
-  --nav-w:56px;
-  --ease:cubic-bezier(.4,0,.2,1);
-  --safe-b: env(safe-area-inset-bottom, 0px);
-  --safe-l: env(safe-area-inset-left, 0px);
-}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--ui);display:flex;gap:var(--gap);padding:var(--gap);height:100dvh;overflow:hidden;-webkit-tap-highlight-color:transparent;transition:background .3s,color .3s}
+button{font:inherit;color:inherit}
+svg{display:block;flex:none;shape-rendering:crispEdges}
+::selection{background:var(--soft)}
 
-/* ── Light themes ── */
-[data-theme="parchment"]{--paper:#F7F5F0;--paper2:#F0EDE6;--ink:#2A2820;--ink2:#7A7670;--ink3:#B8B4AC;--ink4:#D8D4CC;--line:#E8E4DC;--hover:rgba(42,40,32,.05);--active:rgba(42,40,32,.10);--shadow:rgba(42,40,32,.12);--acc-fg:#F7F5F0;}
-[data-theme="moss"]     {--paper:#F2F5EE;--paper2:#E8EDE2;--ink:#283020;--ink2:#6A7860;--ink3:#AAB4A0;--ink4:#C8D0C0;--line:#DDE4D5;--hover:rgba(40,48,32,.05);--active:rgba(40,48,32,.10);--shadow:rgba(40,48,32,.12);--acc-fg:#F2F5EE;}
-[data-theme="rose"]     {--paper:#FDF6F5;--paper2:#F8EDEB;--ink:#2C1A18;--ink2:#907070;--ink3:#C4A8A5;--ink4:#DECDCA;--line:#EEE0DD;--hover:rgba(44,26,24,.05);--active:rgba(44,26,24,.10);--shadow:rgba(44,26,24,.10);--acc-fg:#FDF6F5;}
-[data-theme="slate"]    {--paper:#EEF0F8;--paper2:#E4E8F4;--ink:#1C2040;--ink2:#606888;--ink3:#A8B0CC;--ink4:#C8CCE0;--line:#D8DCF0;--hover:rgba(28,32,64,.05);--active:rgba(28,32,64,.10);--shadow:rgba(28,32,64,.12);--acc-fg:#EEF0F8;}
-[data-theme="mono"]     {--paper:#F5F5F5;--paper2:#EBEBEB;--ink:#141414;--ink2:#707070;--ink3:#B0B0B0;--ink4:#D0D0D0;--line:#E2E2E2;--hover:rgba(20,20,20,.05);--active:rgba(20,20,20,.10);--shadow:rgba(20,20,20,.12);--acc-fg:#F5F5F5;}
+/* ── ドットの角 (サイトの .card / .chip と同じ作り) ──
+   外側 = 線の色、::before = 中の色。形は JS で作った --px-* を使う */
+.px,.btn,.chip,.opt,.seg>button{position:relative;isolation:isolate;background:var(--edge,var(--line));clip-path:var(--o,var(--px-md-o));transition:background .15s}
+.px::before,.btn::before,.chip::before,.opt::before,.seg>button::before{content:'';position:absolute;inset:0;z-index:-1;background:var(--fill,var(--paper));clip-path:var(--i,var(--px-md-i));transition:background .15s}
+.lg{--o:var(--px-lg-o);--i:var(--px-lg-i)}
 
-/* ── Dark mode overlay ── */
-body.dark {
-  --paper:#141310;  --paper2:#1C1A16;
-  --ink:#E4E0D4;    --ink2:#686460;
-  --ink3:#38362E;   --ink4:#2A2820; --line:#222018;
-  --hover:rgba(228,224,212,.05); --active:rgba(228,224,212,.10);
-  --shadow:rgba(0,0,0,.5); --acc-fg:#141310;
-}
-/* Dark per-theme tints */
-body.dark[data-theme="moss"]  {--paper:#0E1210;--paper2:#141A12;--ink:#C0CEB8;--ink2:#526050;--line:#1A2018;}
-body.dark[data-theme="rose"]  {--paper:#160E0C;--paper2:#1E1412;--ink:#E0C8C4;--ink2:#785858;--line:#221614;}
-body.dark[data-theme="slate"] {--paper:#0C0E1C;--paper2:#121628;--ink:#B8C0E0;--ink2:#505878;--line:#181C30;}
-body.dark[data-theme="mono"]  {--paper:#101010;--paper2:#181818;--ink:#E0E0E0;--ink2:#606060;--line:#1E1E1E;}
+.ic-btn{width:36px;height:36px;display:grid;place-items:center;border:0;background:none;color:var(--line);cursor:pointer;flex:none;clip-path:var(--px-sm-o);transition:background .12s,color .12s}
+.ic-btn:hover{background:var(--hover);color:var(--ink)}
+:focus-visible{outline:2px dashed var(--line);outline-offset:2px}
 
-body {
-  font-family: var(--ui-font);
-  background: var(--paper); color: var(--ink);
-  height: 100dvh; display: flex; overflow: hidden;
-  transition: background .35s var(--ease), color .35s var(--ease);
-}
+/* ── sidebar ── */
+#side{width:var(--side-w);flex:none;display:flex;flex-direction:column;z-index:40;transition:margin .3s var(--ease),transform .3s var(--ease)}
+body.side-closed #side{margin-left:calc(-1 * (var(--side-w) + var(--gap)))}
+.side-head{display:flex;align-items:center;gap:10px;padding:18px 14px 6px 20px}
+.logo{flex:1;display:flex;align-items:center;gap:10px;font-size:24px;line-height:1}
+.logo img{width:28px;height:28px;display:block;image-rendering:pixelated}
+.side-tools{padding:10px 16px 10px;display:flex;flex-direction:column;gap:10px}
+#new-btn{--fill:var(--soft);display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;border:0;font-size:16px;cursor:pointer}
+#new-btn:hover{--edge:var(--ink);--fill:var(--hover)}
+#new-btn:active{transform:translateY(1px)}
+.search{--fill:var(--paper);display:flex;align-items:center;gap:8px;height:42px;padding:0 14px;color:var(--line)}
+.search:focus-within{--edge:var(--ink)}
+#search{flex:1;min-width:0;height:100%;border:0;background:none;color:var(--ink);font:15px var(--ui);outline:none}
+#search::placeholder{color:var(--line);opacity:.8}
+#search::-webkit-search-cancel-button{display:none}
+#list{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--soft) transparent;padding:4px 12px 12px;overscroll-behavior:contain}
+.item{position:relative;display:flex;align-items:center;gap:4px;margin-bottom:2px;padding:10px 40px 10px 6px;cursor:pointer;user-select:none;-webkit-user-select:none;clip-path:var(--px-sm-o);transition:background .12s}
+.item:hover{background:var(--hover)}
+.item.active{background:var(--soft)}
+.grip{width:16px;height:22px;display:grid;place-items:center;color:var(--line);opacity:0;cursor:grab;touch-action:none;flex:none;transition:opacity .15s}
+.item:hover .grip{opacity:1}
+#list.searching .grip{visibility:hidden}
+.item-body{flex:1;min-width:0}
+.item-title{font-size:16px;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.item.untitled .item-title{color:var(--line)}
+.item-sub{font-size:12px;line-height:1.6;color:var(--line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
+.item-del{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:30px;height:30px;display:grid;place-items:center;border:0;background:none;color:var(--line);cursor:pointer;opacity:0;clip-path:var(--px-sm-o);transition:opacity .15s,color .15s,background .15s}
+.item:hover .item-del{opacity:1}
+.item-del:hover{color:var(--danger);background:var(--paper)}
+.item.dragging{opacity:.35}
+.item.drop-before::before,.item.drop-after::after{content:'';position:absolute;left:8px;right:8px;height:4px;background:var(--line)}
+.item.drop-before::before{top:0}.item.drop-after::after{bottom:0}
+.empty-list{padding:28px 8px;text-align:center;font-size:14px;color:var(--line)}
+.side-foot{display:flex;align-items:center;gap:4px;margin:0 4px;padding:10px 10px calc(14px + env(safe-area-inset-bottom));background:linear-gradient(90deg,var(--soft) 50%,transparent 0) top/8px 2px repeat-x}
+#count{flex:1;font-size:13px;color:var(--line);padding-left:8px}
+#side-scrim{display:none}
 
-/* ══════════════════════════════════════
-   DESKTOP LAYOUT
-   ══════════════════════════════════════ */
-#nav {
-  width: var(--nav-w); flex-shrink: 0; height: 100%;
-  display: flex; flex-direction: column; align-items: center;
-  padding: 20px 0; border-right: 1px solid var(--line);
-  background: var(--paper2);
-  transition: background .35s var(--ease), border-color .35s var(--ease);
-  z-index: 10; overflow: hidden;
-}
+/* ── main ── */
+#main{flex:1;min-width:0;display:flex;flex-direction:column}
+#topbar{height:62px;flex:none;display:flex;align-items:center;gap:6px;padding:0 14px}
+#topbar.lined{background:linear-gradient(90deg,var(--soft) 50%,transparent 0) bottom/8px 2px repeat-x}
+#toolbar{--fill:var(--paper);flex:0 1 auto;min-width:0;display:flex;align-items:center;gap:2px;margin-left:4px;padding:5px 7px;overflow-x:auto;scrollbar-width:none}
+#toolbar::-webkit-scrollbar{display:none}
+.tb{min-width:34px;height:34px;padding:0 7px;flex:none;display:grid;place-items:center;border:0;background:none;color:var(--line);font:16px/1 var(--ui);cursor:pointer;touch-action:manipulation;clip-path:var(--px-sm-o);transition:background .12s,color .12s}
+.tb:hover{background:var(--hover);color:var(--ink)}
+.tb.on{background:var(--soft);color:var(--ink)}
+.tb-sep{width:2px;height:16px;background:var(--soft);margin:0 5px;flex:none}
+#saved{margin-left:auto;display:flex;align-items:center;gap:8px;font-size:14px;color:var(--line);padding:0 6px;white-space:nowrap;flex:none}
+#saved::before{content:'';width:6px;height:6px;background:var(--soft);transition:background .2s}
+#saved.saving::before{background:var(--line)}
+#saved.error{color:var(--danger)}#saved.error::before{background:var(--danger)}
+#scroll{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--soft) transparent;overscroll-behavior:contain}
+#paper{max-width:780px;margin:0 auto;padding:40px 56px 45vh}
+#title{display:block;width:100%;border:0;background:none;resize:none;outline:none;overflow:hidden;color:var(--ink);font-family:var(--pixel)!important;font-size:30px;line-height:1.35}
+#title::placeholder{color:var(--line);opacity:.55}
+#meta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 0;margin:12px 0 28px;padding-bottom:20px;font-size:13px;color:var(--line);background:linear-gradient(90deg,var(--soft) 50%,transparent 0) bottom/8px 2px repeat-x}
+#meta>*+*::before{content:'・';margin:0 .5em;color:var(--soft)}
+#font-btn{display:inline-flex;align-items:center;gap:0;border:0;background:none;color:inherit;font-size:13px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:4px}
+#font-btn svg{display:none}
+#font-btn:hover{color:var(--ink)}
 
-.nav-logo {
-  font-size: 17px; font-weight: 700; color: var(--ink);
-  margin-bottom: 22px; flex-shrink: 0;
-  font-family: 'Shippori Mincho', serif; user-select: none;
-}
+/* ── editor ── */
+#area{position:relative;outline:none;font-size:16.5px;line-height:1.9;color:var(--ink);min-height:40vh;word-break:break-word;overflow-wrap:anywhere;caret-color:var(--line);-webkit-touch-callout:none}
+#area.empty::before{content:'ここから書きはじめる…\A\A「# 」見出し　「- 」リスト　「[] 」Todo　「**太字**」';white-space:pre-wrap;position:absolute;top:0;left:0;right:0;color:var(--line);opacity:.75;pointer-events:none;font:15px/1.9 var(--pixel)}
+#area h1,#area h2,#area h3{font-family:var(--pixel);font-weight:normal}
+#area h1{font-size:26px;line-height:1.45;margin:.9em 0 .3em}
+#area h2{font-size:20px;line-height:1.55;margin:.8em 0 .2em}
+#area h3{font-size:17px}
+#area>:first-child{margin-top:0}
+#area blockquote{margin:.5em 0;padding:.5em 1em;background:var(--hover);border-left:4px solid var(--soft);color:var(--ink)}
+#area ul,#area ol{padding-left:1.5em;margin:.15em 0}
+#area ul{list-style:square}
+#area li::marker{color:var(--line)}
+#area ol li::marker{font-family:var(--pixel)}
+#area b,#area strong{font-weight:700}
+#area a{color:var(--line)}
+#area hr{border:0;height:4px;margin:1.4em 0;background:linear-gradient(90deg,var(--soft) 50%,transparent 0) 0 0/8px 4px repeat-x}
+.todo{position:relative;padding-left:1.9em}
+.todo::before{content:'';position:absolute;left:1px;top:7px;width:20px;height:20px;background:var(--line);cursor:pointer;
+  -webkit-mask:var(--chk-off) center/100% 100% no-repeat;mask:var(--chk-off) center/100% 100% no-repeat;transition:background .12s}
+.todo:hover::before{background:var(--ink)}
+.todo[data-checked="true"]::before{-webkit-mask-image:var(--chk-on);mask-image:var(--chk-on)}
+.todo[data-checked="true"]{color:var(--line);text-decoration:line-through;text-decoration-color:var(--line)}
+.todo[data-reset-label]::after{content:'↻ ' attr(data-reset-label);display:inline-block;margin-left:.7em;padding:0 .6em;background:var(--hover);font:12px/1.9 var(--pixel);color:var(--line);vertical-align:.12em;clip-path:var(--px-xs-o);user-select:none;-webkit-user-select:none;pointer-events:none}
 
-#nav-pages {
-  flex: 1; overflow-y: auto; overflow-x: hidden;
-  width: 100%; display: flex; flex-direction: column;
-  align-items: center; gap: 3px; padding: 4px 9px;
-}
-#nav-pages::-webkit-scrollbar { width: 0; }
+/* ── popover menu ── */
+#menu{position:fixed;z-index:60;min-width:220px;padding:10px;display:none}
+#menu.open{display:block;animation:pop .16s var(--ease)}
+.mi{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border:0;background:none;font-size:15px;color:var(--ink);text-align:left;cursor:pointer;clip-path:var(--px-sm-o)}
+.mi:hover{background:var(--hover)}
+.mi svg{color:var(--line)}
+.mi.danger,.mi.danger svg{color:var(--danger)}
+.mi-sep{height:2px;margin:6px 8px;background:linear-gradient(90deg,var(--soft) 50%,transparent 0) 0 0/8px 2px repeat-x}
+@keyframes pop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
 
-.nav-page-wrap { width: 38px; position: relative; flex-shrink: 0; }
+/* ── sheet (modal) ── */
+#sheet-wrap{position:fixed;inset:0;z-index:70;display:none;align-items:center;justify-content:center}
+#sheet-wrap.open{display:flex}
+#sheet-scrim{position:absolute;inset:0;background:color-mix(in srgb,var(--ink) 35%,transparent);animation:fade .2s}
+#sheet{width:min(460px,calc(100% - 32px));max-height:min(680px,86dvh);display:flex;animation:rise .3s var(--ease)}
+#sheet-body{flex:1;overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--soft) transparent;padding:28px 26px 24px}
+@keyframes fade{from{opacity:0}}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}}
+#sheet h3{font-size:22px;font-weight:normal;margin-bottom:8px}
+#sheet .lead{font-size:14px;color:var(--line);line-height:1.8}
+#sheet .lead b{font-weight:normal;color:var(--ink)}
+.sec{font-size:14px;color:var(--line);margin:22px 0 10px}
+.swatches{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.sw{display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 0;border:0;background:none;cursor:pointer;font-size:13px;color:var(--line);clip-path:var(--px-sm-o)}
+.sw:hover{background:var(--hover)}
+.sw i{width:32px;height:32px;display:block;clip-path:var(--px-sm-o)}
+.sw.on{color:var(--ink);background:var(--hover)}
+.sw.on i{box-shadow:inset 0 0 0 4px var(--ink)}
+.seg{display:flex;gap:6px}
+.seg>button{flex:1;height:42px;border:0;font-size:15px;color:var(--line);cursor:pointer}
+.seg>button:hover{--fill:var(--hover)}
+.seg>button.on{--fill:var(--soft);--edge:var(--ink);color:var(--ink)}
+.rows{display:flex;flex-direction:column;gap:6px}
+.row{--o:var(--px-md-o);display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:13px 16px;border:0;background:var(--hover);font-size:15px;text-align:left;cursor:pointer;clip-path:var(--px-md-o);transition:background .12s}
+.row:hover{background:var(--soft)}
+.row .v{color:var(--line);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:center;justify-content:space-between;width:100%;padding:13px 16px;border:0;font-size:15px;text-align:left;cursor:pointer}
+.opt:hover{--fill:var(--hover)}
+.opt.on{--fill:var(--soft);--edge:var(--ink)}
+.opt .chk{color:var(--ink)}
+.note{font-size:13px;line-height:1.85;color:var(--line);background:var(--hover);padding:12px 16px;clip-path:var(--px-md-o)}
+.acts{display:flex;gap:8px;justify-content:flex-end;margin-top:22px;flex-wrap:wrap}
+.acts.split>*{flex:1}
+.btn{height:44px;padding:0 20px;border:0;font-size:16px;cursor:pointer;white-space:nowrap}
+.btn:hover{--edge:var(--ink);--fill:var(--hover)}
+.btn:active{transform:translateY(1px)}
+.btn.primary{--fill:var(--soft)}
+.btn.danger{--edge:var(--danger);--fill:var(--danger);color:#fff}
+.btn.danger:hover{--edge:var(--ink)}
+.input{width:100%;height:48px;padding:0 16px;border:0;background:var(--hover);color:var(--ink);font:16px var(--ui);outline:none;clip-path:var(--px-md-o);box-shadow:inset 0 0 0 3px transparent;transition:box-shadow .15s}
+.input:focus{box-shadow:inset 0 0 0 3px var(--line)}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 15px;border:0;font-size:14px;color:var(--ink);cursor:pointer}
+.chip:hover{--edge:var(--ink);--fill:var(--hover)}
+.chip.on{--fill:var(--soft);--edge:var(--ink)}
+.chip .x{display:grid;place-items:center;width:18px;height:18px;margin-right:-6px;color:var(--line)}
+.chip .x:hover{color:var(--danger)}
 
-.nav-dot {
-  width: 100%; height: 38px; border-radius: 24px;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; transition: background .15s, color .15s;
-  position: relative; color: var(--ink3);
-  border: none; background: none;
-}
-.nav-dot:hover { background: var(--hover); color: var(--ink2); }
-.nav-dot.active { background: var(--active); color: var(--ink); }
-.nav-dot.active::before {
-  content: ''; position: absolute; left: -9px; top: 50%;
-  transform: translateY(-50%); width: 2px; height: 16px;
-  background: var(--ink); border-radius: 1px;
-}
+#toast{position:fixed;left:50%;bottom:calc(28px + var(--kb) + env(safe-area-inset-bottom));transform:translate(-50%,16px);z-index:80;padding:12px 22px;background:var(--ink);color:var(--paper);font-size:15px;opacity:0;pointer-events:none;clip-path:var(--px-md-o);transition:opacity .2s,transform .2s;white-space:nowrap}
+#toast.show{opacity:1;transform:translate(-50%,0)}
 
-/* Tooltip */
-.tip-r::after {
-  content: attr(data-tip);
-  position: absolute; left: calc(100% + 12px); top: 50%;
-  transform: translateY(-50%);
-  background: var(--ink); color: var(--acc-fg);
-  font-size: 11px; font-family: var(--ui-font);
-  white-space: nowrap; padding: 5px 10px; border-radius: 24px;
-  pointer-events: none; opacity: 0; transition: opacity .12s .4s;
-  max-width: 200px; overflow: hidden; text-overflow: ellipsis; z-index: 200;
+/* ── mobile ── */
+@media (max-width:760px){
+  body{padding:0;gap:0;background:var(--paper)}
+  #main{clip-path:none;background:var(--paper)}
+  #main::before{display:none}
+  #side{position:fixed;left:8px;top:8px;bottom:8px;width:min(86vw,340px);margin:0!important;transform:translateX(calc(-100% - 16px));visibility:hidden;transition:transform .3s var(--ease),visibility 0s .3s}
+  body.drawer #side{transform:none;visibility:visible;transition:transform .3s var(--ease)}
+  body.drawer #side-scrim{display:block;position:fixed;inset:0;z-index:35;background:color-mix(in srgb,var(--ink) 35%,transparent);animation:fade .2s}
+  .grip,.item-del{opacity:.7}
+  #topbar{height:56px;padding:0 8px}
+  #toolbar{position:fixed;left:8px;right:8px;bottom:calc(var(--kb) + 8px);z-index:30;margin:0;gap:0;padding:6px 8px;display:none;overflow:hidden;touch-action:none}
+  body.editing #toolbar{display:flex}
+  .tb{flex:1 1 0;min-width:0;height:40px;padding:0}
+  .tb-sep{display:none}
+  #paper{padding:18px 20px 55vh}
+  #title{font-size:26px}
+  #meta{margin-bottom:22px}
+  #sheet-wrap{align-items:flex-end;padding:8px}
+  #sheet{width:100%;max-height:88dvh}
+  #sheet-body{padding-bottom:calc(24px + env(safe-area-inset-bottom))}
 }
-.tip-r:hover::after { opacity: 1; }
-
-/* Desktop Page Popover with Trash */
-#page-popover {
-  position: fixed;
-  transform: translateY(-50%);
-  background: var(--ink); color: var(--acc-fg);
-  border-radius: 24px;
-  display: flex; align-items: center; gap: 8px;
-  padding: 4px 4px 4px 14px;
-  box-shadow: 0 4px 12px var(--shadow);
-  opacity: 0; pointer-events: none;
-  transition: opacity .15s;
-  z-index: 1000;
-}
-#page-popover.show {
-  opacity: 1; pointer-events: all;
-}
-#page-popover::before {
-  content: '';
-  position: absolute;
-  left: -16px; top: 0; bottom: 0; width: 16px;
-  background: transparent;
-}
-.nav-popover-title {
-  font-size: 11px; font-family: var(--ui-font);
-  white-space: nowrap; max-width: 160px;
-  overflow: hidden; text-overflow: ellipsis;
-  cursor: pointer;
-}
-.nav-popover-trash {
-  width: 24px; height: 24px; border-radius: 50%;
-  border: none; background: rgba(255,255,255,0.15);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--acc-fg); cursor: pointer;
-  transition: background .15s, color .15s;
-  flex-shrink: 0;
-}
-.nav-popover-trash:hover {
-  background: #C0392B; color: #fff;
-}
-body.dark .nav-popover-trash {
-  background: rgba(0,0,0,0.12);
-}
-body.dark .nav-popover-trash:hover {
-  background: #C0392B; color: #fff;
-}
-
-/* Drag & Drop */
-.nav-page-wrap.dragging { opacity: 0.2; }
-.mpl-item.dragging { opacity: 0.4; }
-.nav-page-wrap.drop-target-above::before,
-.nav-page-wrap.drop-target-below::after {
-  content: ''; position: absolute; left: 0; right: 0;
-  height: 2px; background: var(--ink); z-index: 10; border-radius: 1px;
-}
-.nav-page-wrap.drop-target-above::before { top: -2px; }
-.nav-page-wrap.drop-target-below::after { bottom: -2px; }
-
-.mpl-item.drag-over { position: relative; }
-.mpl-item.drag-over::before {
-  content: ''; position: absolute; top: -2px; left: 12px; right: 12px;
-  height: 2px; background: var(--ink); z-index: 10; border-radius: 1px;
-}
-
-#nav-add {
-  width: 38px; height: 38px; margin: 2px 9px 0;
-  border-radius: 24px; border: 1.5px dashed var(--ink4);
-  background: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ink3); flex-shrink: 0;
-  transition: border-color .15s, color .15s, background .15s; position: relative;
-}
-#nav-add:hover { border-color: var(--ink2); color: var(--ink2); background: var(--hover); }
-#nav-add::after {
-  content: '新しい記録';
-  position: absolute; left: calc(100% + 12px); top: 50%;
-  transform: translateY(-50%);
-  background: var(--ink); color: var(--acc-fg);
-  font-size: 11px; font-family: var(--ui-font);
-  white-space: nowrap; padding: 5px 10px; border-radius: 24px;
-  pointer-events: none; opacity: 0; transition: opacity .12s .4s; z-index: 200;
-}
-#nav-add:hover::after { opacity: 1; }
-
-#nav-bottom {
-  display: flex; flex-direction: column; align-items: center;
-  gap: 3px; padding: 10px 9px 0;
-  border-top: 1px solid var(--line); margin-top: 8px; width: 100%;
-}
-
-.nav-icon-btn {
-  width: 38px; height: 38px; border-radius: 24px;
-  border: none; background: none; cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ink2); transition: background .15s, color .15s; position: relative;
-}
-.nav-icon-btn:hover { background: var(--hover); color: var(--ink); }
-
-/* ── Main ── */
-#main { flex: 1; display: flex; flex-direction: column; min-width: 0; height: 100%; position: relative; }
-
-/* ── Top bar ── */
-#topbar {
-  position: absolute; top: 0; left: 0; right: 0; height: 44px;
-  display: flex; align-items: center; padding: 0 22px; z-index: 20; gap: 0;
-  pointer-events: none;
-}
-
-#status-left {
-  display: flex; align-items: center; gap: 9px; pointer-events: none;
-}
-.sb-item { font-size: 10px; letter-spacing: .06em; color: var(--ink3); font-family: var(--ui-font); }
-#save-indicator { font-size: 10px; letter-spacing: .1em; color: var(--ink3); opacity: 0; transition: opacity .4s; font-family: var(--ui-font); }
-#save-indicator.show { opacity: 1; }
-.sb-sep { width: 1px; height: 9px; background: var(--line); flex-shrink: 0; }
-
-#fmt-bar {
-  margin-left: auto;
-  display: flex; align-items: center; gap: 1px; pointer-events: all;
-}
-.fmt-btn {
-  height: 26px; min-width: 26px; padding: 0 6px;
-  border: none; background: none; cursor: pointer; border-radius: 24px;
-  color: var(--ink3); font-family: var(--ui-font); font-size: 11px;
-  display: flex; align-items: center; justify-content: center;
-  transition: background .12s, color .12s; line-height: 1; flex-shrink: 0;
-}
-.fmt-btn:hover { background: var(--hover); color: var(--ink2); }
-.fmt-btn:active { background: var(--active); }
-.fmt-btn.is-active { color: var(--ink); background: var(--active); }
-.fmt-sep2 { width: 1px; height: 12px; background: var(--line); margin: 0 2px; flex-shrink: 0; }
-
-/* ── Font chip ── */
-#font-chip {
-  position: absolute; bottom: 18px; right: 22px;
-  display: flex; align-items: center; gap: 6px;
-  padding: 4px 11px; border: 1px solid var(--line); border-radius: 100px;
-  background: var(--paper2); font-size: 10px; letter-spacing: .08em;
-  color: var(--ink2); cursor: pointer; transition: border-color .15s, color .15s;
-  z-index: 20; font-family: var(--ui-font);
-}
-#font-chip:hover { border-color: var(--ink3); color: var(--ink); }
-
-/* Todo elements */
-.todo-wrap {
-  display: inline-flex; align-items: center; justify-content: center;
-  vertical-align: middle; margin: 0 6px 0 2px;
-  line-height: 1;
-  user-select: none; position: relative;
-  width: 20px; min-width: 20px; max-width: 20px;
-  height: 20px; min-height: 20px; max-height: 20px;
-  flex: 0 0 20px;
-  white-space: nowrap;
-  overflow: hidden;
-  -webkit-tap-highlight-color: transparent;
-}
-.todo-check-custom {
-  width: 18px; height: 18px; border: 2px solid var(--ink3);
-  border-radius: 6px; cursor: pointer; transition: all .15s;
-  background: transparent; position: relative; flex-shrink: 0;
-}
-.todo-wrap[data-checked="true"] .todo-check-custom {
-  background: var(--ink); border-color: var(--ink);
-}
-.todo-wrap[data-checked="true"] .todo-check-custom::after {
-  content: ''; position: absolute; left: 4px; top: 1px;
-  width: 5px; height: 9px; border: solid white;
-  border-width: 0 2px 2px 0; transform: rotate(45deg);
-}
-/* Todo設定ギア：デスクトップは左に浮かせる */
-.todo-settings-trigger {
-  display: none !important;
-}
-/* スマホ：設定ギアは非表示（長押しで設定を開く） */
-@media (max-width: 640px) {
-  /* チェックボックス領域を少し大きくしてタップしやすく */
-  .todo-check-custom {
-    width: 22px; height: 22px; border-radius: 7px;
-  }
-  .todo-wrap[data-checked="true"] .todo-check-custom::after {
-    left: 5px; top: 2px; width: 6px; height: 10px;
-  }
-  /* 右側に歯車ボタンが出るスペース確保 */
-  .todo-wrap {
-    width: 22px; min-width: 22px; max-width: 22px;
-    height: 22px; min-height: 22px; max-height: 22px;
-    flex: 0 0 22px;
-    margin: 0 8px 0 2px;
-    vertical-align: middle;
-  }
-}
-
-/* ── Editor ── */
-#editor-scroll { flex: 1; overflow-y: auto; padding: 68px 0 80px; }
-#editor-scroll::-webkit-scrollbar { width: 0; }
-#editor-inner { max-width: 660px; margin: 0 auto; padding: 0 52px; position: relative; }
-
-#hover-menu-container {
-  position: absolute;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: 20px; box-shadow: 0 4px 16px var(--shadow);
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.15s, top 0.1s, left 0.1s, max-width 0.25s cubic-bezier(.4,0,.2,1);
-  z-index: 100; overflow: hidden;
-  height: 38px; max-width: 38px;
-  transform: translateY(-50%);
-  display: flex; align-items: center;
-  -webkit-tap-highlight-color: transparent;
-}
-@media (max-width: 640px) {
-  #hover-menu-container {
-    height: 34px; max-width: 34px; border-radius: 17px;
-    /* スマホ：transform を none にするのはJS側で制御 */
-  }
-  #hover-menu-container.expanded {
-    left: 10px !important; right: 10px !important; 
-    max-width: none !important; width: auto !important;
-    height: auto !important; min-height: 46px; padding: 8px 4px 6px;
-    border-radius: 18px; overflow: visible;
-  }
-}
-
-#hover-menu-container.show { opacity: 1; pointer-events: all; }
-#hover-menu-container.expanded { max-width: 380px; overflow: visible; }
-
-/* Hide menu when mobile panel or modals are open */
-body:has(#mobile-page-panel.open) #hover-menu-container,
-body:has(#modal-overlay.open) #hover-menu-container {
-  display: none !important;
-}
-
-.hm-inner { display: flex; align-items: center; width: max-content; height: 100%; position: relative; }
-@media (max-width: 640px) {
-  .hm-inner { width: 100%; }
-  #hover-menu-container.expanded .hm-inner { width: 100%; flex-wrap: wrap; justify-content: center; align-content: flex-start; padding-top: 0; }
-}
-
-.hm-trigger-icon {
-  width: 38px; height: 38px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--ink3); flex-shrink: 0; cursor: pointer;
-  transition: opacity 0.2s, transform 0.22s cubic-bezier(.4,0,.2,1);
-}
-@media (max-width: 640px) { 
-  .hm-trigger-icon { width: 34px; height: 34px; } 
-  #hover-menu-container.expanded .hm-trigger-icon { 
-    position: absolute; top: 6px; right: 4px; 
-    width: 22px; height: 22px; z-index: 10;
-  }
-}
-#hover-menu-container.expanded .hm-trigger-icon { transform: rotate(180deg); color: var(--ink4); }
-
-.hm-items {
-  display: flex; align-items: center; gap: 2px;
-  padding: 0 8px 0 2px;
-  opacity: 0; width: 0; overflow: hidden; pointer-events: none;
-  transition: opacity 0.18s 0.05s, width 0.25s cubic-bezier(.4,0,.2,1);
-}
-@media (max-width: 640px) {
-  #hover-menu-container.expanded .hm-items {
-    flex-wrap: wrap; justify-content: center;
-    padding: 4px 28px 4px 4px; gap: 4px;
-    width: 100%; overflow: visible;
-  }
-}
-#hover-menu-container.expanded .hm-items { opacity: 1; width: auto; pointer-events: all; overflow: visible; }
-
-.hm-close-icon { display: none; }
-
-#title-input {
-  width: 100%; font-size: clamp(26px,4vw,46px);
-  font-weight: 700; line-height: 1.15; letter-spacing: -0.04em;
-  border: none; outline: none; background: transparent;
-  color: var(--ink); display: block; resize: none; overflow: hidden;
-  font-family: var(--ed-font);
-}
-#title-input::placeholder { color: var(--ink4); }
-
-.editor-divider { width: 20px; height: 1px; background: var(--ink4); margin: 22px 0; border: none; display: block; }
-
-#content-area {
-  width: 100%; min-height: 55vh;
-  font-size: 17px; font-weight: 400; line-height: 2.05; letter-spacing: .02em;
-  color: var(--ink); font-family: var(--ed-font);
-  outline: none; caret-color: var(--ink);
-}
-#content-area:empty::before { content: 'ここから思考が始まります…'; color: var(--ink4); pointer-events: none; }
-#content-area b, #content-area strong { font-weight: 700; }
-#content-area i, #content-area em     { font-style: italic; }
-#content-area u { text-decoration: underline; text-underline-offset: 3px; }
-#content-area s, #content-area strike { text-decoration: line-through; opacity: .65; }
-#content-area h1 { font-size: 1.6em; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; margin: .3em 0 .1em; }
-#content-area h2 { font-size: 1.22em; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; margin: .3em 0 .1em; }
-#content-area blockquote { border-left: 2px solid var(--ink4); padding-left: 14px; color: var(--ink2); font-style: italic; margin: .4em 0; }
-#content-area ul { padding-left: 1.3em; }
-#content-area li { margin: .1em 0; }
-
-/* ══════════════════════════════════════
-   MOBILE LAYOUT  (≤ 640px)
-   ══════════════════════════════════════ */
-@media (max-width: 640px) {
-  body { flex-direction: column; }
-
-  /* Hide desktop sidebar */
-  #nav { display: none; }
-
-  /* Main fills screen, leaves room for bottom bar */
-  #main { height: 100dvh; }
-
-  /* Topbar: compact on mobile */
-  #topbar { padding: 0 14px; height: 40px; }
-  #save-indicator, .sb-sep, #last-modified, #char-count { display: none; }
-
-  /* Fmt bar visible but compact */
-  #fmt-bar { gap: 0; }
-  .fmt-btn { min-width: 22px; height: 26px; padding: 0 4px; font-size: 10px; }
-
-  /* Editor */
-  #editor-scroll { padding: 52px 0 calc(64px + var(--safe-b)); }
-  #editor-inner  { padding: 0 20px; }
-  #title-input   { font-size: clamp(22px, 6vw, 32px); }
-  #content-area  { font-size: 16px; min-height: 50vh; }
-
-  /* Font chip */
-  #font-chip { bottom: calc(64px + var(--safe-b) + 10px); right: 16px; }
-
-  /* ── Bottom nav bar ── */
-  #mobile-bar {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    height: calc(56px + var(--safe-b));
-    padding-bottom: var(--safe-b);
-    background: var(--paper2); border-top: 1px solid var(--line);
-    display: flex; align-items: center; justify-content: space-around;
-    z-index: 100;
-    transition: background .35s var(--ease), border-color .35s var(--ease);
-  }
-
-  .mb-btn {
-    flex: 1; height: 100%; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 3px;
-    border: none; background: none; cursor: pointer; color: var(--ink3);
-    transition: color .15s; -webkit-tap-highlight-color: transparent;
-    padding-top: 4px;
-  }
-  .mb-btn.active { color: var(--ink); }
-  .mb-btn svg { flex-shrink: 0; }
-  .mb-btn span { font-size: 9px; letter-spacing: .04em; font-family: var(--ui-font); line-height: 1; }
-
-  /* Mobile page list panel */
-  #mobile-page-panel {
-    position: fixed; inset: 0; bottom: calc(56px + var(--safe-b));
-    background: var(--paper2); z-index: 90;
-    display: flex; flex-direction: column;
-    transform: translateX(-100%); transition: transform .28s var(--ease);
-  }
-  #mobile-page-panel.open { transform: none; }
-
-  .mpp-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 20px 12px; border-bottom: 1px solid var(--line);
-  }
-  .mpp-title { font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); font-family: var(--ui-font); }
-  .mpp-add {
-    display: flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: 24px;
-    background: var(--ink); color: var(--acc-fg);
-    border: none; cursor: pointer; font-family: var(--ui-font);
-    font-size: 12px; font-weight: 600;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  #mobile-page-list {
-    flex: 1; overflow-y: auto; padding: 8px 12px;
-  }
-  #mobile-page-list::-webkit-scrollbar { width: 0; }
-
-  .mpl-item {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 13px 12px; border-radius: 24px; cursor: pointer;
-    transition: background .15s; margin-bottom: 2px;
-    -webkit-tap-highlight-color: transparent;
-    position: relative;
-  }
-  .mpl-item:hover, .mpl-item:active { background: var(--hover); }
-  .mpl-item.active { background: var(--active); }
-  
-  /* Straight insertion line indicator */
-  .mpl-item.drop-target-above::before,
-  .mpl-item.drop-target-below::after {
-    content: ''; position: absolute; left: 12px; right: 12px;
-    height: 2px; background: var(--ink); z-index: 10;
-    border-radius: 1px;
-  }
-  .mpl-item.drop-target-above::before { top: -2px; }
-  .mpl-item.drop-target-below::after { bottom: -2px; }
-  .mpl-item-title { font-size: 15px; color: var(--ink); font-family: var(--ui-font); flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .mpl-item.active .mpl-item-title { font-weight: 600; }
-  .mpl-trash { background: none; border: none; color: var(--ink3); cursor: pointer; padding: 6px; display: flex; align-items: center; flex-shrink: 0; -webkit-tap-highlight-color: transparent; }
-  .mpl-trash:active { color: #B44; }
-}
-
-/* Hide mobile bar on desktop */
-@media (min-width: 641px) {
-  #mobile-bar { display: none !important; }
-  #mobile-page-panel { display: none !important; }
-}
-
-/* ── Delete confirm modal ── */
-#delete-overlay {
-  display: none; position: fixed; inset: 0; z-index: 400;
-  align-items: center; justify-content: center; padding: 24px;
-}
-#delete-overlay.show { display: flex; }
-#delete-scrim {
-  position: absolute; inset: 0;
-  background: rgba(30,28,22,.22);
-  backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-  animation: scrimIn .2s var(--ease);
-}
-#delete-box {
-  position: relative; z-index: 1;
-  background: var(--paper); border: 1px solid var(--line);
-  border-radius: 24px; padding: 28px 28px 24px;
-  width: 100%; max-width: 320px;
-  box-shadow: 0 8px 40px var(--shadow);
-  animation: popIn .22s cubic-bezier(.34,1.4,.64,1);
-}
-@keyframes popIn { from{opacity:0;transform:scale(.94)}to{opacity:1;transform:none} }
-#del-icon {
-  width: 40px; height: 40px; border-radius: 24px;
-  background: #FEE8E8; display: flex; align-items: center; justify-content: center;
-  margin-bottom: 14px; color: #C0392B;
-}
-body.dark #del-icon { background: rgba(192,57,43,.18); }
-#del-heading { font-size: 15px; font-weight: 700; color: var(--ink); margin-bottom: 6px; font-family: var(--ui-font); }
-#del-body { font-size: 13px; color: var(--ink2); margin-bottom: 22px; font-family: var(--ui-font); line-height: 1.6; }
-#del-body strong { color: var(--ink); font-weight: 600; }
-.del-actions { display: flex; gap: 8px; }
-.del-cancel-btn {
-  flex: 1; padding: 11px; border: 1px solid var(--line);
-  border-radius: 24px; background: none; cursor: pointer;
-  font-family: var(--ui-font); font-size: 13px; font-weight: 500;
-  color: var(--ink2); transition: background .15s, color .15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.del-cancel-btn:hover { background: var(--hover); color: var(--ink); }
-.del-delete-btn {
-  flex: 1; padding: 11px; border: none; border-radius: 24px;
-  background: #C0392B; cursor: pointer;
-  font-family: var(--ui-font); font-size: 13px; font-weight: 600;
-  color: #fff; transition: opacity .15s;
-  -webkit-tap-highlight-color: transparent;
-}
-.del-delete-btn:hover { opacity: .85; }
-
-/* ── Modal ── */
-#modal-overlay { display:none; position:fixed; inset:0; z-index:500; align-items:flex-end; justify-content:center; }
-#modal-overlay.open { display:flex; }
-#modal-scrim { position:absolute; inset:0; background:rgba(30,28,22,.18); backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); animation:scrimIn .2s var(--ease); }
-@keyframes scrimIn { from{opacity:0}to{opacity:1} }
-#modal-box { position:relative; width:100%; max-width:520px; background:var(--paper); border:1px solid var(--line); border-bottom:none; border-radius:20px 20px 0 0; padding:24px 28px calc(32px + var(--safe-b)); animation:drawerUp .26s cubic-bezier(.34,1.3,.64,1); z-index:1; max-height:88dvh; overflow-y:auto; }
-#modal-box::-webkit-scrollbar { width: 0; }
-@keyframes drawerUp { from{transform:translateY(110%)}to{transform:none} }
-.modal-handle { width:30px; height:3px; background:var(--line); border-radius:24px; margin:0 auto 20px; }
-.modal-section-title { font-size:10px; font-weight:600; letter-spacing:.2em; text-transform:uppercase; color:var(--ink3); margin-bottom:12px; font-family:var(--ui-font); }
-.modal-input { width:100%; border:none; border-bottom:1.5px solid var(--ink4); background:transparent; color:var(--ink); font-family:var(--ed-font); font-size:20px; font-weight:400; padding:6px 0 12px; outline:none; transition:border-color .2s; margin-bottom:18px; letter-spacing:-.02em; }
-.modal-input:focus { border-bottom-color:var(--ink); }
-.modal-input::placeholder { color:var(--ink4); }
-.modal-apply-btn { width:100%; padding:13px; background:var(--ink); color:var(--acc-fg); border:none; border-radius:24px; font-family:var(--ui-font); font-size:13px; font-weight:600; letter-spacing:.08em; cursor:pointer; transition:opacity .15s; }
-.modal-apply-btn:hover { opacity:.75; }
-
-.settings-row { display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line); cursor:pointer; -webkit-tap-highlight-color:transparent; }
-.settings-row:last-of-type { border-bottom:none; }
-.settings-row:hover .s-label, .settings-row:active .s-label { opacity:.65; }
-.s-label { font-size:14px; font-weight:400; color:var(--ink); transition:opacity .15s; font-family:var(--ui-font); }
-.s-value { font-size:11px; letter-spacing:.08em; color:var(--ink2); font-family:var(--ui-font); max-width:160px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.kbd { display:inline-block; padding:1px 5px; border:1px solid var(--ink4); border-radius:24px; font-size:9px; color:var(--ink3); margin-left:6px; font-family:monospace; vertical-align:middle; }
-
-/* ── Theme picker ── */
-.theme-swatches { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; }
-.theme-swatch-btn {
-  display:flex; flex-direction:column; align-items:center; gap:5px;
-  background:none; border:none; cursor:pointer; padding:0;
-  -webkit-tap-highlight-color:transparent;
-}
-.theme-swatch-circle {
-  width:32px; height:32px; border-radius:50%;
-  border:2px solid transparent;
-  transition:transform .15s, border-color .15s;
-  box-shadow: 0 0 0 1px var(--line);
-}
-.theme-swatch-btn:hover .theme-swatch-circle { transform:scale(1.1); }
-.theme-swatch-btn.active .theme-swatch-circle { border-color:var(--ink); }
-.theme-swatch-label { font-size:9px; letter-spacing:.06em; color:var(--ink3); font-family:var(--ui-font); }
-
-/* Dark/Light toggle pill */
-.dark-toggle {
-  display:flex; background:var(--paper2); border:1px solid var(--line);
-  border-radius:100px; padding:3px; gap:2px; margin-bottom:20px;
-}
-.dark-toggle-btn {
-  flex:1; padding:7px 0; border:none; border-radius:100px;
-  font-family:var(--ui-font); font-size:12px; font-weight:500;
-  cursor:pointer; transition:background .2s, color .2s;
-  background:transparent; color:var(--ink3);
-  -webkit-tap-highlight-color:transparent;
-}
-.dark-toggle-btn.active { background:var(--ink); color:var(--acc-fg); }
-
-/* Recent fonts */
-.recent-fonts { display:flex; gap:6px; margin-bottom:16px; flex-wrap:wrap; }
-.recent-font-chip {
-  display: flex; align-items:center; gap: 6px;
-  padding:5px 8px 5px 12px; border:1px solid var(--line); border-radius:100px;
-  background:none; font-size:11px; color:var(--ink2);
-  cursor:pointer; font-family:var(--ui-font); letter-spacing:.04em;
-  transition:border-color .15s, color .15s, background .15s;
-  -webkit-tap-highlight-color:transparent;
-}
-.recent-font-chip:hover, .recent-font-chip:active { border-color:var(--ink3); color:var(--ink); background: var(--hover); }
-.recent-font-del {
-  display: flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: 50%;
-  color: var(--ink3); transition: color .15s, background .15s;
-}
-.recent-font-del:hover { background: rgba(192,57,43,0.12); color: #C0392B; }
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
 </style>
 </head>
 <body data-theme="parchment">
 
-<!-- Desktop sidebar nav -->
-<nav id="nav">
-  <div class="nav-logo">文綴</div>
-  <div id="nav-pages"></div>
-  <button id="nav-add" class="tip-r" onclick="createPage()">
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-      <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-    </svg>
-  </button>
-  <div id="nav-bottom">
-    <button class="nav-icon-btn tip-r" onclick="openSettingsModal(event)" data-tip="環境設定">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-      </svg>
-    </button>
+<aside id="side" class="px lg" aria-label="メモ一覧">
+  <div class="side-head">
+    <div class="logo"><img src="memo_icons.png" alt="">文綴</div>
+    <button class="ic-btn" id="side-close" title="一覧を閉じる"></button>
   </div>
-</nav>
+  <div class="side-tools">
+    <button id="new-btn" class="px"></button>
+    <label class="search px"><span id="search-ic"></span><input id="search" type="search" placeholder="メモを検索" autocomplete="off"></label>
+  </div>
+  <div id="list"></div>
+  <div class="side-foot">
+    <span id="count"></span>
+    <button class="ic-btn" id="settings-btn" title="設定"></button>
+  </div>
+</aside>
+<div id="side-scrim"></div>
 
-<!-- Main editor -->
-<main id="main">
-  <div id="topbar">
-    <div id="status-left">
-      <span id="save-indicator">保存済み</span>
-      <div class="sb-sep"></div>
-      <span class="sb-item" id="char-count">0 字</span>
-      <div class="sb-sep"></div>
-      <span class="sb-item" id="last-modified">—</span>
+<main id="main" class="px lg">
+  <header id="topbar">
+    <button class="ic-btn" id="side-open" title="メモ一覧"></button>
+    <div id="toolbar" class="px" role="toolbar" aria-label="書式">
+      <button class="tb" data-cmd="h1" title="見出し（# ）">H1</button>
+      <button class="tb" data-cmd="h2" title="小見出し（## ）">H2</button>
+      <span class="tb-sep"></span>
+      <button class="tb" data-cmd="bold" title="太字（Ctrl+B / **文字**）"><b>B</b></button>
+      <button class="tb" data-cmd="italic" title="斜体（Ctrl+I / *文字*）"><i style="font-family:serif">I</i></button>
+      <button class="tb" data-cmd="underline" title="下線（Ctrl+U）"><u>U</u></button>
+      <button class="tb" data-cmd="strikeThrough" title="取り消し線（~~文字~~）"><s>S</s></button>
+      <span class="tb-sep"></span>
+      <button class="tb" data-cmd="ul" title="リスト（- ）"></button>
+      <button class="tb" data-cmd="ol" title="番号リスト（1. ）">1.</button>
+      <button class="tb" data-cmd="todo" title="Todo（[] ）"></button>
+      <button class="tb" data-cmd="blockquote" title="引用（> ）"></button>
     </div>
-    <div id="fmt-bar"></div>
-  </div>
-
-  <div id="editor-scroll">
-    <div id="editor-inner">
-      <div id="hover-menu-container"
-        onmouseleave="if(window.innerWidth>640)this.classList.remove('expanded')"
-        onmousedown="event.preventDefault()">
-        <div class="hm-inner">
-          <div class="hm-trigger-icon" onclick="const m=document.getElementById('hover-menu-container');m.classList.contains('expanded')?m.classList.remove('expanded'):m.classList.add('expanded')">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <polyline points="9 18 15 12 9 6"/>
-            </svg>
-          </div>
-          <div class="hm-items">
-            <button class="fmt-btn" onclick="applyFmt('bold')" title="太字 ⌘B"><b style="font-weight:800">B</b></button>
-            <button class="fmt-btn" onclick="applyFmt('italic')" title="斜体 ⌘I"><i style="font-family:'Shippori Mincho',serif">I</i></button>
-            <button class="fmt-btn" onclick="applyFmt('underline')" title="下線 ⌘U" style="text-decoration:underline;text-underline-offset:2px">U</button>
-            <button class="fmt-btn" onclick="applyFmt('strikeThrough')" title="打ち消し" style="text-decoration:line-through;opacity:.55">S</button>
-            <div class="fmt-sep2"></div>
-            <button class="fmt-btn" onclick="applyBlock('h1')" title="見出し1" style="font-weight:700;font-size:10px">H1</button>
-            <button class="fmt-btn" onclick="applyBlock('h2')" title="見出し2" style="font-weight:700;font-size:10px">H2</button>
-            <div class="fmt-sep2"></div>
-            <button class="fmt-btn" onclick="applyBlock('blockquote')" title="引用" style="font-style:italic;opacity:.55">"</button>
-            <button class="fmt-btn" onclick="applyList()" title="リスト">·−</button>
-            <button class="fmt-btn" onclick="insertTodo()" title="Todo追加">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="4" ry="4"/>
-                <path d="M9 12l2 2 4-4"/>
-              </svg>
-            </button>
-            <div class="fmt-sep2"></div>
-            <div class="hm-close-icon" onclick="document.getElementById('hover-menu-container').classList.remove('expanded')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="15 18 9 12 15 6"/>
-              </svg>
-            </div>
-          </div>
-        </div>
+    <span id="saved">保存済み</span>
+    <button class="ic-btn" id="more-btn" title="このメモ"></button>
+  </header>
+  <div id="scroll">
+    <div id="paper">
+      <textarea id="title" rows="1" placeholder="無題" spellcheck="false"></textarea>
+      <div id="meta">
+        <span id="m-time"></span>
+        <span id="m-count"></span>
+        <button id="font-btn" title="このメモのフォントを変える"></button>
       </div>
-
-      <textarea id="title-input" rows="1" placeholder="題名"></textarea>
-      <hr class="editor-divider">
-      <div id="content-area" contenteditable="true" spellcheck="false"></div>
+      <div id="area" contenteditable="true" spellcheck="false"></div>
     </div>
   </div>
-
-  <button id="font-chip" onclick="openModal('page-font')">
-    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/>
-    </svg>
-    <span id="font-chip-label">Noto Serif JP</span>
-  </button>
 </main>
 
-<!-- Mobile bottom bar -->
-<div id="mobile-bar">
-  <button class="mb-btn" id="mb-pages" onclick="toggleMobilePanel()">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-    </svg>
-    <span>メモ</span>
-  </button>
-  <button class="mb-btn" id="mb-edit" onclick="closeMobilePanel()" style="color:var(--ink)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
-    </svg>
-    <span>編集</span>
-  </button>
-  <button class="mb-btn" onclick="openSettingsModal(event)">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="12" cy="12" r="3"/>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-    </svg>
-    <span>設定</span>
-  </button>
-</div>
-
-<!-- Mobile page list panel -->
-<div id="mobile-page-panel">
-  <div class="mpp-header">
-    <span class="mpp-title">メモ一覧</span>
-    <button class="mpp-add" onclick="createPage()">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
-      </svg>
-      新しい記録
-    </button>
-  </div>
-  <div id="mobile-page-list"></div>
-</div>
-
-<!-- Delete confirm modal -->
-<div id="delete-overlay" onclick="deleteOverlayClick(event)">
-  <div id="delete-scrim"></div>
-  <div id="delete-box">
-    <div id="del-icon">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-      </svg>
-    </div>
-    <div id="del-heading">このメモを削除しますか？</div>
-    <div id="del-body">「<strong id="del-name"></strong>」は完全に削除されます。この操作は取り消せません。</div>
-    <div class="del-actions">
-      <button class="del-cancel-btn" onclick="cancelDelete()">キャンセル</button>
-      <button class="del-delete-btn" onclick="confirmDelete()">削除する</button>
-    </div>
-  </div>
-</div>
-
-<!-- Desktop page popover -->
-<div id="page-popover">
-  <span class="nav-popover-title" id="popover-title"></span>
-  <button class="nav-popover-trash" id="popover-trash">
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-      <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-    </svg>
-  </button>
-</div>
-
-<!-- Modal -->
-<div id="modal-overlay" onclick="overlayClick(event)">
-  <div id="modal-scrim"></div>
-  <div id="modal-box">
-    <div class="modal-handle"></div>
-    <div id="modal-body"></div>
-  </div>
-</div>
+<div id="menu" class="px" role="menu"></div>
+<div id="sheet-wrap"><div id="sheet-scrim"></div><div id="sheet" class="px lg" role="dialog" aria-modal="true"><div id="sheet-body"></div></div></div>
+<div id="toast" role="status"></div>
+<input type="file" id="file-in" accept="application/json,.json" hidden>
 
 <script>
-const SK_PAGES    = 'fontion_pages_v7';
-const SK_SETTINGS = 'fontion_settings_v7';
-
-let popoverTimer = null;
-window.currentHoverId = null;
-
-window.showPopover = function(el, p) {
-  clearTimeout(popoverTimer);
-  const rect = el.getBoundingClientRect();
-  const popover = document.getElementById('page-popover');
-  popover.style.left = (rect.right + 12) + 'px';
-  popover.style.top = (rect.top + rect.height / 2) + 'px';
-  document.getElementById('popover-title').textContent = p.title || '無題';
-  document.getElementById('popover-title').onclick = () => { if (pendingDeleteId !== p.id) { setActive(p.id); hidePopover(); } };
-  document.getElementById('popover-trash').onclick = (e) => { e.stopPropagation(); hidePopover(); showDeleteConfirm(p.id); };
-  popover.classList.add('show');
-  window.currentHoverId = p.id;
-};
-
-window.startHidePopover = function() {
-  popoverTimer = setTimeout(() => hidePopover(), 150);
-};
-
-window.hidePopover = function() {
-  const popover = document.getElementById('page-popover');
-  if(popover) popover.classList.remove('show');
-  window.currentHoverId = null;
-};
-
-document.addEventListener('DOMContentLoaded', () => {
-  const popover = document.getElementById('page-popover');
-  if(popover) {
-    popover.addEventListener('mouseenter', () => clearTimeout(popoverTimer));
-    popover.addEventListener('mouseleave', () => window.startHidePopover());
+'use strict';
+/* ═══════════ pixel corners (same idea as the site's .card/.chip, scaled up to ~24px) ═══════════ */
+(function () {
+  const P = (v, far) => far ? `calc(100% - ${v}px)` : `${v}px`;
+  function shape(u, s, b) {
+    const n = u.length, pts = [];
+    const add = (x, fx, y, fy) => pts.push(`${P(x, fx)} ${P(y, fy)}`);
+    for (let r = n - 1; r >= 0; r--) { const x = u[r] * s + b; add(x, 0, (r + 1) * s + b, 0); add(x, 0, r * s + b, 0); }
+    for (let r = 0; r < n; r++)      { const x = u[r] * s + b; add(x, 1, r * s + b, 0); add(x, 1, (r + 1) * s + b, 0); }
+    for (let r = n - 1; r >= 0; r--) { const x = u[r] * s + b; add(x, 1, (r + 1) * s + b, 1); add(x, 1, r * s + b, 1); }
+    for (let r = 0; r < n; r++)      { const x = u[r] * s + b; add(x, 0, r * s + b, 1); add(x, 0, (r + 1) * s + b, 1); }
+    return `polygon(${pts.join(',')})`;
   }
-});
+  const st = document.documentElement.style;
+  st.setProperty('--px-lg-o', shape([4, 2, 1, 1], 4, 0)); st.setProperty('--px-lg-i', shape([4, 2, 1, 1], 4, 4));
+  st.setProperty('--px-md-o', shape([3, 2, 1], 3, 0));    st.setProperty('--px-md-i', shape([3, 2, 1], 3, 3));
+  st.setProperty('--px-sm-o', shape([2, 1], 3, 0));
+  st.setProperty('--px-xs-o', shape([2, 1], 2, 0));
+  const svg = d => `url("data:image/svg+xml,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10' shape-rendering='crispEdges'><path fill-rule='evenodd' d='${d}'/></svg>`)}")`;
+  const outer = 'M1 0H9V1H10V9H9V10H1V9H0V1H1Z';
+  const dots = [[2,5],[3,6],[4,7],[5,6],[6,5],[7,4],[8,3]].map(([x, y]) => `M${x} ${y}h1v1h-1z`).join('');
+  st.setProperty('--chk-off', svg(outer + 'M1 1V9H9V1Z'));
+  st.setProperty('--chk-on', svg(outer + dots));
+})();
+/* ═══════════ constants ═══════════ */
+const SK_PAGES = 'fontion_pages_v8', SK_SETTINGS = 'fontion_settings_v8';
+const OLD_PAGES = 'fontion_pages_v7', OLD_SETTINGS = 'fontion_settings_v7';
+const DEFAULT_FONT = 'Noto Sans JP';
+const THEMES = [
+  { id:'parchment', name:'ミント', color:'#c5ddcc' },
+  { id:'moss',      name:'レモン', color:'#e2daa5' },
+  { id:'rose',      name:'サクラ', color:'#e7c4cc' },
+  { id:'slate',     name:'ソーダ', color:'#bfd3e6' },
+  { id:'mono',      name:'モノ',   color:'#d0d0d0' },
+];
+const FONT_PRESETS = ['MaruMinya','Noto Sans JP','M PLUS 2','Zen Kaku Gothic New','BIZ UDPGothic','IBM Plex Sans JP','Zen Maru Gothic','Kiwi Maru','Klee One','Noto Serif JP','Shippori Mincho'];
+const RESETS = [
+  { id:'',      name:'しない' },
+  { id:'1h',    name:'1時間ごと',  ms:36e5 },
+  { id:'3h',    name:'3時間ごと',  ms:108e5 },
+  { id:'12h',   name:'12時間ごと', ms:432e5 },
+  { id:'daily', name:'毎日（日付が変わったら）', label:'毎日' },
+];
+const BLOCK_TAGS = new Set(['DIV','P','H1','H2','H3','H4','H5','H6','BLOCKQUOTE','UL','OL','LI','PRE','HR','TABLE']);
 
-// ── Helpers first (avoid TDZ) ──
-function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2,6); }
-function loadJSON(k) { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } }
+const $ = s => document.querySelector(s);
+/* pixel-art icons: each row is a line of pixels ("#" = filled), drawn as crisp rects */
+function pxi(rows, u = 2) {
+  const w = Math.max(...rows.map(r => r.length)), h = rows.length;
+  let d = '';
+  rows.forEach((r, y) => { r.replace(/#+/g, (m, x) => { d += `M${x} ${y}h${m.length}v1h-${m.length}z`; }); });
+  return `<svg width="${w * u}" height="${h * u}" viewBox="0 0 ${w} ${h}" fill="currentColor" aria-hidden="true"><path d="${d}"/></svg>`;
+}
+const ICON = {
+  side:  pxi(['#########','#..#....#','#..#....#','#..#....#','#..#....#','#..#....#','#..#....#','#########']),
+  plus:  pxi(['...#...','...#...','...#...','#######','...#...','...#...','...#...']),
+  search:pxi(['.###....','#...#...','#...#...','#...#...','.###....','....##..','.....##.','......##']),
+  gear:  pxi(['...##...','.#.##.#.','..####..','####.###','###.####','..####..','.#.##.#.','...##...']),
+  more:  pxi(['##.##.##','##.##.##']),
+  trash: pxi(['..###..','#######','.......','.#####.','.#.#.#.','.#.#.#.','.#.#.#.','..###..']),
+  grip:  pxi(['#.#','...','#.#','...','#.#'], 2),
+  ul:    pxi(['##.######','##.......','.........','##.######','##.......','.........','##.######','##.......']),
+  todo:  pxi(['########.','#......##','#.....##.','#.#..##.#','#.####..#','#..##...#','#.......#','#########']),
+  quote: pxi(['##..##','##..##','.#...#','#...#.']),
+  font:  pxi(['#######','#..#..#','...#...','...#...','..###..']),
+  x:     pxi(['#...#','.#.#.','..#..','.#.#.','#...#']),
+};
 
-const loadedFonts = new Set();
+/* ═══════════ helpers ═══════════ */
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+const loadJSON = k => { try { return JSON.parse(localStorage.getItem(k)); } catch { return null; } };
+const isBlock = n => n && n.nodeType === 1 && BLOCK_TAGS.has(n.nodeName);
+const elOf = n => n && (n.nodeType === 3 ? n.parentNode : n);
+const cleanFont = s => String(s || '').replace(/[^\w\s\-]/g, '').replace(/\s+/g, ' ').trim();
+const newPage = () => ({ id: uid(), title: '', content: '', font: DEFAULT_FONT, updatedAt: Date.now() });
+const isMobile = () => matchMedia('(max-width:760px)').matches;
+
+function htmlToText(html) {
+  const t = document.createElement('template');
+  t.innerHTML = html || '';
+  t.content.querySelectorAll('div,p,li,h1,h2,h3,blockquote,br').forEach(el => el.after(' '));
+  return (t.content.textContent || '').replace(/[\s​]+/g, ' ').trim();
+}
+function relTime(ts) {
+  if (!ts) return '—';
+  const d = new Date(ts), now = new Date(), min = Math.floor((now - d) / 6e4);
+  if (min < 1) return 'たった今';
+  if (min < 60) return `${min}分前`;
+  if (min < 60 * 24 && d.getDate() === now.getDate()) return `${Math.floor(min / 60)}時間前`;
+  const y = new Date(now); y.setDate(now.getDate() - 1);
+  const hm = `${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}`;
+  if (d.toDateString() === y.toDateString()) return `昨日 ${hm}`;
+  if (d.getFullYear() === now.getFullYear()) return `${d.getMonth() + 1}/${d.getDate()} ${hm}`;
+  return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+}
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.timer);
+  toast.timer = setTimeout(() => t.classList.remove('show'), 2200);
+}
+const loadedFonts = new Set(['Noto Sans JP', 'MaruMinya']);
 function injectFont(name) {
+  name = cleanFont(name);
   if (!name || loadedFonts.has(name)) return;
   loadedFonts.add(name);
+  const fam = name.replace(/ /g, '+');
   const l = document.createElement('link');
   l.rel = 'stylesheet';
-  l.href = `https://fonts.googleapis.com/css2?family=${name.replace(/\s+/g,'+')}&display=swap`;
+  l.href = `https://fonts.googleapis.com/css2?family=${fam}:wght@400;700&display=swap`;
+  l.onerror = () => { l.onerror = null; l.href = `https://fonts.googleapis.com/css2?family=${fam}&display=swap`; };
   document.head.appendChild(l);
 }
 
-// ── Theme definitions ──
-const THEMES = [
-  { id:'parchment', name:'羊皮紙', color:'#C8B99A' },
-  { id:'moss',      name:'苔',     color:'#8FAA80' },
-  { id:'rose',      name:'薔薇',   color:'#C49090' },
-  { id:'slate',     name:'夜空',   color:'#8090C0' },
-  { id:'mono',      name:'モノ',   color:'#909090' },
-];
-
-// ── State ──
-let pages    = loadJSON(SK_PAGES)    || [{ id:uid(), title:'', content:'', font:'Noto Serif JP', updatedAt:Date.now() }];
-let settings = loadJSON(SK_SETTINGS) || { theme:'parchment', dark:false, uiFont:'Zen Kaku Gothic New', recentFonts:[] };
-if (!settings.recentFonts) settings.recentFonts = [];
-
-let activeId = pages[0].id;
-let modalType = null;
-let pendingDeleteId = null;
-let mobilePanelOpen = false;
-let saveTimer, flashTimer, deleteTimer;
-let lastEditorRange = null;
-let todoLongPressTimer = null;
-let todoLongPressStartX = 0;
-let todoLongPressStartY = 0;
-let todoLongPressTargetId = null;
-let suppressTodoToggleId = null;
-let modalOpenedAt = 0;
-let isComposing = false;
-let isNormalizingTodo = false;
-let selectionSyncRaf = 0;
-let compositionWatchdogTimer = 0;
-
-function clearCompositionWatchdog() {
-  if (!compositionWatchdogTimer) return;
-  clearTimeout(compositionWatchdogTimer);
-  compositionWatchdogTimer = 0;
+/* ── todo element helpers ── */
+function fixTodo(el) {
+  const r = RESETS.find(x => x.id && x.id === el.dataset.reset);
+  if (r) el.dataset.resetLabel = r.label || r.name;
+  else { delete el.dataset.reset; delete el.dataset.resetLabel; }
+  if (el.dataset.checked !== 'true') { el.dataset.checked = 'false'; delete el.dataset.checkedAt; }
+  ensureFilled(el);
 }
-
-function armCompositionWatchdog() {
-  clearCompositionWatchdog();
-  compositionWatchdogTimer = setTimeout(() => {
-    if (!isComposing) return;
-    isComposing = false;
-    queueSelectionSync();
-    requestSelectionSync();
-  }, 900);
+function ensureFilled(el) {
+  if (!el.textContent.replace(/​/g, '') && !el.querySelector('br,img,hr')) { el.textContent = ''; el.appendChild(document.createElement('br')); }
 }
-
-function restoreEditorSelectionIfNeeded() {
-  const sel = window.getSelection();
-  const area = document.getElementById('content-area');
-  if (!area) return;
-
-  if (sel.rangeCount && area.contains(sel.anchorNode)) return;
-
-  if (lastEditorRange) {
-    sel.removeAllRanges();
-    sel.addRange(lastEditorRange.cloneRange());
-    return;
+function stripZW(root) {
+  const w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const dead = [];
+  while (w.nextNode()) {
+    const n = w.currentNode;
+    if (n.data.includes('​')) { n.data = n.data.replace(/​/g, ''); if (!n.data) dead.push(n); }
   }
-
-  const range = document.createRange();
-  range.selectNodeContents(area);
-  range.collapse(false);
-  sel.removeAllRanges();
-  sel.addRange(range);
-  lastEditorRange = range.cloneRange();
+  dead.forEach(n => n.remove());
 }
 
-function queueSelectionSync() {
-  if (selectionSyncRaf) cancelAnimationFrame(selectionSyncRaf);
-  selectionSyncRaf = requestAnimationFrame(() => {
-    selectionSyncRaf = 0;
-    restoreEditorSelectionIfNeeded();
-    document.dispatchEvent(new Event('selectionchange'));
+/* old (v7) inline todo spans → line-level todo blocks */
+function migrateHTML(html) {
+  if (!html) return '';
+  const t = document.createElement('template');
+  t.innerHTML = html;
+  const root = t.content;
+  root.querySelectorAll('.todo-wrap').forEach(w => {
+    const d = document.createElement('div');
+    d.className = 'todo';
+    d.dataset.checked = w.dataset.checked === 'true' ? 'true' : 'false';
+    if (w.dataset.checked === 'true' && w.dataset.checkedAt) d.dataset.checkedAt = w.dataset.checkedAt;
+    if (w.dataset.reset && w.dataset.reset !== 'none') d.dataset.reset = w.dataset.reset;
+    let n = w.nextSibling;
+    while (n && n.nodeName !== 'BR' && !isBlock(n)) { const nx = n.nextSibling; d.appendChild(n); n = nx; }
+    if (n && n.nodeName === 'BR') n.remove();
+    w.replaceWith(d);
+    const p = d.parentNode;
+    if (p && p.nodeName === 'DIV' && !p.classList.contains('todo') && p.childNodes.length === 1) p.replaceWith(d);
   });
+  root.querySelectorAll('[onclick]').forEach(el => el.removeAttribute('onclick'));
+  root.querySelectorAll('[contenteditable]').forEach(el => el.removeAttribute('contenteditable'));
+  stripZW(root);
+  root.querySelectorAll('.todo').forEach(fixTodo);
+  return t.innerHTML;
 }
 
-function requestSelectionSync() {
-  const ticks = [0, 24, 80, 180];
-  ticks.forEach(ms => setTimeout(() => queueSelectionSync(), ms));
+/* ═══════════ state ═══════════ */
+let pages = loadJSON(SK_PAGES);
+let migrated = false;
+if (!Array.isArray(pages) || !pages.length) {
+  const old = loadJSON(OLD_PAGES);
+  pages = Array.isArray(old) && old.length ? old : [newPage()];
+  migrated = Array.isArray(old) && old.length > 0;
 }
+pages = pages.filter(p => p && typeof p === 'object').map(p => ({
+  id: String(p.id || uid()), title: String(p.title || ''), font: cleanFont(p.font) || DEFAULT_FONT,
+  updatedAt: +p.updatedAt || Date.now(),
+  content: /todo-wrap|​/.test(p.content || '') ? migrateHTML(p.content) : String(p.content || ''),
+}));
+if (!pages.length) pages = [newPage()];
 
-// ── Apply theme + dark ──
+let settings = Object.assign(
+  { theme: 'parchment', dark: false, uiFont: 'MaruMinya', recentFonts: [], sideClosed: false, activeId: null },
+  loadJSON(SK_SETTINGS) || loadJSON(OLD_SETTINGS) || {});
+if (!THEMES.some(t => t.id === settings.theme)) settings.theme = 'parchment';
+if (!Array.isArray(settings.recentFonts)) settings.recentFonts = [];
+settings.recentFonts = settings.recentFonts.map(cleanFont).filter(Boolean).slice(0, 8);
+/* v9 redesign: the old built-in defaults (mincho body / Zen Kaku UI) move to the new default font */
+if (!settings.v9) {
+  if (settings.uiFont === 'Zen Kaku Gothic New') settings.uiFont = DEFAULT_FONT;
+  pages.forEach(p => { if (p.font === 'Noto Serif JP') p.font = DEFAULT_FONT; });
+  settings.v9 = true; migrated = true;
+}
+/* v10: the UI uses the site's pixel font */
+if (!settings.v10) { if (!settings.uiFont || settings.uiFont === 'Noto Sans JP' || settings.uiFont === 'Zen Kaku Gothic New') settings.uiFont = 'MaruMinya'; settings.v10 = true; migrated = true; }
+
+let activeId = pages.some(p => p.id === settings.activeId) ? settings.activeId : pages[0].id;
+let saveTimer = 0, dirty = false;
+
+const area = $('#area'), titleEl = $('#title'), list = $('#list');
+const activePage = () => pages.find(p => p.id === activeId) || pages[0];
+
+/* ═══════════ persistence ═══════════ */
+function setSaved(state) {
+  const el = $('#saved');
+  el.className = state === 'saved' ? '' : state;
+  el.textContent = state === 'saving' ? '保存中…' : state === 'error' ? '保存できませんでした' : '保存済み';
+}
+function persist() {
+  clearTimeout(saveTimer); saveTimer = 0;
+  try {
+    localStorage.setItem(SK_PAGES, JSON.stringify(pages));
+    localStorage.setItem(SK_SETTINGS, JSON.stringify(settings));
+    setSaved('saved'); dirty = false;
+  } catch (e) {
+    setSaved('error');
+    toast('保存できませんでした（容量がいっぱいかも）');
+  }
+}
+function save() { dirty = true; setSaved('saving'); clearTimeout(saveTimer); saveTimer = setTimeout(persist, 450); }
+function saveSettings() { try { localStorage.setItem(SK_SETTINGS, JSON.stringify(settings)); } catch {} }
+addEventListener('pagehide', () => { if (dirty) persist(); });
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { if (dirty) persist(); }
+  else { resetAll(); updateMeta(); }
+});
+addEventListener('storage', e => {
+  if (e.key !== SK_PAGES || !e.newValue || dirty) return;
+  let np; try { np = JSON.parse(e.newValue); } catch { return; }
+  if (!Array.isArray(np) || !np.length) return;
+  pages = np;
+  if (!pages.some(p => p.id === activeId)) activeId = pages[0].id;
+  renderList();
+  if (document.activeElement !== area && document.activeElement !== titleEl) loadPage(true);
+});
+
+/* ═══════════ theme ═══════════ */
+const darkMQ = matchMedia('(prefers-color-scheme: dark)');
 function applyTheme() {
-  document.body.setAttribute('data-theme', settings.theme);
-  document.body.classList.toggle('dark', settings.dark);
-}
-
-function toggleDark() {
-  settings.dark = !settings.dark;
-  applyTheme(); save();
-}
-
-function pickTheme(themeId) {
-  if (!THEMES.some(t => t.id === themeId)) return;
-  settings.theme = themeId;
-  applyTheme();
-  save();
-  if (modalType === 'settings') openModal('settings');
-}
-
-function setDark(isDark) {
-  settings.dark = !!isDark;
-  applyTheme();
-  save();
-  if (modalType === 'settings') openModal('settings');
-}
-
-// ── Persistence ──
-function saveNow() {
-  activePage().updatedAt = Date.now();
-  localStorage.setItem(SK_PAGES,    JSON.stringify(pages));
-  localStorage.setItem(SK_SETTINGS, JSON.stringify(settings));
-  flashSaved(); renderLastModified();
-}
-function save() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveNow, 700);
-}
-function flashSaved() {
-  const el = document.getElementById('save-indicator');
-  el.classList.add('show');
-  clearTimeout(flashTimer);
-  flashTimer = setTimeout(() => el.classList.remove('show'), 1400);
-}
-
-// ── Active page ──
-function activePage() { return pages.find(p => p.id === activeId) || pages[0]; }
-
-// ── Nav render (desktop) ──
-function renderNav() {
-  const c = document.getElementById('nav-pages');
-  c.innerHTML = '';
-  
-  let dragToIdx = null;
-
-  pages.forEach((p, idx) => {
-    const wrap = document.createElement('div');
-    wrap.className = 'nav-page-wrap';
-    wrap.draggable = true;
-    wrap.dataset.index = idx;
-
-    wrap.addEventListener('dragstart', e => {
-      wrap.classList.add('dragging');
-      e.dataTransfer.setData('text/plain', idx);
-      e.dataTransfer.effectAllowed = 'move';
-      // Hide ghost image on PC
-      const img = new Image();
-      img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-      e.dataTransfer.setDragImage(img, 0, 0);
-    });
-    wrap.addEventListener('dragend', () => {
-      wrap.classList.remove('dragging');
-      c.querySelectorAll('.nav-page-wrap').forEach(el => el.classList.remove('drop-target-above', 'drop-target-below'));
-    });
-    wrap.addEventListener('dragover', e => {
-      e.preventDefault();
-      const rect = wrap.getBoundingClientRect();
-      const relY = e.clientY - rect.top;
-      
-      c.querySelectorAll('.nav-page-wrap').forEach(el => el.classList.remove('drop-target-above', 'drop-target-below'));
-      
-      if (relY < rect.height * 0.5) {
-        wrap.classList.add('drop-target-above');
-        dragToIdx = idx;
-      } else {
-        wrap.classList.add('drop-target-below');
-        dragToIdx = idx + 1;
-      }
-    });
-    wrap.addEventListener('dragleave', () => {
-      wrap.classList.remove('drop-target-above', 'drop-target-below');
-    });
-    wrap.addEventListener('drop', e => {
-      e.preventDefault();
-      const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
-      if (dragToIdx !== null) {
-        if (fromIdx !== dragToIdx && fromIdx !== dragToIdx - 1) {
-          const finalTo = dragToIdx > fromIdx ? dragToIdx - 1 : dragToIdx;
-          reorderPages(fromIdx, finalTo);
-        }
-      }
-      dragToIdx = null;
-    });
-
-    const btn = document.createElement('button');
-    btn.className = 'nav-dot' + (p.id === activeId ? ' active' : '');
-    btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
-    </svg>`;
-    btn.addEventListener('click', () => { if (pendingDeleteId !== p.id) setActive(p.id); });
-
-    wrap.addEventListener('mouseenter', () => window.showPopover(wrap, p));
-    wrap.addEventListener('mouseleave', () => window.startHidePopover());
-
-    wrap.appendChild(btn); c.appendChild(wrap);
+  document.body.dataset.theme = settings.theme;
+  document.body.classList.toggle('dark', settings.dark === 'auto' ? darkMQ.matches : !!settings.dark);
+  document.body.style.setProperty('--ui', `'${cleanFont(settings.uiFont) || 'MaruMinya'}', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', sans-serif`);
+  injectFont(settings.uiFont);
+  requestAnimationFrame(() => {
+    document.querySelector('meta[name=theme-color]').content = getComputedStyle(document.body).getPropertyValue('--bg').trim();
   });
 }
+darkMQ.addEventListener?.('change', () => { if (settings.dark === 'auto') applyTheme(); });
 
-function reorderPages(from, to) {
-  const item = pages.splice(from, 1)[0];
-  pages.splice(to, 0, item);
-  saveNow();
-  renderNav();
-  renderMobilePageList();
-}
-
-// Mobile page list
-function renderMobilePageList() {
-  const c = document.getElementById('mobile-page-list');
-  c.innerHTML = '';
-  pages.forEach((p, idx) => {
-    const item = document.createElement('div');
-    item.className = 'mpl-item' + (p.id === activeId ? ' active' : '');
-    item.dataset.index = idx;
-    
-    item.innerHTML = `
-      <div class="mpl-drag-handle" style="margin-right:10px; color:var(--ink4); padding: 10px 5px; cursor: grab;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-          <line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/>
-        </svg>
-      </div>
-      <span class="mpl-item-title">${p.title || '無題の思索'}</span>
-      <button class="mpl-trash">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-        </svg>
-      </button>`;
-    
-    item.addEventListener('click', (e) => {
-      if (e.target.closest('.mpl-trash') || e.target.closest('.mpl-drag-handle')) return;
-      setActive(p.id); closeMobilePanel();
-    });
-
-    // Touch-based reordering for mobile
-    const handle = item.querySelector('.mpl-drag-handle');
-    let startY, currentIdx, targetIdx;
-    
-    handle.addEventListener('touchstart', e => {
-      startY = e.touches[0].clientY;
-      currentIdx = idx;
-      item.classList.add('dragging');
-      // Prevent scrolling while dragging
-      document.body.style.overflow = 'hidden';
-    }, {passive:true});
-
-    handle.addEventListener('touchmove', e => {
-      const touchY = e.touches[0].clientY;
-      const overEl = document.elementFromPoint(e.touches[0].clientX, touchY);
-      const targetItem = overEl ? overEl.closest('.mpl-item') : null;
-
-      // Clear all indicators
-      c.querySelectorAll('.mpl-item').forEach(el => {
-        el.classList.remove('drop-target-above', 'drop-target-below');
-      });
-
-      if (targetItem && targetItem !== item) {
-        targetIdx = parseInt(targetItem.dataset.index);
-        const rect = targetItem.getBoundingClientRect();
-        if (touchY < rect.top + rect.height / 2) {
-          targetItem.classList.add('drop-target-above');
-        } else {
-          targetItem.classList.add('drop-target-below');
-          targetIdx += 1;
-        }
-      } else {
-        targetIdx = null;
-      }
-    }, {passive:false});
-
-    handle.addEventListener('touchend', () => {
-      item.classList.remove('dragging');
-      c.querySelectorAll('.mpl-item').forEach(el => el.classList.remove('drop-target-above', 'drop-target-below'));
-      document.body.style.overflow = '';
-      
-      if (targetIdx !== null && targetIdx !== undefined && targetIdx !== idx && targetIdx !== idx + 1) {
-        const finalTo = targetIdx > idx ? targetIdx - 1 : targetIdx;
-        reorderPages(idx, finalTo);
-      }
-    });
-
-    item.querySelector('.mpl-trash').addEventListener('click', e => { e.stopPropagation(); showDeleteConfirm(p.id); });
-    c.appendChild(item);
+/* ═══════════ sidebar list ═══════════ */
+let listTimer = 0;
+const refreshListSoon = () => { clearTimeout(listTimer); listTimer = setTimeout(renderList, 350); };
+function renderList() {
+  clearTimeout(listTimer);
+  const q = $('#search').value.trim().toLowerCase();
+  list.classList.toggle('searching', !!q);
+  list.textContent = '';
+  let shown = 0;
+  pages.forEach((p, i) => {
+    const body = htmlToText(p.content);
+    if (q && !(p.title.toLowerCase().includes(q) || body.toLowerCase().includes(q))) return;
+    shown++;
+    const el = document.createElement('div');
+    el.className = 'item' + (p.id === activeId ? ' active' : '') + (p.title.trim() ? '' : ' untitled');
+    el.dataset.id = p.id; el.dataset.index = i;
+    el.innerHTML = `<span class="grip" title="ドラッグで並べ替え">${ICON.grip}</span><div class="item-body"><div class="item-title"></div><div class="item-sub"></div></div><button class="item-del" title="削除">${ICON.trash}</button>`;
+    el.querySelector('.item-title').textContent = p.title.trim() || '無題';
+    el.querySelector('.item-sub').textContent = relTime(p.updatedAt) + (body ? '　' + body.slice(0, 80) : '');
+    list.appendChild(el);
   });
+  if (!shown) list.innerHTML = '<div class="empty-list">見つかりませんでした</div>';
+  $('#count').textContent = `${pages.length} 件のメモ`;
 }
+list.addEventListener('click', e => {
+  const item = e.target.closest('.item');
+  if (!item || e.target.closest('.grip')) return;
+  if (e.target.closest('.item-del')) { askDelete(item.dataset.id); return; }
+  setActive(item.dataset.id);
+  closeDrawer();
+});
+/* pointer-based reorder (mouse + touch) */
+let drag = null;
+const clearDrop = () => list.querySelectorAll('.drop-before,.drop-after').forEach(el => el.classList.remove('drop-before', 'drop-after'));
+list.addEventListener('pointerdown', e => {
+  const g = e.target.closest('.grip');
+  if (!g || list.classList.contains('searching')) return;
+  e.preventDefault();
+  const item = g.closest('.item');
+  g.setPointerCapture(e.pointerId);
+  drag = { from: +item.dataset.index, to: null, item };
+  item.classList.add('dragging');
+});
+list.addEventListener('pointermove', e => {
+  if (!drag) return;
+  const over = document.elementFromPoint(e.clientX, e.clientY)?.closest('.item');
+  clearDrop();
+  const lr = list.getBoundingClientRect();
+  if (e.clientY < lr.top + 36) list.scrollTop -= 10; else if (e.clientY > lr.bottom - 36) list.scrollTop += 10;
+  if (!over || !list.contains(over)) { drag.to = null; return; }
+  const r = over.getBoundingClientRect(), before = e.clientY < r.top + r.height / 2;
+  over.classList.add(before ? 'drop-before' : 'drop-after');
+  drag.to = +over.dataset.index + (before ? 0 : 1);
+});
+const endDrag = () => {
+  if (!drag) return;
+  const { from, to, item } = drag; drag = null;
+  item.classList.remove('dragging'); clearDrop();
+  if (to == null || to === from || to === from + 1) return;
+  const [p] = pages.splice(from, 1);
+  pages.splice(to > from ? to - 1 : to, 0, p);
+  save(); renderList();
+};
+list.addEventListener('pointerup', endDrag);
+list.addEventListener('pointercancel', endDrag);
+$('#search').addEventListener('input', renderList);
+$('#search').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.target.value = ''; renderList(); }
+  if (e.key === 'Enter') { const f = list.querySelector('.item'); if (f) { setActive(f.dataset.id); closeDrawer(); area.focus(); } }
+});
 
-function setActive(id) {
-  activeId = id;
-  renderNav();
-  renderMobilePageList();
-  loadActivePage();
+/* drawer / sidebar toggle */
+function openSide() {
+  if (isMobile()) document.body.classList.add('drawer');
+  else { settings.sideClosed = !settings.sideClosed; document.body.classList.toggle('side-closed', settings.sideClosed); saveSettings(); }
 }
+function closeDrawer() { document.body.classList.remove('drawer'); }
+$('#side-open').onclick = openSide;
+$('#side-close').onclick = () => isMobile() ? closeDrawer() : openSide();
+$('#side-scrim').onclick = closeDrawer;
 
-// Mobile panel toggle
-function toggleMobilePanel() {
-  mobilePanelOpen ? closeMobilePanel() : openMobilePanel();
-}
-function openMobilePanel() {
-  mobilePanelOpen = true;
-  renderMobilePageList();
-  document.getElementById('mobile-page-panel').classList.add('open');
-  document.getElementById('mb-pages').style.color = 'var(--ink)';
-  document.getElementById('mb-edit').style.color  = 'var(--ink3)';
-}
-function closeMobilePanel() {
-  mobilePanelOpen = false;
-  document.getElementById('mobile-page-panel').classList.remove('open');
-  document.getElementById('mb-pages').style.color = 'var(--ink3)';
-  document.getElementById('mb-edit').style.color  = 'var(--ink)';
-}
-
-// ── Load page ──
-function loadActivePage() {
+/* ═══════════ pages ═══════════ */
+function loadPage(keepScroll) {
   const p = activePage();
+  activeId = p.id;
   injectFont(p.font);
-  const tEl = document.getElementById('title-input');
-  const cEl = document.getElementById('content-area');
-  tEl.style.fontFamily = cEl.style.fontFamily = `'${p.font}', serif`;
-  tEl.value = p.title;
-  cEl.innerHTML = p.content || '';
-  autoResizeTitle();
-  updateCharCount();
-  renderLastModified();
-  document.getElementById('font-chip-label').textContent = p.font;
+  titleEl.style.fontFamily = area.style.fontFamily = `'${p.font}', 'Noto Sans JP', sans-serif`;
+  titleEl.value = p.title;
+  area.innerHTML = p.content;
+  normalizeTop();
+  autoTitle(); updateMeta(); updateEmpty();
+  if (!keepScroll) $('#scroll').scrollTop = 0;
+  document.title = (p.title.trim() ? p.title.trim() + ' — ' : '') + '文綴';
 }
-
-// ── CRUD ──
+function setActive(id) {
+  if (dirty) persist();
+  activeId = id; settings.activeId = id; saveSettings();
+  loadPage(); renderList();
+}
 function createPage() {
-  const p = { id:uid(), title:'', content:'', font:'Noto Serif JP', updatedAt:Date.now() };
-  pages.push(p);
-  setActive(p.id);
-  closeMobilePanel();
-  saveNow();
-  setTimeout(() => document.getElementById('title-input').focus(), 50);
+  const p = newPage();
+  const idx = pages.findIndex(x => x.id === activeId);
+  pages.splice(idx + 1, 0, p);
+  setActive(p.id); save(); closeDrawer();
+  setTimeout(() => titleEl.focus(), 30);
 }
-
-function showDeleteConfirm(id) {
-  pendingDeleteId = id;
+function duplicatePage() {
+  const src = activePage();
+  const p = { ...src, id: uid(), title: (src.title.trim() || '無題') + ' のコピー', updatedAt: Date.now() };
+  pages.splice(pages.indexOf(src) + 1, 0, p);
+  setActive(p.id); save(); toast('複製しました');
+}
+function askDelete(id) {
   const p = pages.find(x => x.id === id);
-  document.getElementById('del-name').textContent = p?.title || '無題';
-  document.getElementById('delete-overlay').classList.add('show');
-}
-function confirmDelete() {
-  if (!pendingDeleteId) return;
-  const id = pendingDeleteId; cancelDelete();
-  pages = pages.filter(p => p.id !== id);
-  if (!pages.length) pages = [{ id:uid(), title:'', content:'', font:'Noto Serif JP', updatedAt:Date.now() }];
-  if (activeId === id) activeId = pages[0].id;
-  renderNav(); renderMobilePageList(); loadActivePage(); saveNow();
-}
-function cancelDelete() {
-  pendingDeleteId = null;
-  document.getElementById('delete-overlay').classList.remove('show');
-}
-function deleteOverlayClick(e) {
-  if (e.target === document.getElementById('delete-scrim') ||
-      e.target === document.getElementById('delete-overlay')) cancelDelete();
-}
-
-// ── Editor ──
-document.getElementById('title-input').addEventListener('input', function() {
-  activePage().title = this.value;
-  autoResizeTitle();
-  
-  const titleSpan = document.getElementById('popover-title');
-  if (titleSpan && window.currentHoverId === activePage().id) {
-    titleSpan.textContent = this.value || '無題';
-  }
-  
-  // live update mobile list item
-  const mItem = document.querySelector('.mpl-item.active .mpl-item-title');
-  if (mItem) mItem.textContent = this.value || '無題の思索';
-  save();
-});
-document.getElementById('title-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') { e.preventDefault(); document.getElementById('content-area').focus(); }
-});
-function autoResizeTitle() {
-  const el = document.getElementById('title-input');
-  el.style.height = 'auto'; el.style.height = el.scrollHeight + 'px';
-}
-
-function applyInlineFmt(node, match, offset, cmd) {
-  const text = node.textContent;
-  let matchIndex = match.index;
-  let innerText = match[1];
-  
-  if (cmd === 'italic') {
-    matchIndex += match.prefix.length;
-    innerText = match.innerText;
-  }
-  
-  const before = text.slice(0, matchIndex);
-  const after = text.slice(offset);
-  
-  node.textContent = before + innerText + after;
-  
-  const r = document.createRange();
-  r.setStart(node, before.length);
-  r.setEnd(node, before.length + innerText.length);
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(r);
-  
-  document.execCommand(cmd, false, null);
-  
-  sel.collapseToEnd();
-  document.execCommand(cmd, false, null);
-  document.execCommand('insertText', false, '\u200B');
-  
-  activePage().content = document.getElementById('content-area').innerHTML;
-}
-
-document.getElementById('content-area').addEventListener('input', function(e) {
-  const liveSel = window.getSelection();
-  const liveArea = document.getElementById('content-area');
-  if (liveSel.rangeCount && liveArea.contains(liveSel.anchorNode)) {
-    lastEditorRange = liveSel.getRangeAt(0).cloneRange();
-  }
-
-  // Some IME paths do not emit compositionend reliably.
-  if (isComposing && !e.isComposing) {
-    isComposing = false;
-    clearCompositionWatchdog();
-    queueSelectionSync();
-    requestSelectionSync();
-  }
-
-  if (isComposing || e.isComposing) {
-    armCompositionWatchdog();
-    activePage().content = this.innerHTML;
-    updateCharCount();
-    save();
-    return;
-  }
-
-  if (normalizeTodoWraps()) {
-    activePage().content = this.innerHTML;
-  }
-
-  activePage().content = this.innerHTML;
-  updateCharCount(); save();
-  queueSelectionSync();
-
-  const sel = window.getSelection();
-  if (!sel.rangeCount) return;
-  const node = sel.anchorNode;
-  
-  if (node.nodeType === 3) {
-    const text = node.textContent;
-    const offset = sel.anchorOffset;
-    const beforeCursor = text.slice(0, offset);
-    
-    // 1. Block level format
-    let blockCmd = null;
-    if (beforeCursor === '# ') blockCmd = 'h1';
-    else if (beforeCursor === '## ') blockCmd = 'h2';
-    else if (beforeCursor === '> ') blockCmd = 'blockquote';
-    else if (beforeCursor === '- ' || beforeCursor === '* ') blockCmd = 'ul';
-    
-    if (blockCmd) {
-      e.preventDefault();
-      node.textContent = text.slice(offset);
-      const r = document.createRange();
-      r.setStart(node, 0); r.collapse(true);
-      sel.removeAllRanges(); sel.addRange(r);
-      
-      if (blockCmd === 'ul') document.execCommand('insertUnorderedList', false, null);
-      else document.execCommand('formatBlock', false, blockCmd);
-      
-      activePage().content = this.innerHTML;
-      return;
-    }
-    
-    // 2. Format exit marker
-    let parent = node.parentNode;
-    const checkExit = (cmd, tagName, marker) => {
-      if (parent && (parent.tagName === tagName || document.queryCommandState(cmd)) && beforeCursor.endsWith(marker)) {
-        node.textContent = text.slice(0, offset - marker.length) + text.slice(offset);
-        const r = document.createRange();
-        r.setStart(node, offset - marker.length); r.collapse(true);
-        sel.removeAllRanges(); sel.addRange(r);
-        
-        document.execCommand(cmd, false, null);
-        document.execCommand('insertText', false, '\u200B');
-        return true;
-      }
-      return false;
+  if (!p) return;
+  openSheet(`<h3>このメモを削除しますか？</h3>
+    <p class="lead">「<b class="nm"></b>」を削除します。元には戻せません。</p>
+    <div class="acts"><button class="btn" data-close>キャンセル</button><button class="btn danger" id="del-ok">削除する</button></div>`, s => {
+    s.querySelector('.nm').textContent = p.title.trim() || '無題';
+    s.querySelector('#del-ok').onclick = () => {
+      const i = pages.indexOf(p);
+      pages = pages.filter(x => x !== p);
+      if (!pages.length) pages = [newPage()];
+      if (activeId === id) activeId = pages[Math.max(0, i - 1)].id;
+      settings.activeId = activeId;
+      closeSheet(); loadPage(); renderList(); persist(); toast('削除しました');
     };
-    if (checkExit('bold', 'B', '**')) return;
-    if (checkExit('bold', 'STRONG', '**')) return;
-    if (checkExit('italic', 'I', '*')) return;
-    if (checkExit('italic', 'EM', '*')) return;
-    if (checkExit('strikeThrough', 'S', '~~')) return;
-    if (checkExit('strikeThrough', 'STRIKE', '~~')) return;
-    
-    // 3. Inline markup
-    const boldMatch = beforeCursor.match(/\*\*([^\*]+)\*\*$/);
-    if (boldMatch && !document.queryCommandState('bold')) {
-      applyInlineFmt(node, boldMatch, offset, 'bold'); return;
-    }
-    const italicMatch = beforeCursor.match(/(^|[^\*])\*([^\*]+)\*$/);
-    if (italicMatch && !document.queryCommandState('italic')) {
-      const innerText = italicMatch[2];
-      const m = {0: italicMatch[0], index: italicMatch.index, innerText: innerText, prefix: italicMatch[1], 1: italicMatch[1]};
-      applyInlineFmt(node, m, offset, 'italic'); return;
-    }
-    const strikeMatch = beforeCursor.match(/~~([^~]+)~~$/);
-    if (strikeMatch && !document.queryCommandState('strikeThrough')) {
-      applyInlineFmt(node, strikeMatch, offset, 'strikeThrough'); return;
-    }
-  }
-});
-
-document.getElementById('content-area').addEventListener('beforeinput', function(e) {
-  const sel = window.getSelection();
-  if (!sel.rangeCount) return;
-  const wrap = getTodoWrapFromNode(sel.anchorNode);
-  if (!wrap) return;
-
-  moveCaretAfterTodoWrap(wrap);
-
-  // Let the browser handle insertion after caret is relocated.
-  // Preventing default here breaks full-width/composition input on iOS.
-  if (isComposing || e.isComposing || /Composition/i.test(e.inputType || '')) return;
-});
-
-document.getElementById('content-area').addEventListener('keydown', function(e) {
-  if (isComposing || e.isComposing) return;
-  if (e.key === 'Enter') {
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount && sel.isCollapsed && isTodoNearCaret(sel)) {
-      e.preventDefault();
-      document.execCommand('insertLineBreak', false, null);
-      activePage().content = document.getElementById('content-area').innerHTML;
-      save();
-      return;
-    }
-  }
-
-  if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertText', false, '　'); }
-});
-
-function updateCharCount() {
-  const text = (activePage().title || '') + (document.getElementById('content-area').innerText || '');
-  document.getElementById('char-count').textContent = `${text.replace(/[\s\u200B]/g,'').length} 字`;
+  });
 }
-function renderLastModified() {
+$('#new-btn').onclick = createPage;
+
+/* ═══════════ meta ═══════════ */
+function autoTitle() { titleEl.style.height = 'auto'; titleEl.style.height = titleEl.scrollHeight + 'px'; }
+function updateMeta() {
   const p = activePage();
-  if (!p.updatedAt) { document.getElementById('last-modified').textContent = '—'; return; }
-  const d = new Date(p.updatedAt);
-  const diff = Math.floor((Date.now() - d) / 60000);
-  let label;
-  if (diff < 1) label = 'たった今';
-  else if (diff < 60) label = `${diff}分前`;
-  else if (diff < 1440) label = `${Math.floor(diff/60)}時間前`;
-  else {
-    const mm = String(d.getMonth()+1).padStart(2,'0');
-    const dd = String(d.getDate()).padStart(2,'0');
-    const hh = String(d.getHours()).padStart(2,'0');
-    const mi = String(d.getMinutes()).padStart(2,'0');
-    label = `${mm}/${dd} ${hh}:${mi}`;
+  const n = (p.title + area.textContent).replace(/[\s​]/g, '').length;
+  $('#m-time').textContent = relTime(p.updatedAt) + ' 更新';
+  $('#m-count').textContent = `${n.toLocaleString()} 字`;
+  $('#font-btn').innerHTML = ICON.font + '<span></span>';
+  $('#font-btn span').textContent = p.font;
+}
+function updateEmpty() {
+  const empty = !area.textContent.replace(/[\s​]/g, '') && !area.querySelector('li,.todo,hr,img,h1,h2,blockquote');
+  area.classList.toggle('empty', empty);
+}
+setInterval(() => { updateMeta(); }, 60000);
+
+titleEl.addEventListener('input', () => {
+  const p = activePage();
+  p.title = titleEl.value.replace(/\n/g, ' ');
+  if (p.title !== titleEl.value) titleEl.value = p.title;
+  p.updatedAt = Date.now();
+  autoTitle(); updateMeta(); save(); refreshListSoon();
+  document.title = (p.title.trim() ? p.title.trim() + ' — ' : '') + '文綴';
+});
+titleEl.addEventListener('keydown', e => {
+  if (e.isComposing || e.keyCode === 229) return;
+  if (e.key === 'Enter' || (e.key === 'ArrowDown' && titleEl.selectionStart === titleEl.value.length)) {
+    e.preventDefault();
+    area.focus(); setCaret(area.firstChild || area, 0);
   }
-  document.getElementById('last-modified').textContent = label;
+});
+
+/* ═══════════ editor core ═══════════ */
+try { document.execCommand('defaultParagraphSeparator', false, 'div'); } catch {}
+
+function setCaret(node, offset) {
+  const r = document.createRange();
+  r.setStart(node, offset); r.collapse(true);
+  const s = getSelection(); s.removeAllRanges(); s.addRange(r);
 }
-setInterval(renderLastModified, 60000);
-
-// ── Formatting ──
-function applyFmt(cmd) {
-  document.getElementById('content-area').focus();
-  document.execCommand(cmd, false, null);
-  activePage().content = document.getElementById('content-area').innerHTML;
-  save();
+function caretRange() {
+  const s = getSelection();
+  if (!s.rangeCount) return null;
+  const r = s.getRangeAt(0);
+  return area.contains(r.startContainer) ? r : null;
 }
-function applyBlock(tag) {
-  document.getElementById('content-area').focus();
-  document.execCommand('formatBlock', false, tag);
-  activePage().content = document.getElementById('content-area').innerHTML;
-  save();
-}
-function applyList() {
-  document.getElementById('content-area').focus();
-  document.execCommand('insertUnorderedList', false, null);
-  activePage().content = document.getElementById('content-area').innerHTML;
-  save();
-}
-
-function moveCaretAfterTodoWrap(wrap) {
-  if (!wrap || !wrap.parentNode) return;
-
-  // Backward compatibility: remove legacy NBSP placeholder created by older builds.
-  const next = wrap.nextSibling;
-  if (next && next.nodeType === 3 && next.textContent && next.textContent.charAt(0) === '\u00A0') {
-    next.textContent = next.textContent.slice(1);
-  }
-
-  let anchorNode = wrap.nextSibling;
-  if (!anchorNode || anchorNode.nodeType !== 3) {
-    anchorNode = document.createTextNode('\u200B');
-    wrap.parentNode.insertBefore(anchorNode, wrap.nextSibling);
-  } else if (!anchorNode.textContent) {
-    anchorNode.textContent = '\u200B';
-  }
-
-  const range = document.createRange();
-  range.setStart(anchorNode, anchorNode.textContent.length);
-  range.collapse(true);
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-  lastEditorRange = range.cloneRange();
-}
-
-function isTodoNode(node) {
-  return !!(node && node.nodeType === 1 && node.classList && node.classList.contains('todo-wrap'));
-}
-
-function getTodoWrapFromNode(node) {
-  if (!node) return null;
-  let el = node.nodeType === 3 ? node.parentNode : node;
-  if (!el || !el.closest) return null;
-  return el.closest('.todo-wrap');
-}
-
-function normalizeTodoWraps() {
-  if (isNormalizingTodo) return false;
-
-  isNormalizingTodo = true;
-  let changed = false;
-  document.querySelectorAll('.todo-wrap').forEach(wrap => {
-    let leakedText = '';
-    const removeNodes = [];
-
-    wrap.childNodes.forEach(child => {
-      if (child.nodeType === 3) {
-        if ((child.textContent || '').replace(/[\u200B\s]/g, '').length > 0) {
-          leakedText += child.textContent;
-          removeNodes.push(child);
-        }
-      } else if (child.nodeType === 1) {
-        const isKnown = child.classList.contains('todo-settings-trigger') || child.classList.contains('todo-check-custom');
-        if (!isKnown) {
-          leakedText += child.textContent || '';
-          removeNodes.push(child);
-        }
-      }
-    });
-
-    if (removeNodes.length) {
-      removeNodes.forEach(n => n.remove());
-      changed = true;
+/* wrap loose top-level text / <br> into line <div>s so every line is a block */
+function normalizeTop() {
+  if (![...area.childNodes].some(n => !isBlock(n))) { if (!area.firstChild) area.innerHTML = '<div><br></div>'; return false; }
+  const r = caretRange();
+  const saved = r && [r.startContainer, r.startOffset];
+  let run = null;
+  [...area.childNodes].forEach(n => {
+    if (isBlock(n)) { run = null; return; }
+    if (n.nodeName === 'BR') {
+      if (!run) { const d = document.createElement('div'); d.appendChild(document.createElement('br')); area.insertBefore(d, n); }
+      n.remove(); run = null; return;
     }
-
-    if (leakedText) {
-      const textNode = document.createTextNode(leakedText);
-      wrap.parentNode.insertBefore(textNode, wrap.nextSibling);
-      changed = true;
-    }
+    if (n.nodeType === 3 && !run && (!n.data || (/^\s*$/.test(n.data) && n.data.includes('\n')))) { n.remove(); return; }
+    if (n.nodeType === 8) { n.remove(); return; }
+    if (!run) { run = document.createElement('div'); area.insertBefore(run, n); }
+    run.appendChild(n);
   });
-
-  isNormalizingTodo = false;
-
-  return changed;
-}
-
-function setupTodoNormalizerObserver() {
-  const area = document.getElementById('content-area');
-  if (!area) return;
-
-  const observer = new MutationObserver(() => {
-    if (isNormalizingTodo) return;
-    if (normalizeTodoWraps()) {
-      activePage().content = area.innerHTML;
-      updateCharCount();
-      save();
-    }
-  });
-
-  observer.observe(area, {
-    childList: true,
-    subtree: true,
-    characterData: true
-  });
-}
-
-function isTodoNearCaret(sel) {
-  const range = sel.getRangeAt(0);
-  const node = range.startContainer;
-  const offset = range.startOffset;
-
-  if (node.nodeType === 3) {
-    if (isTodoNode(node.previousSibling) || isTodoNode(node.nextSibling)) return true;
-    const parent = node.parentNode;
-    if (parent && parent.nodeType === 1) {
-      if (isTodoNode(parent.previousSibling) || isTodoNode(parent.nextSibling)) return true;
-    }
-    return false;
-  }
-
-  if (node.nodeType === 1) {
-    const before = node.childNodes[offset - 1];
-    const after = node.childNodes[offset];
-    if (isTodoNode(before) || isTodoNode(after)) return true;
-  }
-
-  return false;
-}
-
-function hasVisibleContentBeforeInLine(node) {
-  let cur = node;
-  while (cur && cur.id !== 'content-area') {
-    let prev = cur.previousSibling;
-    while (prev) {
-      if (prev.nodeType === 1 && prev.tagName === 'BR') return false;
-
-      const t = (prev.textContent || '').replace(/[\s\u200B]/g, '');
-      if (t.length > 0) return true;
-      prev = prev.previousSibling;
-    }
-
-    const parent = cur.parentNode;
-    if (!parent || parent.id === 'content-area') break;
-    if (parent.nodeType === 1 && /^(DIV|P|LI|BLOCKQUOTE|H1|H2|H3|H4|H5|H6)$/i.test(parent.tagName)) break;
-    cur = parent;
-  }
-  return false;
-}
-
-function hasVisibleText(node) {
-  return !!((node && node.textContent || '').replace(/[\s\u200B]/g, '').length);
-}
-
-function isLineBreakNode(node) {
-  return !!(node && node.nodeType === 1 && node.tagName === 'BR');
-}
-
-function isBlockNode(node) {
-  return !!(node && node.nodeType === 1 && /^(DIV|P|LI|BLOCKQUOTE|H1|H2|H3|H4|H5|H6)$/i.test(node.tagName));
-}
-
-function isCaretAtLineStart(sel) {
-  if (!sel || !sel.rangeCount) return false;
-  const range = sel.getRangeAt(0);
-  const area = document.getElementById('content-area');
-  if (!area.contains(range.startContainer)) return false;
-
-  let node = range.startContainer;
-  const offset = range.startOffset;
-
-  if (node.nodeType === 3) {
-    const before = (node.textContent || '').slice(0, offset).replace(/[\s\u200B]/g, '');
-    if (before.length > 0) return false;
-    let prev = node.previousSibling;
-    while (prev) {
-      if (isLineBreakNode(prev)) return true;
-      if (isBlockNode(prev)) return true;
-      if (hasVisibleText(prev)) return false;
-      prev = prev.previousSibling;
-    }
-    node = node.parentNode;
-  } else if (node.nodeType === 1) {
-    const atNodeStart = offset === 0;
-    if (atNodeStart && isBlockNode(node)) return true;
-
-    const childAtCaret = node.childNodes[offset];
-    if (childAtCaret && isBlockNode(childAtCaret)) return true;
-
-    for (let i = offset - 1; i >= 0; i--) {
-      const child = node.childNodes[i];
-      if (isLineBreakNode(child)) return true;
-      if (isBlockNode(child)) return true;
-      if (hasVisibleText(child)) return false;
-    }
-  }
-
-  let cur = node;
-  while (cur && cur !== area) {
-    if (isBlockNode(cur)) return true;
-
-    let prev = cur.previousSibling;
-    while (prev) {
-      if (isLineBreakNode(prev)) return true;
-      if (isBlockNode(prev)) return true;
-      if (hasVisibleText(prev)) return false;
-      prev = prev.previousSibling;
-    }
-    cur = cur.parentNode;
-  }
-
+  if (!area.firstChild) area.innerHTML = '<div><br></div>';
+  if (saved && saved[0] !== area && saved[0].isConnected) { try { setCaret(saved[0], saved[1]); } catch {} }
   return true;
 }
-
-function insertTodo() {
-  const area = document.getElementById('content-area');
-  area.focus();
-  const sel = window.getSelection();
-  if ((!sel.rangeCount || !area.contains(sel.anchorNode)) && lastEditorRange) {
-    sel.removeAllRanges();
-    sel.addRange(lastEditorRange.cloneRange());
+function lineBlock(node) {
+  let n = elOf(node);
+  while (n && n !== area) {
+    if (n.nodeType === 1 && /^(DIV|P|H1|H2|H3|H4|BLOCKQUOTE|LI|PRE)$/.test(n.nodeName)) return n;
+    n = n.parentNode;
   }
+  return null;
+}
+function currentBlock() {
+  let r = caretRange();
+  if (!r) return null;
+  if (r.startContainer === area) {
+    normalizeTop();
+    const c = area.childNodes[Math.min(r.startOffset, area.childNodes.length - 1)];
+    return c && isBlock(c) ? (lineBlock(c.firstChild || c) || c) : null;
+  }
+  let b = lineBlock(r.startContainer);
+  if (!b) { normalizeTop(); r = caretRange(); b = r && lineBlock(r.startContainer); }
+  return b;
+}
+function beforeCaret(block, r) {
+  const x = document.createRange();
+  x.setStart(block, 0); x.setEnd(r.startContainer, r.startOffset);
+  return x;
+}
+function atLineStart(block, r) {
+  const f = beforeCaret(block, r).cloneContents();
+  return !f.textContent.replace(/​/g, '') && !f.querySelector('img,hr');
+}
+const todoOf = node => { const el = elOf(node); const t = el && el.closest ? el.closest('.todo') : null; return t && area.contains(t) ? t : null; };
 
-  if (!sel.rangeCount || !area.contains(sel.anchorNode)) return;
-  if (!isCaretAtLineStart(sel)) return;
-
-  const id = 'todo_' + Math.random().toString(36).substr(2, 9);
-  const rawHtml = `<span class="todo-wrap" data-id="${id}" data-checked="false" data-reset="none" contenteditable="false"><span class="todo-settings-trigger" onclick="window.openTodoSettings('${id}')"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg></span><span class="todo-check-custom" onclick="toggleTodo(this)"></span></span>`;
-  document.execCommand('insertHTML', false, rawHtml);
-
-  const inserted = document.querySelector(`.todo-wrap[data-id="${id}"]`);
-  moveCaretAfterTodoWrap(inserted);
-
-  activePage().content = document.getElementById('content-area').innerHTML;
-  save();
+function makeTodo(block, checked) {
+  let el = block;
+  if (!el || el.nodeName === 'LI') return null;
+  if (el.nodeName !== 'DIV' && el.nodeName !== 'P') {
+    const d = document.createElement('div');
+    while (el.firstChild) d.appendChild(el.firstChild);
+    el.replaceWith(d); el = d;
+  }
+  el.classList.add('todo');
+  el.dataset.checked = checked ? 'true' : 'false';
+  if (checked) el.dataset.checkedAt = Date.now();
+  fixTodo(el);
+  return el;
+}
+function unTodo(el) {
+  el.classList.remove('todo');
+  if (!el.classList.length) el.removeAttribute('class');
+  ['checked', 'checkedAt', 'reset', 'resetLabel'].forEach(k => delete el.dataset[k]);
+}
+function keepCaret(fn) {
+  const r = caretRange();
+  const s = r && [r.startContainer, r.startOffset];
+  const res = fn();
+  try {
+    if (s && s[0].isConnected) setCaret(s[0], s[1]);
+    else if (res && res.nodeType === 1) setCaret(res, 0);
+  } catch {}
+  return res;
 }
 
-// ── Format state detection ──
-// Map: button data-cmd → execCommand query string (or custom check)
-const FMT_CHECKS = [
-  { cmd: 'bold',          query: 'bold' },
-  { cmd: 'italic',        query: 'italic' },
-  { cmd: 'underline',     query: 'underline' },
-  { cmd: 'strikeThrough', query: 'strikeThrough' },
+/* sync DOM → page data */
+function sync(touch = true) {
+  const p = activePage();
+  p.content = area.innerHTML;
+  if (touch) p.updatedAt = Date.now();
+  save(); updateMeta(); updateEmpty(); refreshListSoon();
+}
+
+/* markdown-ish shortcuts at line start (半角/全角どちらでも) */
+const LINE_MD = [
+  [/^(##|＃＃)[ 　 ]$/, 'h2'],
+  [/^(#|＃)[ 　 ]$/, 'h1'],
+  [/^(>|＞)[ 　 ]$/, 'blockquote'],
+  [/^[-*・－ー][ 　 ]$/, 'ul'],
+  [/^[1１][.．][ 　 ]$/, 'ol'],
+  [/^[\[［][ 　 ]?[\]］][ 　 ]$/, 'todo'],
+  [/^[\[［][xXｘＸ][\]］][ 　 ]$/, 'done'],
+  [/^(---|ーーー|－－－)$/, 'hr'],
 ];
-const BLOCK_CHECKS = ['h1', 'h2', 'blockquote'];
-
-function updateFmtBar() {
-  const area = document.getElementById('content-area');
-  const sel = window.getSelection();
-  // Only update when selection is inside content-area
-  if (!area.contains(sel.anchorNode)) {
-    // Clear all active states
-    document.querySelectorAll('.fmt-btn').forEach(b => b.classList.remove('is-active'));
-    return;
+function lineShortcut() {
+  const r = caretRange();
+  if (!r || !r.collapsed) return false;
+  const b = lineBlock(r.startContainer);
+  if (!b || !/^(DIV|P)$/.test(b.nodeName) || b.closest('li,blockquote,h1,h2')) return false;
+  if (b.classList.contains('todo')) return false;
+  const text = beforeCaret(b, r).toString();
+  const hit = LINE_MD.find(([re]) => re.test(text));
+  if (!hit) return false;
+  const kind = hit[1];
+  if (kind === 'hr' && b.textContent !== text) return false;
+  beforeCaret(b, r).deleteContents();
+  ensureFilled(b);
+  setCaret(b, 0);
+  if (kind === 'todo' || kind === 'done') { makeTodo(b, kind === 'done'); setCaret(b, 0); }
+  else if (kind === 'ul') document.execCommand('insertUnorderedList');
+  else if (kind === 'ol') document.execCommand('insertOrderedList');
+  else if (kind === 'hr') {
+    const hr = document.createElement('hr');
+    b.before(hr);
   }
-
-  // Inline format checks
-  FMT_CHECKS.forEach(({ cmd, query }) => {
-    document.querySelectorAll(`.fmt-btn[onclick*="${cmd}"]`).forEach(btn => {
-      try {
-        const active = document.queryCommandState(query);
-        btn.classList.toggle('is-active', active);
-      } catch(e) {}
-    });
-  });
-
-  // Block format checks (H1, H2, blockquote)
-  let blockTag = '';
-  try { blockTag = document.queryCommandValue('formatBlock').toLowerCase(); } catch(e) {}
-  BLOCK_CHECKS.forEach(tag => {
-    document.querySelectorAll(`.fmt-btn[onclick*="'${tag}'"]`).forEach(btn => {
-      btn.classList.toggle('is-active', blockTag === tag);
-    });
-  });
-
-  // List check
-  document.querySelectorAll('.fmt-btn[onclick*="applyList"]').forEach(listBtn => {
-    try {
-      listBtn.classList.toggle('is-active', document.queryCommandState('insertUnorderedList'));
-    } catch(e) {}
-  });
+  else document.execCommand('formatBlock', false, kind);
+  return true;
+}
+/* **太字** *斜体* ~~取り消し~~ */
+const INLINE_MD = [
+  [/\*\*([^*\n]+)\*\*$/, 'bold', 2],
+  [/~~([^~\n]+)~~$/, 'strikeThrough', 2],
+  [/(?:^|[^*])\*([^*\s][^*\n]*)\*$/, 'italic', 1],
+];
+function inlineShortcut() {
+  const r = caretRange();
+  if (!r || !r.collapsed || r.startContainer.nodeType !== 3) return false;
+  const node = r.startContainer, end = r.startOffset, before = node.data.slice(0, end);
+  for (const [re, cmd, ml] of INLINE_MD) {
+    const m = before.match(re);
+    if (!m) continue;
+    const inner = m[1], start = end - inner.length - ml * 2;
+    node.deleteData(end - ml, ml);
+    node.deleteData(start, ml);
+    const s = getSelection(), x = document.createRange();
+    x.setStart(node, start); x.setEnd(node, start + inner.length);
+    s.removeAllRanges(); s.addRange(x);
+    document.execCommand(cmd);
+    s.collapseToEnd();
+    if (document.queryCommandState(cmd)) document.execCommand(cmd);
+    return true;
+  }
+  return false;
 }
 
-// Listen to selection changes to update fmt bar and hover menu
-document.addEventListener('selectionchange', () => {
-  updateFmtBar();
-  
-  const sel = window.getSelection();
-  const area = document.getElementById('content-area');
-  const menu = document.getElementById('hover-menu-container');
-  const panel = document.getElementById('mobile-page-panel');
-
-  if (sel.rangeCount && area.contains(sel.anchorNode)) {
-    lastEditorRange = sel.getRangeAt(0).cloneRange();
-  }
-
-  if (sel.rangeCount) {
-    let node = sel.anchorNode;
-    if (node && node.nodeType === 3) node = node.parentNode;
-    if (node && node.closest) {
-      const todoWrap = node.closest('.todo-wrap');
-      if (todoWrap && area.contains(todoWrap)) {
-        moveCaretAfterTodoWrap(todoWrap);
-        return;
-      }
-    }
-  }
-
-  if (!sel.rangeCount || !area.contains(sel.anchorNode) || (panel && panel.classList.contains('open'))) {
-    // We only hide 'show' if 'expanded' is also not present, 
-    // AND if we are sure the focus actually left the editor.
-    if (menu && !menu.classList.contains('expanded')) {
-      menu.classList.remove('show');
-    }
-    return;
-  }
-  
-  if (menu && menu.classList.contains('expanded')) return;
-
-  const range = sel.getRangeAt(0);
-  let rect = range.getBoundingClientRect();
-  const innerRect = document.getElementById('editor-inner').getBoundingClientRect();
-  const areaRect = area.getBoundingClientRect();
-
-  // If editor is empty or at the start of a line, getBoundingClientRect often fails (0,0,0,0)
-  if (rect.top === 0 || (rect.width === 0 && rect.height === 0)) {
-    let el = sel.anchorNode;
-    if (el && el.nodeType === 3) el = el.parentNode;
-    if (el && el !== document.body && area.contains(el)) {
-        rect = el.getBoundingClientRect();
-    }
-  }
-
-  // Final fallback (completely empty editor or outside focus)
-  if (rect.top === 0 || !area.contains(sel.anchorNode)) {
-    rect = {
-      top: areaRect.top,
-      bottom: areaRect.top + 24,
-      left: areaRect.left,
-      right: areaRect.left,
-      height: 24,
-      width: 0
-    };
-  }
-
-  if (menu) {
-    const vpW = window.innerWidth;
-    const isMobile = vpW <= 640;
-    
-    // Improved rect for mobile/collapsed
-    if (sel.isCollapsed && rect.height === 0) {
-      const range = sel.getRangeAt(0).cloneRange();
-      const span = document.createElement('span');
-      span.textContent = '\u200b'; // zero-width space
-      range.insertNode(span);
-      rect = span.getBoundingClientRect();
-      const p = span.parentNode;
-      p.removeChild(span);
-      p.normalize();
-    }
-
-    let topOffset, leftOffset;
-    const editorInner = document.getElementById('editor-inner');
-    const editorRect = editorInner.getBoundingClientRect();
-    const scrollTop = document.getElementById('editor-scroll').scrollTop;
-
-    if (isMobile) {
-      topOffset = rect.bottom - editorRect.top + scrollTop + 8;
-      menu.style.transform = 'none';
-    } else {
-      const verticalOffset = (rect.height > 32) ? 12 : (rect.height / 2);
-      topOffset = rect.top - editorRect.top + scrollTop + verticalOffset;
-      menu.style.transform = 'translateY(-50%)';
-    }
-
-    let leftAnchor = (!sel.isCollapsed && rect.width > 0) ? rect.right : (rect.left || areaRect.left);
-    leftOffset = leftAnchor - editorRect.left + 8;
-    
-    if (isMobile) {
-        if (leftOffset > vpW - 52) leftOffset = vpW - 52;
-        if (leftOffset < 12) leftOffset = 12;
-    } else {
-        if (leftOffset > editorRect.width - 44) leftOffset = editorRect.width - 44;
-        if (leftOffset < 16) leftOffset = 16;
-    }
-    
-    const isExpanded = menu.classList.contains('expanded');
-    const currentTop = parseInt(menu.style.top) || 0;
-    
-    // Auto-collapse if moved to a different line while expanded
-    if (isExpanded && Math.abs(currentTop - topOffset) > 24) {
-      menu.classList.remove('expanded');
-    }
-    
-    menu.style.top = topOffset + 'px';
-    menu.style.left = leftOffset + 'px';
-    menu.classList.add('show');
-  }
+let composing = false, handling = false;
+area.addEventListener('compositionstart', () => { composing = true; });
+area.addEventListener('compositionend', () => { composing = false; setTimeout(() => afterInput(true), 0); });
+area.addEventListener('input', e => {
+  if (handling) return;
+  if (composing || e.isComposing) { sync(); return; }
+  afterInput(false, e);
 });
-
-document.getElementById('content-area').addEventListener('keyup', e => {
-  if (isComposing || e.isComposing) return;
-  updateFmtBar();
-  // Auto markdown conversions (space pressed)
-  if (e.key === ' ' || e.code === 'Space') {
-    const sel = window.getSelection();
-    if (!sel.rangeCount) return;
-    const node = sel.anchorNode;
-    if (node.nodeType === 3) {
-      const text = node.textContent;
-      const beforeCursor = text.slice(0, sel.anchorOffset);
-      if (/^[-*]\s$/.test(text) && sel.anchorOffset === 2) {
-        document.execCommand('delete', false);
-        document.execCommand('delete', false);
-        applyList();
-      } else if (/^(\[\]|\[ \])\s$/.test(beforeCursor)
-          && !hasVisibleContentBeforeInLine(node)
-          && sel.anchorOffset === beforeCursor.length) {
-        for (let i = 0; i < beforeCursor.length; i++) document.execCommand('delete', false);
-        insertTodo();
-      }
-    }
-  }
-  
-  if (e.key === 'Enter') {
-    // Re-assign IDs to duplicate todo items that get cloned by hitting enter
-    const seen = new Set();
-    let changed = false;
-    document.querySelectorAll('.todo-wrap').forEach(wrap => {
-      const id = wrap.dataset.id;
-      if (seen.has(id)) {
-        wrap.dataset.id = 'todo_' + Math.random().toString(36).substr(2, 9);
-        wrap.dataset.checked = 'false';
-        delete wrap.dataset.checkedAt;
-        wrap.dataset.reset = 'none';
-        changed = true;
-      } else {
-        seen.add(id);
-      }
-    });
-    if (changed) save();
-  }
-});
-document.getElementById('content-area').addEventListener('mouseup', updateFmtBar);
-
-document.getElementById('content-area').addEventListener('compositionstart', () => {
-  isComposing = true;
-  armCompositionWatchdog();
-  queueSelectionSync();
-});
-
-document.getElementById('content-area').addEventListener('compositionupdate', () => {
-  armCompositionWatchdog();
-  queueSelectionSync();
-});
-
-document.getElementById('content-area').addEventListener('compositionend', () => {
-  isComposing = false;
-  clearCompositionWatchdog();
-  const sel = window.getSelection();
-  const area = document.getElementById('content-area');
-  if ((!sel.rangeCount || !area.contains(sel.anchorNode)) && lastEditorRange) {
-    sel.removeAllRanges();
-    sel.addRange(lastEditorRange.cloneRange());
-  }
-  if (sel.rangeCount && area.contains(sel.anchorNode)) {
-    lastEditorRange = sel.getRangeAt(0).cloneRange();
-  }
-
-  // iOS IME may delay selection restoration; retry sync for a short window.
-  updateFmtBar();
-  queueSelectionSync();
-  requestSelectionSync();
-});
-
-function clearTodoLongPress() {
-  clearTimeout(todoLongPressTimer);
-  todoLongPressTimer = null;
-  todoLongPressTargetId = null;
+function afterInput(fromIME, e) {
+  if (handling) return;
+  handling = true;
+  try {
+    normalizeTop();
+    const typed = fromIME || !e || !e.inputType || e.inputType.startsWith('insert');
+    if (typed && !(e && e.inputType === 'insertParagraph')) { lineShortcut() || inlineShortcut(); }
+  } finally { handling = false; }
+  sync();
+  refreshToolbar();
 }
 
-const LONG_PRESS_MS = 500;
-const LONG_PRESS_MOVE_TOLERANCE = 8;
-
-document.getElementById('content-area').addEventListener('pointerdown', function(e) {
-  const wrap = e.target.closest('.todo-wrap');
-  if (!wrap) return;
-
-  clearTodoLongPress();
-  todoLongPressTargetId = wrap.dataset.id;
-  todoLongPressStartX = e.clientX;
-  todoLongPressStartY = e.clientY;
-
-  todoLongPressTimer = setTimeout(() => {
-    const id = todoLongPressTargetId;
-    clearTodoLongPress();
-    if (!id) return;
-    suppressTodoToggleId = id;
-    window.openTodoSettings(id);
-  }, LONG_PRESS_MS);
-});
-
-document.getElementById('content-area').addEventListener('pointermove', function(e) {
-  if (!todoLongPressTimer) return;
-  if (Math.abs(e.clientX - todoLongPressStartX) > LONG_PRESS_MOVE_TOLERANCE ||
-      Math.abs(e.clientY - todoLongPressStartY) > LONG_PRESS_MOVE_TOLERANCE) {
-    clearTodoLongPress();
-  }
-});
-
-document.getElementById('content-area').addEventListener('pointerup', clearTodoLongPress);
-document.getElementById('content-area').addEventListener('pointercancel', clearTodoLongPress);
-document.getElementById('content-area').addEventListener('pointerleave', clearTodoLongPress);
-
-document.addEventListener('keydown', e => {
-  const mod = e.metaKey || e.ctrlKey;
-  if (mod && e.key === 'b') { e.preventDefault(); applyFmt('bold'); }
-  if (mod && e.key === 'i') { e.preventDefault(); applyFmt('italic'); }
-  if (mod && e.key === 'u') { e.preventDefault(); applyFmt('underline'); }
-  if (mod && e.key === 'd') { e.preventDefault(); toggleDark(); }
-  if (e.key === 'Escape') { closeModal(); closeMobilePanel(); cancelDelete(); }
-});
-
-// ── Modal ──
-function openModal(type) {
-  modalType = type;
-  const body = document.getElementById('modal-body');
-
-  if (type === 'page-font' || type === 'ui-font') {
-    const isPage = type === 'page-font';
-    const currentFont = isPage ? activePage().font : settings.uiFont;
-
-    // Recent fonts chips
-    const recentHTML = settings.recentFonts.length
-      ? `<div class="modal-section-title" style="margin-top:0">最近使ったフォント</div>
-         <div class="recent-fonts">${
-           settings.recentFonts.map(f =>
-             `<button class="recent-font-chip" onclick="pickRecentFont('${f.replace(/'/g,"\\'")}')">
-               <span>${f}</span>
-               <div class="recent-font-del" onclick="removeRecentFont('${f.replace(/'/g,"\\'")}', event)">
-                 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                   <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-                 </svg>
-               </div>
-             </button>`
-           ).join('')
-         }</div>
-         <div class="modal-section-title">Google Fonts 名称</div>`
-      : `<div class="modal-section-title">Google Fonts 名称</div>`;
-
-    body.innerHTML = `
-      ${recentHTML}
-      <input class="modal-input" id="mfi" type="text" value="${currentFont}"
-        placeholder="例: Noto Serif JP" autocomplete="off" spellcheck="false">
-      <button class="modal-apply-btn" onclick="applyFont()">変更を適用</button>`;
-
-    setupFontInput();
-
-  } else if (type === 'settings') {
-    // Theme swatches
-    const swatches = THEMES.map(t =>
-      `<button class="theme-swatch-btn ${settings.theme === t.id ? 'active' : ''}"
-        onclick="pickTheme('${t.id}')">
-        <div class="theme-swatch-circle" style="background:${t.color}"></div>
-        <span class="theme-swatch-label">${t.name}</span>
-      </button>`
-    ).join('');
-
-    body.innerHTML = `
-      <div class="modal-section-title">テーマカラー</div>
-      <div class="theme-swatches" id="swatch-row">${swatches}</div>
-
-      <div class="modal-section-title">外観</div>
-      <div class="dark-toggle">
-        <button class="dark-toggle-btn ${!settings.dark ? 'active' : ''}"
-          onclick="setDark(false)">☀ ライト</button>
-        <button class="dark-toggle-btn ${settings.dark ? 'active' : ''}"
-          onclick="setDark(true)">☾ ダーク</button>
-      </div>
-
-      <div class="settings-row" onclick="openModal('ui-font')">
-        <span class="s-label">UIフォント</span>
-        <span class="s-value">${settings.uiFont}</span>
-      </div>`;
-  } else if (type === 'todo') {
-    const todoEl = document.querySelector(`.todo-wrap[data-id="${window.currentTodoId}"]`);
-    if (!todoEl) return closeModal();
-    const currentRule = todoEl.dataset.reset || 'none';
-    
-    body.innerHTML = `
-      <div class="modal-section-title">自動リセット設定</div>
-      <div class="settings-row" onclick="setTodoRule('none')">
-        <span class="s-label">なし</span>
-        <span class="s-value">${currentRule === 'none' ? '✓' : ''}</span>
-      </div>
-      <div class="settings-row" onclick="setTodoRule('1h')">
-        <span class="s-label">1時間ごと</span>
-        <span class="s-value">${currentRule === '1h' ? '✓' : ''}</span>
-      </div>
-      <div class="settings-row" onclick="setTodoRule('3h')">
-        <span class="s-label">3時間ごと</span>
-        <span class="s-value">${currentRule === '3h' ? '✓' : ''}</span>
-      </div>
-      <div class="settings-row" onclick="setTodoRule('12h')">
-        <span class="s-label">12時間ごと</span>
-        <span class="s-value">${currentRule === '12h' ? '✓' : ''}</span>
-      </div>
-      <div class="settings-row" onclick="setTodoRule('daily')">
-        <span class="s-label">日ごと</span>
-        <span class="s-value">${currentRule === 'daily' ? '✓' : ''}</span>
-      </div>`;
-  }
-
-  document.getElementById('modal-overlay').classList.add('open');
-  modalOpenedAt = Date.now();
+/* Enter / Backspace inside todos.
+   Phone keyboards (Gboard, iOS) report keyCode 229 for everything, so this is driven
+   by `beforeinput`, which every keyboard fires, instead of keydown. */
+function splitTodo(r) {
+  const t = todoOf(r.startContainer);
+  if (!t) return false;
+  if (!r.collapsed) r.deleteContents();
+  if (!t.textContent.replace(/[\s​]/g, '')) { unTodo(t); ensureFilled(t); setCaret(t, 0); return true; }
+  const x = document.createRange();
+  x.setStart(r.startContainer, r.startOffset); x.setEnd(t, t.childNodes.length);
+  const frag = x.extractContents();
+  const n = document.createElement('div');
+  n.className = 'todo'; n.dataset.checked = 'false';
+  if (t.dataset.reset) n.dataset.reset = t.dataset.reset;
+  n.appendChild(frag);
+  [...n.querySelectorAll('*')].forEach(el => { if (!el.textContent && !/^(BR|IMG|HR)$/.test(el.nodeName) && !el.querySelector('br,img')) el.remove(); });
+  fixTodo(n); ensureFilled(t);
+  t.after(n);
+  setCaret(n, 0);
+  n.scrollIntoView({ block: 'nearest' });
+  return true;
 }
-
-function openSettingsModal(e) {
-  if (e) {
+function backspaceAtStart(r) {
+  if (!r.collapsed) return false;
+  const b = lineBlock(r.startContainer);
+  if (!b || !atLineStart(b, r)) return false;
+  const t = todoOf(r.startContainer);
+  if (t) { keepCaret(() => unTodo(t)); return true; }
+  if (/^(H1|H2|H3|H4|BLOCKQUOTE)$/.test(b.nodeName)) { document.execCommand('formatBlock', false, 'div'); return true; }
+  return false;
+}
+/* Japanese IME confirm (確定) can arrive as delete/paragraph-shaped events right around
+   compositionend (Android IMEs replace the composed text by deleting it first, iOS sends
+   the confirm Enter just after compositionend). Never treat those as the user's keys. */
+let compositionEndedAt = 0;
+area.addEventListener('compositionend', () => { compositionEndedAt = Date.now(); });
+const nearComposition = () => composing || Date.now() - compositionEndedAt < 400;
+area.addEventListener('beforeinput', e => {
+  if (e.isComposing || nearComposition()) return;
+  const r = caretRange();
+  if (!r) return;
+  let done = false;
+  if (e.inputType === 'insertParagraph') {
+    if (!todoOf(r.startContainer)) return;
     e.preventDefault();
-    e.stopPropagation();
+    done = splitTodo(r);
+  } else if (e.inputType === 'deleteContentBackward' && e.cancelable) {
+    if (!r.collapsed) return;
+    const b = lineBlock(r.startContainer);
+    if (!b || !atLineStart(b, r)) return;
+    if (!todoOf(r.startContainer) && !/^(H1|H2|H3|H4|BLOCKQUOTE)$/.test(b.nodeName)) return;
+    /* a real backspace at line start deletes across the line boundary; an IME replacing
+       its own text targets characters inside this line */
+    const tr = e.getTargetRanges ? e.getTargetRanges()[0] : null;
+    if (tr && !tr.collapsed && b.contains(tr.startContainer) && tr.startContainer !== b) {
+      const probe = document.createRange();
+      probe.setStart(tr.startContainer, tr.startOffset); probe.setEnd(tr.endContainer, tr.endOffset);
+      if (probe.toString()) return;
+    }
+    e.preventDefault();
+    done = backspaceAtStart(r);
   }
-  openModal('settings');
+  if (done) { sync(); refreshToolbar(); }
+});
+area.addEventListener('keydown', e => {
+  if (composing || e.isComposing || e.keyCode === 229) return;
+  if (e.key !== 'Tab') return;
+  const r = caretRange();
+  if (!r) return;
+  e.preventDefault();
+  if (elOf(r.startContainer).closest('li')) document.execCommand(e.shiftKey ? 'outdent' : 'indent');
+  else if (!e.shiftKey) document.execCommand('insertText', false, '　');
+});
+/* plain-text paste keeps the page clean */
+area.addEventListener('paste', e => {
+  const text = e.clipboardData && e.clipboardData.getData('text/plain');
+  if (text == null) return;
+  e.preventDefault();
+  document.execCommand('insertText', false, text.replace(/\r\n?/g, '\n'));
+});
+area.addEventListener('drop', e => {
+  const text = e.dataTransfer && e.dataTransfer.getData('text/plain');
+  if (!text) { e.preventDefault(); return; }
+  if (e.dataTransfer.types.includes('text/html')) {
+    e.preventDefault();
+    const pos = document.caretRangeFromPoint ? document.caretRangeFromPoint(e.clientX, e.clientY) : null;
+    if (pos) { const s = getSelection(); s.removeAllRanges(); s.addRange(pos); }
+    document.execCommand('insertText', false, text);
+  }
+});
+
+/* ── todo checkbox: tap to toggle, long-press / right-click for repeat ── */
+function inBox(t, e) {
+  const r = t.getBoundingClientRect();
+  const x = e.clientX - r.left, y = e.clientY - r.top;
+  return x >= -6 && x <= 27 && y >= 0 && y <= 36;
 }
-
-// スマホ向け: Todoをタッチしたとき歯車アイコンを一時表示
-// Todo設定は長押しで開く（ギアアイコンは非表示）
-
-window.toggleTodo = function(el) {
-  const wrap = el.closest('.todo-wrap');
-  if (suppressTodoToggleId && wrap.dataset.id === suppressTodoToggleId) {
-    suppressTodoToggleId = null;
-    return;
+function setChecked(t, v) {
+  t.dataset.checked = v ? 'true' : 'false';
+  if (v) t.dataset.checkedAt = Date.now(); else delete t.dataset.checkedAt;
+  sync();
+}
+let press = null;
+area.addEventListener('pointerdown', e => {
+  const t = e.target.closest && e.target.closest('.todo');
+  if (!t || !inBox(t, e) || e.button > 0) return;
+  e.preventDefault();
+  press = { t, x: e.clientX, y: e.clientY, long: false, moved: false };
+  press.timer = setTimeout(() => { if (press) { press.long = true; openTodoSheet(press.t); } }, 520);
+});
+area.addEventListener('pointermove', e => {
+  if (press && Math.hypot(e.clientX - press.x, e.clientY - press.y) > 8) { press.moved = true; clearTimeout(press.timer); }
+  if (e.pointerType === 'mouse') {
+    const t = e.target.closest && e.target.closest('.todo');
+    area.style.cursor = t && inBox(t, e) ? 'pointer' : '';
   }
-  const isChecked = wrap.dataset.checked === 'true';
-  const newChecked = !isChecked;
-  wrap.dataset.checked = newChecked;
-  if (newChecked) wrap.dataset.checkedAt = Date.now();
-  else delete wrap.dataset.checkedAt;
-  save();
-};
-
-window.openTodoSettings = function(id) {
-  window.currentTodoId = id;
-  openModal('todo');
-};
-
-window.setTodoRule = function(rule) {
-  const todoEl = document.querySelector(`.todo-wrap[data-id="${window.currentTodoId}"]`);
-  if (todoEl) {
-    todoEl.dataset.reset = rule;
-    save();
-  }
-  closeModal();
-};
-
-// Check for resets every minute
-setInterval(() => {
+});
+area.addEventListener('pointerup', () => {
+  if (!press) return;
+  clearTimeout(press.timer);
+  const p = press; press = null;
+  if (!p.long && !p.moved) setChecked(p.t, p.t.dataset.checked !== 'true');
+});
+area.addEventListener('pointercancel', () => { if (press) { clearTimeout(press.timer); press = null; } });
+area.addEventListener('touchstart', e => {
+  const t = e.target.closest && e.target.closest('.todo');
+  if (t && inBox(t, e.touches[0])) e.preventDefault();
+}, { passive: false });
+area.addEventListener('contextmenu', e => {
+  const t = e.target.closest && e.target.closest('.todo');
+  if (t && inBox(t, e)) { e.preventDefault(); openTodoSheet(t); }
+});
+function openTodoSheet(t) {
+  const cur = t.dataset.reset || '';
+  openSheet(`<h3>チェックの自動リセット</h3>
+    <p class="lead">チェックしてから時間がたつと、自動でチェックが外れます。毎日のルーティンなどに。</p>
+    <div class="sec">リセットの間隔</div>
+    <div class="opts">${RESETS.map(r => `<button class="opt ${cur === r.id ? 'on' : ''}" data-r="${r.id}"><span>${r.name}</span><span class="chk">${cur === r.id ? '✓' : ''}</span></button>`).join('')}</div>
+    <div class="acts split"><button class="btn" id="untodo">Todoをやめる</button><button class="btn primary" data-close>閉じる</button></div>`, s => {
+    s.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+      if (!t.isConnected) return closeSheet();
+      if (b.dataset.r) t.dataset.reset = b.dataset.r; else delete t.dataset.reset;
+      fixTodo(t); sync(false); closeSheet();
+    });
+    s.querySelector('#untodo').onclick = () => { if (t.isConnected) { unTodo(t); sync(); } closeSheet(); };
+  });
+}
+function runResets(root) {
   let changed = false;
   const now = Date.now();
-  document.querySelectorAll('.todo-wrap').forEach(wrap => {
-    if (wrap.dataset.checked !== 'true') return;
-    const rule = wrap.dataset.reset;
-    const checkedAt = parseInt(wrap.dataset.checkedAt) || 0;
-    if (rule === 'none' || !checkedAt) return;
-    let shouldReset = false;
-    if (rule === '1h' && now - checkedAt >= 3600000) shouldReset = true;
-    else if (rule === '3h' && now - checkedAt >= 10800000) shouldReset = true;
-    else if (rule === '12h' && now - checkedAt >= 43200000) shouldReset = true;
-    else if (rule === 'daily') {
-      const d1 = new Date(checkedAt).toLocaleDateString();
-      const d2 = new Date(now).toLocaleDateString();
-      if (d1 !== d2) shouldReset = true;
-    }
-    if (shouldReset) {
-      wrap.dataset.checked = 'false';
-      delete wrap.dataset.checkedAt;
-      changed = true;
+  root.querySelectorAll('.todo[data-checked="true"][data-reset]').forEach(el => {
+    const at = +el.dataset.checkedAt || 0;
+    const rule = RESETS.find(r => r.id === el.dataset.reset);
+    if (!at || !rule) return;
+    const due = rule.ms ? now - at >= rule.ms : new Date(at).toDateString() !== new Date(now).toDateString();
+    if (due) { el.dataset.checked = 'false'; delete el.dataset.checkedAt; changed = true; }
+  });
+  return changed;
+}
+function resetAll() {
+  let any = false;
+  pages.forEach(p => {
+    if (p.id === activeId) {
+      if (runResets(area)) { p.content = area.innerHTML; any = true; }
+    } else if (p.content.includes('data-reset')) {
+      const t = document.createElement('template');
+      t.innerHTML = p.content;
+      if (runResets(t.content)) { p.content = t.innerHTML; any = true; }
     }
   });
-  if (changed) save();
-}, 60000);
-
-function pickRecentFont(font) {
-  document.getElementById('mfi').value = font;
-  applyFont();
+  if (any) save();
 }
+setInterval(resetAll, 60000);
 
-function addRecentFont(font) {
-  const list = settings.recentFonts.filter(f => f !== font);
-  list.unshift(font);
-  settings.recentFonts = list.slice(0, 6); // Keep up to 6 recent fonts
+/* ═══════════ toolbar ═══════════ */
+const TB_ICONS = { ul: ICON.ul, todo: ICON.todo, blockquote: ICON.quote };
+document.querySelectorAll('.tb').forEach(b => { if (TB_ICONS[b.dataset.cmd]) b.innerHTML = TB_ICONS[b.dataset.cmd]; });
+let lastRange = null;
+function restoreRange() {
+  if (caretRange()) return;
+  area.focus({ preventScroll: true });
+  const s = getSelection();
+  if (lastRange && area.contains(lastRange.startContainer)) { s.removeAllRanges(); s.addRange(lastRange); }
+  else { const last = area.lastChild || area; setCaret(last, last.childNodes.length); }
 }
-
-function removeRecentFont(font, e) {
-  if (e) { e.stopPropagation(); e.preventDefault(); }
-  settings.recentFonts = settings.recentFonts.filter(f => f !== font);
-  save();
-  openModal(modalType); // Refresh modal
+function blockTagAt(node) {
+  const el = elOf(node);
+  if (!el || !el.closest) return '';
+  if (el.closest('h1')) return 'h1';
+  if (el.closest('h2')) return 'h2';
+  if (el.closest('blockquote')) return 'blockquote';
+  return '';
 }
-
-function setupFontInput() {
-  setTimeout(() => {
-    const el = document.getElementById('mfi');
-    if (!el) return;
-    el.focus(); el.select();
-    el.addEventListener('keydown', e => { if (e.key === 'Enter') applyFont(); });
-  }, 60);
+function run(cmd) {
+  restoreRange();
+  const r = caretRange();
+  if (!r) return;
+  handling = true;
+  try {
+    if (['bold', 'italic', 'underline', 'strikeThrough'].includes(cmd)) document.execCommand(cmd);
+    else if (cmd === 'h1' || cmd === 'h2' || cmd === 'blockquote') {
+      const t = todoOf(r.startContainer);
+      if (t) keepCaret(() => unTodo(t));
+      document.execCommand('formatBlock', false, blockTagAt(r.startContainer) === cmd ? 'div' : cmd);
+    }
+    else if (cmd === 'ul') document.execCommand('insertUnorderedList');
+    else if (cmd === 'ol') document.execCommand('insertOrderedList');
+    else if (cmd === 'todo') {
+      const t = todoOf(r.startContainer);
+      if (t) keepCaret(() => unTodo(t));
+      else {
+        if (elOf(r.startContainer).closest('li')) { toast('リストの中ではTodoにできません'); return; }
+        if (blockTagAt(r.startContainer)) document.execCommand('formatBlock', false, 'div');
+        const b = currentBlock();
+        if (b) keepCaret(() => makeTodo(b, false));
+      }
+    }
+  } finally { handling = false; }
+  sync(); refreshToolbar();
 }
+const toolbar = $('#toolbar');
+let tbPress = null;
+/* Keep focus (and the phone keyboard) in the editor while a button is tapped:
+   cancelling touchstart/pointerdown stops the button from stealing focus. */
+toolbar.addEventListener('mousedown', e => e.preventDefault());
+toolbar.addEventListener('touchstart', e => { if (e.target.closest('.tb')) e.preventDefault(); }, { passive: false });
+toolbar.addEventListener('pointerdown', e => {
+  const b = e.target.closest('.tb'); if (!b) return;
+  e.preventDefault();
+  tbPress = { b, x: e.clientX };
+});
+toolbar.addEventListener('pointercancel', () => { tbPress = null; });
+toolbar.addEventListener('pointerup', e => {
+  const b = e.target.closest('.tb');
+  if (!tbPress || b !== tbPress.b || Math.abs(e.clientX - tbPress.x) > 10) { tbPress = null; return; }
+  tbPress = null;
+  run(b.dataset.cmd);
+});
+toolbar.addEventListener('click', e => { const b = e.target.closest('.tb'); if (b && e.detail === 0) run(b.dataset.cmd); });
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  modalType = null;
+let tbRaf = 0;
+function refreshToolbar() {
+  cancelAnimationFrame(tbRaf);
+  tbRaf = requestAnimationFrame(() => {
+    const r = caretRange();
+    const on = {};
+    if (r) {
+      ['bold', 'italic', 'underline', 'strikeThrough'].forEach(c => { try { on[c] = document.queryCommandState(c); } catch {} });
+      const tag = blockTagAt(r.startContainer); if (tag) on[tag] = true;
+      if (tag === 'h1' || tag === 'h2') on.bold = false;
+      const el = elOf(r.startContainer);
+      const li = el.closest && el.closest('ul,ol');
+      if (li && area.contains(li)) on[li.nodeName.toLowerCase()] = true;
+      if (todoOf(r.startContainer)) on.todo = true;
+    }
+    document.querySelectorAll('.tb').forEach(b => b.classList.toggle('on', !!on[b.dataset.cmd]));
+  });
 }
-function overlayClick(e) {
-  if (Date.now() - modalOpenedAt < 180) return;
-  if (e.target === document.getElementById('modal-scrim') ||
-      e.target === document.getElementById('modal-overlay')) closeModal();
+document.addEventListener('selectionchange', () => {
+  const r = caretRange();
+  if (r) lastRange = r.cloneRange();
+  refreshToolbar();
+});
+area.addEventListener('focus', () => document.body.classList.add('editing'));
+area.addEventListener('blur', () => setTimeout(() => { if (document.activeElement !== area && !tbPress) document.body.classList.remove('editing'); }, 250));
+if (window.visualViewport) {
+  const vv = visualViewport;
+  const upd = () => document.documentElement.style.setProperty('--kb', Math.max(0, Math.round(innerHeight - vv.height - vv.offsetTop)) + 'px');
+  vv.addEventListener('resize', upd); vv.addEventListener('scroll', upd);
 }
+$('#scroll').addEventListener('scroll', e => $('#topbar').classList.toggle('lined', e.target.scrollTop > 4), { passive: true });
 
-function applyFont() {
-  const el = document.getElementById('mfi');
-  if (!el) return;
-  const font = el.value.trim();
-  if (!font) return;
-  injectFont(font);
-  addRecentFont(font);
+/* ═══════════ popover menu ═══════════ */
+const menu = $('#menu');
+function openMenu(anchor, items) {
+  menu.innerHTML = items.map((it, i) => it === '-' ? '<div class="mi-sep"></div>'
+    : `<button class="mi ${it.danger ? 'danger' : ''}" data-i="${i}">${it.icon || ''}<span>${it.label}</span></button>`).join('');
+  menu.querySelectorAll('.mi').forEach(b => b.onclick = () => { closeMenu(); items[+b.dataset.i].run(); });
+  menu.classList.add('open');
+  const r = anchor.getBoundingClientRect(), w = menu.offsetWidth;
+  menu.style.top = (r.bottom + 6) + 'px';
+  menu.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.right - w)) + 'px';
+}
+function closeMenu() { menu.classList.remove('open'); }
+document.addEventListener('pointerdown', e => { if (menu.classList.contains('open') && !menu.contains(e.target) && !e.target.closest('#more-btn')) closeMenu(); });
+$('#more-btn').onclick = e => {
+  if (menu.classList.contains('open')) return closeMenu();
+  openMenu(e.currentTarget, [
+    { label: 'このメモのフォント', run: () => openFontSheet('page') },
+    { label: 'Markdownで書き出す', run: () => exportPage('md') },
+    { label: 'テキストで書き出す', run: () => exportPage('txt') },
+    { label: '複製する', run: duplicatePage },
+    '-',
+    { label: '削除する', danger: true, run: () => askDelete(activeId) },
+  ]);
+};
 
-  if (modalType === 'page-font') {
-    activePage().font = font;
-    document.getElementById('title-input').style.fontFamily  =
-    document.getElementById('content-area').style.fontFamily = `'${font}', serif`;
-    document.getElementById('font-chip-label').textContent = font;
-  } else if (modalType === 'ui-font') {
-    settings.uiFont = font;
-    document.body.style.setProperty('--ui-font', `'${font}', sans-serif`);
+/* ═══════════ sheets ═══════════ */
+const sheetWrap = $('#sheet-wrap'), sheet = $('#sheet-body');
+function openSheet(html, setup) {
+  closeMenu();
+  sheet.innerHTML = html;
+  sheet.querySelectorAll('[data-close]').forEach(b => b.onclick = closeSheet);
+  sheetWrap.classList.add('open');
+  setup && setup(sheet);
+}
+function closeSheet() { sheetWrap.classList.remove('open'); sheet.innerHTML = ''; }
+$('#sheet-scrim').onclick = closeSheet;
+
+function openSettings() {
+  closeDrawer();
+  const darkVal = settings.dark === 'auto' ? 'auto' : settings.dark ? 'dark' : 'light';
+  openSheet(`<h3>設定</h3>
+    <div class="sec">テーマ</div>
+    <div class="swatches">${THEMES.map(t => `<button class="sw ${settings.theme === t.id ? 'on' : ''}" data-t="${t.id}"><i style="background:${t.color}"></i>${t.name}</button>`).join('')}</div>
+    <div class="sec">明るさ</div>
+    <div class="seg">${[['light', 'ライト'], ['dark', 'ダーク'], ['auto', '自動']].map(([v, n]) => `<button data-d="${v}" class="${darkVal === v ? 'on' : ''}">${n}</button>`).join('')}</div>
+    <div class="sec">フォント</div>
+    <div class="rows"><button class="row" id="ui-font"><span>画面の文字</span><span class="v"></span></button><button class="row" id="pg-font"><span>このメモの本文</span><span class="v"></span></button></div>
+    <div class="sec">データ</div>
+    <p class="note">メモはこのブラウザの中にだけ保存されています。ブラウザのデータを消したり、別の端末で開いたりすると見られないので、ときどきバックアップしてね。</p>
+    <div class="acts split"><button class="btn" id="bk-save">バックアップ</button><button class="btn" id="bk-load">読み込む</button></div>
+    <div class="acts"><button class="btn primary" data-close>閉じる</button></div>`, s => {
+    s.querySelector('#ui-font .v').textContent = settings.uiFont;
+    s.querySelector('#pg-font .v').textContent = activePage().font;
+    s.querySelectorAll('.sw').forEach(b => b.onclick = () => {
+      settings.theme = b.dataset.t; applyTheme(); saveSettings();
+      s.querySelectorAll('.sw').forEach(x => x.classList.toggle('on', x === b));
+    });
+    s.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+      settings.dark = b.dataset.d === 'auto' ? 'auto' : b.dataset.d === 'dark';
+      applyTheme(); saveSettings();
+      s.querySelectorAll('.seg button').forEach(x => x.classList.toggle('on', x === b));
+    });
+    s.querySelector('#ui-font').onclick = () => openFontSheet('ui');
+    s.querySelector('#pg-font').onclick = () => openFontSheet('page');
+    s.querySelector('#bk-save').onclick = backup;
+    s.querySelector('#bk-load').onclick = () => $('#file-in').click();
+  });
+}
+$('#settings-btn').onclick = openSettings;
+
+function openFontSheet(kind) {
+  const isPage = kind === 'page';
+  const cur = isPage ? activePage().font : settings.uiFont;
+  FONT_PRESETS.forEach(injectFont);
+  settings.recentFonts.forEach(injectFont);
+  const chip = (f, x) => `<button class="chip ${f === cur ? 'on' : ''}" data-f="${f}" style="font-family:'${f}'">${f}${x ? `<span class="x" data-x="${f}" title="履歴から消す">${ICON.x}</span>` : ''}</button>`;
+  const recent = settings.recentFonts.filter(f => !FONT_PRESETS.includes(f));
+  openSheet(`<h3>${isPage ? 'このメモのフォント' : '画面の文字のフォント'}</h3>
+    <p class="lead">${isPage ? 'メモごとに本文のフォントを変えられます。' : 'ボタンや一覧などの文字です。'}<a href="https://fonts.google.com/?subset=japanese" target="_blank" rel="noopener" style="color:var(--acc)">Google Fonts</a> にあるフォントなら名前を入れて使えます。</p>
+    <div class="sec">フォント名</div>
+    <input class="input" id="font-in" autocomplete="off" spellcheck="false" placeholder="例: Klee One">
+    <div class="sec">おすすめ</div>
+    <div class="chips">${FONT_PRESETS.map(f => chip(f)).join('')}</div>
+    ${recent.length ? `<div class="sec">最近使った</div><div class="chips">${recent.map(f => chip(f, true)).join('')}</div>` : ''}
+    <div class="acts"><button class="btn" data-close>キャンセル</button><button class="btn primary" id="font-ok">決定</button></div>`, s => {
+    const inp = s.querySelector('#font-in');
+    inp.value = cur;
+    const apply = name => {
+      const f = cleanFont(name);
+      if (!f) return toast('フォント名を入れてね');
+      injectFont(f);
+      settings.recentFonts = [f, ...settings.recentFonts.filter(x => x !== f)].slice(0, 8);
+      if (isPage) { activePage().font = f; loadPage(true); sync(false); }
+      else { settings.uiFont = f; applyTheme(); }
+      saveSettings(); closeSheet();
+      document.fonts && document.fonts.load(`16px '${f}'`).then(list => { if (!list.length) toast(`「${f}」が見つからないかも…`); }).catch(() => {});
+    };
+    s.querySelectorAll('.chip').forEach(c => c.onclick = e => {
+      const x = e.target.closest('.x');
+      if (x) {
+        e.stopPropagation();
+        settings.recentFonts = settings.recentFonts.filter(f => f !== x.dataset.x);
+        saveSettings(); c.remove(); return;
+      }
+      apply(c.dataset.f);
+    });
+    s.querySelector('#font-ok').onclick = () => apply(inp.value);
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.isComposing) apply(inp.value); });
+    if (!isMobile()) setTimeout(() => inp.select(), 30);
+  });
+}
+$('#font-btn').onclick = () => openFontSheet('page');
+
+/* ═══════════ export / backup ═══════════ */
+function toText(html, md) {
+  const t = document.createElement('template');
+  t.innerHTML = html || '';
+  stripZW(t.content);
+  const out = [];
+  const inline = n => {
+    let s = '';
+    n.childNodes.forEach(c => {
+      if (c.nodeType === 3) s += c.data;
+      else if (c.nodeName === 'BR') s += '\n';
+      else if (!md) s += (isBlock(c) ? '\n' : '') + inline(c);
+      else if (/^(B|STRONG)$/.test(c.nodeName)) s += wrapMd(inline(c), '**');
+      else if (/^(I|EM)$/.test(c.nodeName)) s += wrapMd(inline(c), '*');
+      else if (/^(S|STRIKE|DEL)$/.test(c.nodeName)) s += wrapMd(inline(c), '~~');
+      else s += (isBlock(c) ? '\n' : '') + inline(c);
+    });
+    return s;
+  };
+  const wrapMd = (s, m) => s.trim() ? m + s + m : s;
+  const line = n => inline(n).replace(/\n$/, '');
+  const walk = (node, depth) => {
+    node.childNodes.forEach(c => {
+      if (c.nodeType === 3) { if (c.data.trim()) out.push(c.data); return; }
+      if (c.nodeType !== 1) return;
+      const tag = c.nodeName;
+      if (/^H[1-6]$/.test(tag)) out.push((md ? '#'.repeat(+tag[1]) + ' ' : '') + line(c).trim());
+      else if (tag === 'BLOCKQUOTE') line(c).split('\n').forEach(l => out.push((md ? '> ' : '　') + l));
+      else if (tag === 'UL' || tag === 'OL') {
+        let i = 1;
+        c.childNodes.forEach(li => {
+          if (li.nodeName === 'LI') {
+            const clone = li.cloneNode(true);
+            clone.querySelectorAll('ul,ol').forEach(x => x.remove());
+            out.push('  '.repeat(depth) + (tag === 'OL' ? `${i++}. ` : md ? '- ' : '・') + line(clone).trim());
+            li.querySelectorAll(':scope > ul, :scope > ol').forEach(sub => walk({ childNodes: [sub] }, depth + 1));
+          } else if (li.nodeName === 'UL' || li.nodeName === 'OL') walk({ childNodes: [li] }, depth + 1);
+        });
+      }
+      else if (tag === 'HR') out.push(md ? '---' : '――――');
+      else if (c.classList.contains('todo')) {
+        const on = c.dataset.checked === 'true';
+        out.push((md ? (on ? '- [x] ' : '- [ ] ') : (on ? '☑ ' : '☐ ')) + line(c).trim());
+      }
+      else if ([...c.childNodes].some(isBlock)) walk(c, depth);
+      else out.push(line(c));
+    });
+  };
+  walk(t.content, 0);
+  return out.join('\n').replace(/\n{3,}/g, '\n\n').trim() + '\n';
+}
+function download(name, text, type) {
+  const url = URL.createObjectURL(new Blob([text], { type }));
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+const safeName = s => (s.trim() || '無題').replace(/[\\/:*?"<>|\n]/g, '_').slice(0, 60);
+function exportPage(kind) {
+  if (dirty) persist();
+  const p = activePage(), md = kind === 'md';
+  const head = p.title.trim() ? (md ? '# ' : '') + p.title.trim() + '\n\n' : '';
+  download(`${safeName(p.title)}.${md ? 'md' : 'txt'}`, head + toText(p.content, md), md ? 'text/markdown' : 'text/plain');
+}
+function backup() {
+  if (dirty) persist();
+  const d = new Date(), stamp = `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  download(`文綴-バックアップ-${stamp}.json`, JSON.stringify({ app: 'fumi', version: 8, exportedAt: d.toISOString(), pages }, null, 1), 'application/json');
+  toast('バックアップを保存しました');
+}
+$('#file-in').addEventListener('change', async e => {
+  const f = e.target.files[0];
+  e.target.value = '';
+  if (!f) return;
+  let data;
+  try { data = JSON.parse(await f.text()); } catch { return toast('ファイルを読めませんでした'); }
+  const inc = Array.isArray(data) ? data : data && Array.isArray(data.pages) ? data.pages : null;
+  if (!inc) return toast('文綴のバックアップではないみたい');
+  let added = 0;
+  inc.forEach(p => {
+    if (!p || typeof p !== 'object') return;
+    const content = migrateHTML(String(p.content || ''));
+    const same = pages.find(x => x.id === p.id);
+    if (same && same.content === content && same.title === String(p.title || '')) return;
+    pages.push({ id: same ? uid() : String(p.id || uid()), title: String(p.title || ''), content, font: cleanFont(p.font) || DEFAULT_FONT, updatedAt: +p.updatedAt || Date.now() });
+    added++;
+  });
+  persist(); renderList(); closeSheet();
+  toast(added ? `${added} 件のメモを読み込みました` : '新しいメモはありませんでした');
+});
+
+/* ═══════════ global keys ═══════════ */
+document.addEventListener('keydown', e => {
+  const mod = e.metaKey || e.ctrlKey;
+  if (e.key === 'Escape') {
+    if (sheetWrap.classList.contains('open')) closeSheet();
+    else if (menu.classList.contains('open')) closeMenu();
+    else closeDrawer();
   }
-  save(); closeModal();
-}
+  if (mod && e.key.toLowerCase() === 's') { e.preventDefault(); persist(); toast('保存しました'); }
+  if (mod && e.key.toLowerCase() === 'd' && !e.shiftKey) {
+    e.preventDefault();
+    const cur = document.body.classList.contains('dark');
+    settings.dark = !cur; applyTheme(); saveSettings();
+  }
+});
 
-// ── Init ──
+/* ═══════════ init ═══════════ */
+const setIcon = (id, html) => { $(id).innerHTML = html; };
+setIcon('#side-open', ICON.side); setIcon('#side-close', ICON.side); setIcon('#settings-btn', ICON.gear); setIcon('#more-btn', ICON.more); setIcon('#search-ic', ICON.search);
+$('#new-btn').innerHTML = ICON.plus + '<span>新しいメモ</span>';
+document.body.classList.toggle('side-closed', !!settings.sideClosed);
 applyTheme();
-document.body.style.setProperty('--ui-font', `'${settings.uiFont}', sans-serif`);
-injectFont(settings.uiFont);
-renderNav();
-loadActivePage();
-setupTodoNormalizerObserver();
-
-// スマホ: [>]ホバーメニューの外側タップで閉じる
-document.addEventListener('touchstart', function(e) {
-  const menu = document.getElementById('hover-menu-container');
-  if (!menu || !menu.classList.contains('expanded')) return;
-  if (!menu.contains(e.target)) {
-    menu.classList.remove('expanded');
-  }
-}, { passive: true });
+loadPage();
+resetAll();
+renderList();
+if (migrated) persist();
 </script>
 </body>
 </html>
