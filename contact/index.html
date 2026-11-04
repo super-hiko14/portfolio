@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>お問い合わせ — Super Hiko14</title>
+<meta name="description" content="Super Hiko14へのお問い合わせはこちらから。">
+<link rel="canonical" href="https://super-hiko14.com/contact/">
+<meta name="theme-color" content="#dcede1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Hiko14">
+<meta property="og:title" content="お問い合わせ — Super Hiko14">
+<meta property="og:description" content="Super Hiko14へのお問い合わせはこちらから。">
+<meta property="og:url" content="https://super-hiko14.com/contact/">
+<meta property="og:image" content="https://super-hiko14.com/sozai/images/eee.png">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/sozai/site.css">
+<script src="https://www.google.com/recaptcha/api.js?render=6LfsiZgsAAAAANQMq3doqNAMje_TpSltoO4JiI9T" async defer></script>
+<style>
+/* reCAPTCHA のバッジが下の文字にかぶらないように */
+.grecaptcha-badge{bottom:64px !important}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top"><a class="chip back" href="/">‹ Super Hiko14</a></div>
+
+  <header class="head">
+    <img src="/sozai/images/eee.png" alt="" width="72" height="72">
+    <div>
+      <p class="eyebrow">super-hiko14.com/contact</p>
+      <h1>お問い合わせ</h1>
+    </div>
+  </header>
+
+  <section class="card">
+    <p class="lead">気軽にお問い合わせください</p>
+    <p class="note">メールでも受け付けています：<a href="mailto:info@super-hiko14.com">info@super-hiko14.com</a></p>
+  </section>
+
+  <form class="card" id="contactForm" novalidate>
+    <label class="field">
+      <span>メールアドレス<b class="req">*</b></span>
+      <input class="input" type="email" id="email" name="email" placeholder="your@example.com" autocomplete="email" required>
+      <small class="err" id="emailError"></small>
+    </label>
+    <label class="field">
+      <span>お名前(ニックネーム可)<b class="req">*</b></span>
+      <input class="input" type="text" id="name" name="name" placeholder="例：Super Hiko14" autocomplete="nickname" required>
+      <small class="err" id="nameError"></small>
+    </label>
+    <label class="field">
+      <span>お問い合わせ内容<b class="req">*</b></span>
+      <textarea class="input" id="message" name="message" rows="8" placeholder="お気軽にご連絡ください..." required></textarea>
+      <small class="err" id="messageError"></small>
+    </label>
+    <div class="field">
+      <label class="check">
+        <input type="checkbox" id="agree" name="agree" required>
+        <span><a href="/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a>に同意します<b class="req">*</b></span>
+      </label>
+      <small class="err" id="agreeError"></small>
+    </div>
+    <div class="actions">
+      <button class="chip" type="submit">送信 ›</button>
+      <button class="chip back" type="reset">クリア</button>
+    </div>
+    <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+    <p class="note">
+      This site is protected by reCAPTCHA and the Google
+      <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Privacy Policy</a> and
+      <a href="https://policies.google.com/terms" target="_blank" rel="noopener">Terms of Service</a> apply.
+    </p>
+  </form>
+</div>
+
+<footer class="foot">
+  <span>&copy; 2026 Super Hiko14</span>
+  <a href="/terms/">利用規約</a>
+  <a href="/privacypolicy/">プライバシーポリシー</a>
+</footer>
+
+<script>
+/* 送信先は sub.super-hiko14.com(Vercel)の API */
+const API = "https://sub.super-hiko14.com/api/contact";
+const SITE_KEY = "6LfsiZgsAAAAANQMq3doqNAMje_TpSltoO4JiI9T";
+
+const form = document.getElementById("contactForm");
+const email = document.getElementById("email");
+const nameInput = document.getElementById("name");
+const message = document.getElementById("message");
+const agree = document.getElementById("agree");
+const status = document.getElementById("formStatus");
+const submit = form.querySelector('[type="submit"]');
+
+function setStatus(text, kind){ status.textContent = text; status.className = "status" + (kind ? " " + kind : ""); }
+function setError(id, text){ document.getElementById(id).textContent = text; }
+
+function validate(){
+  ["emailError","nameError","messageError","agreeError"].forEach(id => setError(id, ""));
+  let ok = true;
+  if (!email.value.trim()) { setError("emailError", "メールアドレスを入力してください"); ok = false; }
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) { setError("emailError", "正しいメールアドレスを入力してください"); ok = false; }
+  if (!nameInput.value.trim()) { setError("nameError", "お名前を入力してください"); ok = false; }
+  if (!message.value.trim()) { setError("messageError", "お問い合わせ内容を入力してください"); ok = false; }
+  if (!agree.checked) { setError("agreeError", "プライバシーポリシーへの同意が必要です"); ok = false; }
+  return ok;
+}
+
+form.addEventListener("reset", () => setStatus(""));
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!validate()) return;
+  const label = submit.textContent;
+  submit.disabled = true; submit.textContent = "送信中...";
+  setStatus("");
+  try {
+    if (!window.grecaptcha) throw new Error("recaptcha");
+    await new Promise(r => grecaptcha.ready(r));
+    const recaptchaToken = await grecaptcha.execute(SITE_KEY, { action: "contact" });
+    const res = await fetch(API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email.value, name: nameInput.value, message: message.value, recaptchaToken }),
+    });
+    if (res.ok) {
+      form.reset();
+      setStatus("メールを送信しました。ご連絡ありがとうございます！", "ok");
+    } else {
+      const data = await res.json().catch(() => ({}));
+      setStatus(data.message || "送信に失敗しました。もう一度お試しください。", "ng");
+    }
+  } catch (_) {
+    setStatus("通信エラーが発生しました。もう一度お試しください。", "ng");
+  } finally {
+    submit.disabled = false; submit.textContent = label;
+  }
+});
+</script>
+</body>
+</html>

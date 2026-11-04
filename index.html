@@ -4,7 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="color-scheme" content="light">
-<title>ようこそ</title>
+<title>Super Hiko14</title>
+<meta name="description" content="Super Hiko14のポートフォリオ。SNSやつくったもの、VRChatのリンクなどをまとめています。">
+<link rel="canonical" href="https://super-hiko14.com/">
+<meta name="theme-color" content="#dcede1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/sozai/images/eee.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Hiko14">
+<meta property="og:title" content="Super Hiko14">
+<meta property="og:description" content="Super Hiko14のポートフォリオ。SNSやつくったもの、VRChatのリンクなどをまとめています。">
+<meta property="og:url" content="https://super-hiko14.com/">
+<meta property="og:image" content="https://super-hiko14.com/sozai/images/eee.png">
+<meta property="og:image:alt" content="Super Hiko14のドット絵">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@KokyuJene">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Super Hiko14","url":"https://super-hiko14.com/","image":"https://super-hiko14.com/sozai/images/eee.png",
+ "sameAs":["https://x.com/KokyuJene","https://www.youtube.com/@super-hiko14","https://github.com/super-hiko14","https://misskey.io/@KokyuJene","https://note.com/kokyujene"]}
+</script>
 <style>
 @font-face{
   font-family:"MaruMinya";
@@ -139,6 +159,8 @@ footer{
   text-align:center;font-size:16px;color:var(--line);
   transition:color var(--swap-time) ease;
 }
+footer .legal a{color:inherit;text-decoration:none;margin-left:1em;font-size:14px}
+footer .legal a:hover,footer .legal a:focus-visible{text-decoration:underline;text-underline-offset:3px}
 .sr-only{
   position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
   clip:rect(0 0 0 0);white-space:nowrap;border:0;
@@ -164,7 +186,7 @@ footer{
 </main>
 
 <nav class="sr-only" aria-label="リンク" id="plain"></nav>
-<footer>&copy; <span id="year"></span><span id="owner"></span></footer>
+<footer>&copy; <span id="year"></span><span id="owner"></span><span class="legal"><a href="/terms/">利用規約</a><a href="/privacypolicy/">プライバシー</a></span></footer>
 
 <script>
 /* =============================================
@@ -194,6 +216,11 @@ const MODES = {
       { label: "雑記", items: [
           { label: "Blog", url: "https://super-hiko14.me/blog/",         msg: "適当に殴り書きしてます" },
           { label: "日記",     url: "https://super-hiko14.me/diary/", msg: "更新がよく途絶える1行日記です" },
+      ]},
+      { label: "いろいろ", items: [
+          { label: "About",        url: "/about/",   msg: "どんな人かとか" },
+          { label: "物置場",       url: "/monooki/", msg: "気まぐれに作ったツールたち" },
+          { label: "お問い合わせ", url: "/contact/", msg: "ご連絡はこちらから" },
       ]},
       { label: "VRChat ›", goto: "vrc" },
     ],
@@ -227,7 +254,7 @@ document.getElementById("owner").textContent = " " + COPYRIGHT_NAME;
 // 同じタブで開くサイト（ここに書いたホストは _blank を付けない。それ以外の外部リンクは新しいタブで開く）
 const SAME_TAB_HOSTS = ["super-hiko14.me"];
 const opensInNewTab = u => {
-  if (u.startsWith("mailto:")) return false;
+  if (u.startsWith("mailto:") || u.startsWith("/")) return false;   // このサイトの中のページも同じタブ
   try { return !SAME_TAB_HOSTS.includes(new URL(u).hostname); }
   catch (_) { return true; }
 };

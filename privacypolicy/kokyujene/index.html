@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>プライバシーポリシー(新 高級ジェネ™) — Super Hiko14</title>
+<meta name="description" content="新 高級ジェネ™のDiscord認証システムにおける個人情報/データの取り扱いについて。">
+<link rel="canonical" href="https://super-hiko14.com/privacypolicy/kokyujene/">
+<meta name="theme-color" content="#dcede1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Hiko14">
+<meta property="og:title" content="プライバシーポリシー(新 高級ジェネ™) — Super Hiko14">
+<meta property="og:url" content="https://super-hiko14.com/privacypolicy/kokyujene/">
+<meta property="og:image" content="https://super-hiko14.com/sozai/images/eee.png">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/sozai/site.css">
+</head>
+<body>
+<div class="page">
+  <div class="top"><a class="chip back" href="/privacypolicy/">‹ プライバシーポリシー(共通)</a></div>
+
+  <header class="head">
+    <img src="/sozai/images/eee.png" alt="" width="72" height="72">
+    <div>
+      <p class="eyebrow">super-hiko14.com/privacypolicy/kokyujene</p>
+      <h1>プライバシーポリシー<br>新 高級ジェネ™</h1>
+    </div>
+  </header>
+
+  <section class="card">
+    <p class="updated">最終更新日：2026年11月4日</p>
+    <h2>ざっくりまとめ</h2>
+    <ul class="summary">
+      <li>Discord認証システムでは、DiscordのユーザーID・ユーザー名・IPアドレスを集めます。</li>
+      <li>使うのは「Member」ロールの付与と、VPN・複数アカウントなどの不正対策のためだけです。</li>
+      <li>IPアドレスは、管理用の通知でも隠して表示します。</li>
+      <li><a href="/privacypolicy/">共通のプライバシーポリシー</a>もあわせて適用されます。</li>
+    </ul>
+    <p class="note">※ これは分かりやすくするための要約です。正式な内容は以下の各項目をご確認ください。</p>
+  </section>
+
+  <nav class="card" aria-label="目次">
+    <h2>目次</h2>
+    <ol class="toc">
+      <li><a href="#about">このポリシーについて</a></li>
+      <li><a href="#collect">集める情報と使い道</a></li>
+      <li><a href="#services">利用している外部サービス</a></li>
+      <li><a href="#store">データの保存</a></li>
+      <li><a href="#share">第三者への提供</a></li>
+    </ol>
+  </nav>
+
+  <section class="card" id="about">
+    <h2>1. このポリシーについて</h2>
+    <p>1-1. 本ポリシーは、新 高級ジェネ™のDiscordサーバー参加認証システム <a href="https://auth.super-hiko14.com" target="_blank" rel="noopener">auth.super-hiko14.com</a>(以下「認証システム」)における、個人情報/データの取り扱いを定めるものです。</p>
+    <p>1-2. 認証システムには、本ポリシーと<a href="/privacypolicy/">共通のプライバシーポリシー</a>の両方が適用されます。本ポリシーにない事項(データの削除・ポリシーの変更・お問い合わせなど)は、共通のポリシーに従います。</p>
+  </section>
+
+  <section class="card" id="collect">
+    <h2>2. 集める情報と使い道</h2>
+    <ul class="items">
+      <li><b>集める</b><span>Discord ユーザーID、Discord ユーザー名、アクセス元 IPアドレス</span></li>
+      <li><b>使い道</b><span>Discordサーバーへの「Member」ロール付与、VPN/プロキシ/データセンター回線の検出(不正アクセス防止)、多重アカウントの検出(同一IPアドレスからの複数認証の防止)、認証ログの記録(不正利用防止および障害対応のため)</span></li>
+    </ul>
+    <p class="note">Discordの情報は Discord OAuth 2.0 を通じて取得します。認証システムがアクセスするスコープは <code>identify</code>(ユーザー情報の読み取り)と <code>guilds.members.read</code>(サーバーメンバー情報の読み取り)のみです。</p>
+    <p class="note">認証中は、一時的なセッション情報がブラウザのCookieに保存されます(有効期間5分・認証完了後に自動削除)。</p>
+  </section>
+
+  <section class="card" id="services">
+    <h2>3. 利用している外部サービス</h2>
+    <p>認証システムでは、以下の外部サービスを利用しています。各サービスでの情報の取り扱いは、それぞれのプライバシーポリシーをご確認ください。</p>
+    <dl class="svc">
+      <div>
+        <dt>Cloudflare Turnstile</dt>
+        <dd><span>使い道：</span>ボット対策</dd>
+        <dd>操作パターンを分析してボットを検出します。利用中にCloudflare社がデータを収集する場合があります。(<a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">プライバシーポリシー</a>)</dd>
+      </div>
+      <div>
+        <dt>ProxyCheck.io</dt>
+        <dd><span>使い道：</span>VPN/プロキシの検出</dd>
+        <dd>Turnstileの確認を通過したリクエストのみ、IPアドレスだけを送信します。(<a href="https://proxycheck.io/privacy" target="_blank" rel="noopener">プライバシーポリシー</a>)</dd>
+      </div>
+      <div>
+        <dt>Supabase</dt>
+        <dd><span>使い道：</span>データの保存</dd>
+        <dd>詳しくは「<a href="#store">4. データの保存</a>」をご覧ください。(<a href="https://supabase.com/" target="_blank" rel="noopener">supabase.com</a>)</dd>
+      </div>
+    </dl>
+  </section>
+
+  <section class="card" id="store">
+    <h2>4. データの保存</h2>
+    <p>4-1. 認証システムで集めたデータ(Discord ユーザーID/ユーザー名/IPアドレス/認証結果)は、Supabase Inc. が提供するデータベースに保存し、不正利用の防止/調査のために保持します。</p>
+    <p>4-2. 認証結果はDiscordサーバーの管理用チャンネルに通知されます¹が、IPアドレスはDiscordのスポイラー記法(||IP||)で隠します。プライバシー保護と不正対策を両立させるための仕組みです。</p>
+    <p class="note">¹ サーバーオーナー「Super Hiko14」のみ閲覧可能で、悪用しないことを宣言します(まず見る機会ないし)。</p>
+  </section>
+
+  <section class="card" id="share">
+    <h2>5. 第三者への提供</h2>
+    <p>集めた情報を、目的外の用途に使ったり、第三者へ販売/提供したりすることはありません。ただし、以下の場合は除きます。</p>
+    <ul>
+      <li>法令に基づく開示要求があった場合</li>
+      <li>認証システムの運営に必要な範囲で、サービス事業者(Supabase/Cloudflare/ProxyCheck)へ提供する場合</li>
+    </ul>
+    <p class="note">データの削除を希望する場合は、<a href="/contact/">お問い合わせ</a>よりご連絡ください。</p>
+  </section>
+</div>
+
+<footer class="foot">
+  <span>&copy; 2026 Super Hiko14</span>
+  <a href="/terms/">利用規約</a>
+  <a href="/privacypolicy/">プライバシーポリシー</a>
+</footer>
+</body>
+</html>

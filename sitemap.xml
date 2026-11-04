@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://super-hiko14.com/</loc><lastmod>2026-11-03</lastmod><priority>1.0</priority></url>
+  <url><loc>https://super-hiko14.com/about/</loc><lastmod>2026-11-03</lastmod><priority>0.8</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/</loc><lastmod>2026-11-03</lastmod><priority>0.7</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/toieba/</loc><priority>0.5</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/memo/</loc><priority>0.5</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/polygon/</loc><priority>0.5</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/base64/</loc><priority>0.5</priority></url>
+  <url><loc>https://super-hiko14.com/monooki/otodome/</loc><priority>0.5</priority></url>
+  <url><loc>https://super-hiko14.com/contact/</loc><lastmod>2026-11-03</lastmod><priority>0.6</priority></url>
+  <url><loc>https://super-hiko14.com/terms/</loc><lastmod>2026-11-04</lastmod><priority>0.3</priority></url>
+  <url><loc>https://super-hiko14.com/terms/kokyujene/</loc><lastmod>2026-11-04</lastmod><priority>0.3</priority></url>
+  <url><loc>https://super-hiko14.com/privacypolicy/</loc><lastmod>2026-11-04</lastmod><priority>0.3</priority></url>
+  <url><loc>https://super-hiko14.com/privacypolicy/kokyujene/</loc><lastmod>2026-11-04</lastmod><priority>0.3</priority></url>
+</urlset>
