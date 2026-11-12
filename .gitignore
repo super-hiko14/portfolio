@@ -3,3 +3,9 @@ node_modules/
 aaa.md
 .vercel
 .env*.local
+
+# �g�C�G�o Windows �ł̃r���h������
+apps/toieba-win/bin/
+apps/toieba-win/obj/
+apps/toieba-win/dist/
+apps/
