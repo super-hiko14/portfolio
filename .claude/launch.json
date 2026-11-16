@@ -6,6 +6,12 @@
       "runtimeExecutable": "python",
       "runtimeArgs": ["-m", "http.server", "8765"],
       "port": 8765
+    },
+    {
+      "name": "blog",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "C:\\!github_links\\y_me\\me", "run", "dev", "--", "--port", "4321"],
+      "port": 4321
     }
   ]
 }

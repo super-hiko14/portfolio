@@ -33,7 +33,7 @@ const STR = {
     todoAdded: 'ToDo追加 ✓', todoDone: 'ToDo完了 ✓', todoRemoved: 'ToDo削除 ✓', todoStart: 'まずは1件追加しよう', todoProgress: (d, n) => d + ' / ' + n + ' 完了',
     timerAdded: 'タイマー開始 ✓', timerRemoved: 'タイマー削除 ✓', timerRestarted: 'タイマーリスタート ✓', timerDone: '終了', timerUp: '時間です',
     notFound: s => '「' + s + '」は見つかりませんでした', applied: '切り替えました ✓', accentSet: 'テーマカラーを変更 ✓',
-    aCheck: '完了切り替え', aDelete: '削除', aRestart: 'リスタート', sDone: '完了済み', sOpen: '未完了',
+    aCheck: '完了切り替え', aDelete: '削除', aRestart: 'リスタート',
     hintNote: 'たとえばこんな入力ができる (クリックで試す):',
     noteApp: k => k + ' で呼び出し・Esc で閉じる。終了はトレイアイコンから',
   },
@@ -50,7 +50,7 @@ const STR = {
     todoAdded: 'To-do added ✓', todoDone: 'To-do done ✓', todoRemoved: 'To-do removed ✓', todoStart: 'Add your first one', todoProgress: (d, n) => d + ' / ' + n + ' done',
     timerAdded: 'Timer started ✓', timerRemoved: 'Timer removed ✓', timerRestarted: 'Timer restarted ✓', timerDone: 'Done', timerUp: "Time's up",
     notFound: s => 'Could not find "' + s + '"', applied: 'Switched ✓', accentSet: 'Accent color changed ✓',
-    aCheck: 'Toggle done', aDelete: 'Delete', aRestart: 'Restart', sDone: 'done', sOpen: 'open',
+    aCheck: 'Toggle done', aDelete: 'Delete', aRestart: 'Restart',
     hintNote: 'Things you can type (click to try):',
     noteApp: k => k + ' to summon · Esc to close. Quit from the tray icon',
   },
@@ -76,35 +76,6 @@ const HINTS = {
     ['Settings', ['dark mode', '日本語', 'theme #d97757', 'settings']],
   ],
 };
-// 入力途中に出す候補。c: 入るコマンド [日本語, 英語], h: 説明, k: 反応する書き出し
-const COMMANDS = [
-  { c: ['pass 20', 'pass 20'], h: ['パスワードを生成', 'Generate a password'], k: ['pass', 'password', 'パス', 'ぱす'] },
-  { c: ['pass 16 記号なし', 'pass 16 no symbols'], h: ['記号を使わない', 'Without symbols'], k: ['pass', 'パス', 'ぱす'] },
-  { c: ['pin 6', 'pin 6'], h: ['数字だけの暗証番号', 'Digits only'], k: ['pin', '暗証', 'あんしょう'] },
-  { c: ['uuid', 'uuid'], h: ['UUIDを生成', 'Generate a UUID'], k: ['uu'] },
-  { c: ['2d6', '2d6'], h: ['サイコロを振る', 'Roll dice'], k: ['dice', 'サイコロ', 'さいころ', '2d'] },
-  { c: ['コイン', 'coin'], h: ['コイントス', 'Flip a coin'], k: ['coin', 'コイン', 'こいん'] },
-  { c: ['乱数 1-100', 'random 1-100'], h: ['乱数を生成', 'Random number'], k: ['rand', '乱数', 'らんすう'] },
-  { c: ['todo ', 'todo '], h: ['続けて書くとToDoに追加', 'Keep typing to add a to-do'], k: ['todo', 'やること', 'とぅ'] },
-  { c: ['todo', 'todo'], h: ['ToDo一覧を見る', 'View to-dos'], k: ['tod', 'やること'] },
-  { c: ['todo 完了 ', 'todo done '], h: ['ToDoを完了にする', 'Mark a to-do done'], k: ['todo ', 'todo d', 'todo 完', 'todo c'] },
-  { c: ['todo 削除 ', 'todo remove '], h: ['ToDoを削除する', 'Remove a to-do'], k: ['todo ', 'todo r', 'todo 削'] },
-  { c: ['5分タイマー', 'timer 5m '], h: ['タイマーを開始', 'Start a timer'], k: ['timer', 'タイマー', 'たいまー', '5分', '5ふん'] },
-  { c: ['タイマー', 'timer'], h: ['タイマー一覧を見る', 'View timers'], k: ['time', 'たいま', 'タイマ'] },
-  { c: ['timer 削除 ', 'timer remove '], h: ['タイマーを削除する', 'Remove a timer'], k: ['timer ', 'タイマー '] },
-  { c: ['timer リスタート ', 'timer restart '], h: ['タイマーをやり直す', 'Restart a timer'], k: ['timer ', 'タイマー '] },
-  { c: ['いま', 'now'], h: ['現在時刻', 'Current time'], k: ['now', 'clock', 'いま', '今', 'じこく', '時刻'] },
-  { c: ['ニューヨークの時間', 'time in new york'], h: ['世界の時刻', 'World clock'], k: ['time in', 'ニューヨ', 'にゅーよ', 'せかい', '世界'] },
-  { c: ['今日から90日後', 'in 90 days'], h: ['日付の計算', 'Date math'], k: ['today', 'in 9', '今日', 'きょう'] },
-  { c: ['12/25まで', 'days until 12/25'], h: ['あと何日か数える', 'Count the days'], k: ['days', 'until', 'あと'] },
-  { c: ['カラーピッカー', 'color picker'], h: ['色を選ぶ', 'Pick a color'], k: ['cp', 'color', 'カラー', 'からー', 'いろ'] },
-  { c: ['ダークモード', 'dark mode'], h: ['暗い配色にする', 'Switch to dark'], k: ['dark', 'ダーク', 'だーく'] },
-  { c: ['ライトモード', 'light mode'], h: ['明るい配色にする', 'Switch to light'], k: ['light', 'ライト', 'らいと'] },
-  { c: ['english', '日本語'], h: ['Switch to English', '日本語に切り替え'], k: ['eng', 'lang', 'えいご', '英語', 'jap', 'にほん'] },
-  { c: ['テーマ #d97757', 'theme #d97757'], h: ['テーマカラーを変える', 'Change the accent color'], k: ['theme', 'accent', 'テーマ', 'てーま'] },
-  { c: ['設定', 'settings'], h: ['設定を開く', 'Open settings'], k: ['set', 'せって', '設定'] },
-  { c: ['ヘルプ', 'help'], h: ['使い方の例', 'Show examples'], k: ['help', 'へるぷ', 'ヘルプ', 'つかい', '使い'] },
-];
 
 // ===================== 設定 =====================
 const DEFAULT_ACCENT = '#95af9d';
@@ -149,7 +120,7 @@ darkMq.addEventListener('change', () => { if (settings.theme === 'auto') applySe
 
 // ===================== 要素 =====================
 const wrap = $('#wrap'), qEl = $('#q'), resEl = $('#result'), labelEl = $('#rlabel'), bigEl = $('#rbig'), rowsEl = $('#rrows'),
-      footEl = $('#rfoot'), altsEl = $('#alts'), regenBtn = $('#regen'), suggestEl = $('#suggest'),
+      footEl = $('#rfoot'), altsEl = $('#alts'), regenBtn = $('#regen'),
       settingsEl = $('#settings'), hintsEl = $('#hints'), histWrap = $('#histwrap'), histEl = $('#hist'),
       bmToggleWrap = $('#bmToggleWrap'), bmToggle = $('#bmToggle'), bookmarkBtn = $('#bookmark'), infoBtn = $('#info'), gearBtn = $('#gear'),
       cpanel = $('#cpanel'), ppanel = $('#ppanel'), tpanel = $('#tpanel'), tmpanel = $('#tmpanel'),
@@ -279,7 +250,7 @@ altsEl.addEventListener('click', e => { const b = e.target.closest('.alt'); if (
 // 操作の結果を一瞬だけ見せる (ToDo追加 ✓ など)
 function flash(label, big, swatch) {
   results = []; sel = 0; current = null; stopLive();
-  qEl.value = ''; renderSuggest([]);
+  qEl.value = '';
   if (cmdDrawer) { setDrawer(cmdDrawer, false); cmdDrawer = null; }
   resEl.hidden = false;
   labelEl.textContent = label;
@@ -652,53 +623,6 @@ hintsEl.addEventListener('click', e => {
   evaluate(); qEl.focus();
 });
 
-// ===================== 予測サジェスト =====================
-let suggestions = [];
-function renderSuggest(list) {
-  suggestions = list;
-  suggestEl.innerHTML = list.map((c, i) =>
-    '<button type="button" class="sg-chip" data-i="' + i + '">' + esc(c.cmd.trim() + (/\s$/.test(c.cmd) ? ' …' : '')) +
-    '<span class="sg-hint">' + esc(c.hint) + '</span></button>').join('');
-  postSize();
-}
-function takeSuggestion(i) {
-  if (!suggestions[i]) return;
-  qEl.value = suggestions[i].cmd;
-  renderSuggest([]);
-  evaluate(); updateSuggestions();
-  qEl.focus();
-  requestAnimationFrame(() => qEl.setSelectionRange(qEl.value.length, qEl.value.length));
-}
-suggestEl.addEventListener('click', e => { const b = e.target.closest('.sg-chip'); if (b) takeSuggestion(+b.dataset.i); });
-function updateSuggestions() {
-  const raw = qEl.value, ql = raw.replace(/^\s+/, '').toLowerCase();
-  if (!ql) { renderSuggest([]); return; }
-  // 完了・削除の相手を、いまあるToDo/タイマーから出す
-  let m = raw.match(/^((?:to-?do|やること|タスク|tasks?)\s*(?:check|done|finish|remove|rm|del|delete|完了|済み?|チェック|削除|消す|消去))[\s::]*(.*)$/i);
-  if (m && todos.length) {
-    const part = m[2].trim().toLowerCase();
-    renderSuggest(todos.filter(x => x.text.toLowerCase().includes(part) && x.text.toLowerCase() !== part).slice(0, 5)
-      .map(x => ({ cmd: m[1] + ' ' + x.text, hint: x.done ? t('sDone') : t('sOpen') })));
-    return;
-  }
-  m = raw.match(/^((?:timer|タイマー|たいまー)\s*(?:remove|rm|del|delete|stop|cancel|restart|reset|again|削除|消す|停止|キャンセル|止める|再開|リスタート|リセット|もう一回))[\s::]*(.*)$/i);
-  if (m && timers.length) {
-    const part = m[2].trim().toLowerCase();
-    renderSuggest(timers.filter(x => x.label.toLowerCase().includes(part) && x.label.toLowerCase() !== part).slice(0, 5)
-      .map(x => ({ cmd: m[1] + ' ' + x.label, hint: x.endAt <= Date.now() ? t('timerDone') : fmtCountdown(x.endAt - Date.now()) })));
-    return;
-  }
-  const li = lang === 'en' ? 1 : 0, seen = new Set(), list = [];
-  for (const c of COMMANDS) {
-    const cmd = c.c[li];
-    if (seen.has(cmd) || cmd.toLowerCase() === ql || cmd.trim().toLowerCase() === ql.trim()) continue;
-    if (![cmd, c.c[1 - li], ...c.k].some(k => k.toLowerCase().startsWith(ql))) continue;
-    seen.add(cmd);
-    list.push({ cmd, hint: c.h[li] });
-  }
-  renderSuggest(list.slice(0, 5));
-}
-
 // ===================== 入力 =====================
 function remember(q) {
   q = q.trim(); if (!q) return;
@@ -706,7 +630,7 @@ function remember(q) {
   store.set('history', history);
   histIdx = -1;
 }
-qEl.addEventListener('input', () => { histIdx = -1; evaluate(); updateSuggestions(); });
+qEl.addEventListener('input', () => { histIdx = -1; evaluate(); });
 qEl.addEventListener('keydown', e => {
   if (e.isComposing || e.keyCode === 229) return;   // 日本語入力の変換中 (確定の Enter など) は何もしない
   if (e.key === 'Enter') { e.preventDefault(); onEnter(e.shiftKey || e.ctrlKey); return; }
@@ -715,13 +639,12 @@ qEl.addEventListener('keydown', e => {
     if (qEl.value || !resEl.hidden || (isApp && anyDrawer)) {
       qEl.value = ''; histIdx = -1;
       if (isApp) for (const k of Object.keys(drawers)) setDrawer(k, false);
-      results = []; render(); renderSuggest([]);
+      results = []; render();
     } else if (isApp) hideApp();
     return;
   }
   if (e.key === 'Tab' && !e.shiftKey) {
-    if (suggestions.length) { e.preventDefault(); takeSuggestion(0); }
-    else if (results.length > 1) { e.preventDefault(); promote((sel + 1) % results.length); }
+    if (results.length > 1) { e.preventDefault(); promote((sel + 1) % results.length); }
     return;
   }
   // ↑↓ で前に使った入力を呼び戻す (空欄のとき、または呼び戻している最中)
@@ -730,7 +653,7 @@ qEl.addEventListener('keydown', e => {
     histIdx = Math.max(-1, Math.min(history.length - 1, histIdx + (e.key === 'ArrowUp' ? 1 : -1)));
     qEl.value = histIdx < 0 ? '' : history[histIdx];
     const keep = histIdx;
-    evaluate(); renderSuggest([]);
+    evaluate();
     histIdx = keep;
   }
 });

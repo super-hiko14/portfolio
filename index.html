@@ -7,10 +7,11 @@
 <title>Super Hiko14</title>
 <meta name="description" content="Super Hiko14のポートフォリオ。SNSやつくったもの、VRChatのリンクなどをまとめています。">
 <link rel="canonical" href="https://super-hiko14.com/">
-<meta name="theme-color" content="#dcede1">
+<meta name="theme-color" content="#dcede1" id="themeColor">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/sozai/images/eee.png">
+<link rel="preload" href="/sozai/fonts/x12y12pxMaruMinya.ttf" as="font" type="font/ttf" crossorigin>
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Super Hiko14">
 <meta property="og:title" content="Super Hiko14">
@@ -25,10 +26,23 @@
 {"@context":"https://schema.org","@type":"Person","name":"Super Hiko14","url":"https://super-hiko14.com/","image":"https://super-hiko14.com/sozai/images/eee.png",
  "sameAs":["https://x.com/KokyuJene","https://www.youtube.com/@super-hiko14","https://github.com/super-hiko14","https://misskey.io/@KokyuJene","https://note.com/kokyujene"]}
 </script>
+<!-- JS が動くときだけ About をたたんでおく(動かない環境では最初から見える) -->
+<script>document.documentElement.classList.add("js")</script>
 <style>
+/* =============================================
+   もくじ
+   1. 土台(色・フォント)
+   2. ドットの角(chip / msg / card 共通)
+   3. 絵
+   4. まわりに浮かぶボタン
+   5. About(押すと下にひろがる)
+   6. 下(フッター)
+============================================= */
+
+/* ---------- 1. 土台 ---------- */
 @font-face{
   font-family:"MaruMinya";
-  src: url(/sozai/fonts/x12y12pxMaruMinya.ttf) format("truetype");
+  src:url(/sozai/fonts/x12y12pxMaruMinya.ttf) format("truetype");
   font-display:swap;
 }
 :root{
@@ -41,28 +55,114 @@
   --font:"MaruMinya","Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
   --hop-time:.1s;
   --swap-time:.7s;
+  --safe-top:env(safe-area-inset-top,0px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+  --foot:calc(2.6rem + var(--safe-bottom));   /* フッターの高さ */
   box-sizing:border-box;
-  padding-top:env(safe-area-inset-top,0px);
-  padding-bottom:env(safe-area-inset-bottom,0px);
 }
-html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%;background:var(--bg);transition:background-color var(--swap-time) ease}
 *,*::before,*::after{box-sizing:inherit}
+html{background:var(--bg);-webkit-text-size-adjust:100%;transition:background-color var(--swap-time) ease}
 body{
-  margin:0;height:100%;background:var(--bg);color:var(--ink);
+  margin:0;background:var(--bg);color:var(--ink);
   font-family:var(--font);
   -webkit-tap-highlight-color:transparent;
-  overflow:hidden;
-  transition:background-color var(--swap-time) ease;
+  transition:background-color var(--swap-time) ease,color var(--swap-time) ease;
 }
-main{height:100%;display:grid;place-items:center}
+.sr-only{
+  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
+  clip:rect(0 0 0 0);white-space:nowrap;border:0;
+}
 
+/* 最初の1画面(絵とボタン) */
+.hero{
+  position:relative;overflow:hidden;
+  height:100vh;height:100svh;
+  padding:var(--safe-top) 0 var(--safe-bottom);
+  display:grid;place-items:center;
+}
 .stage{
   --w:min(69vw,336px,51svh);
   position:relative;
   width:var(--w);
 }
 
-/* 絵(2枚を重ねて、ふわっと入れ替える) */
+/* ---------- 2. ドットの角 ----------
+   --p が「ドット1つぶん」の大きさ(枠線の太さも同じ)。
+   外側(--edge)を線の色でぬり、内側(--fill)を紙の色で重ねて枠に見せる。 */
+.chip,.msg,.card{
+  --p1:var(--p); --p2:calc(var(--p)*2); --p3:calc(var(--p)*3);
+  --q1:calc(100% - var(--p)); --q2:calc(100% - var(--p)*2); --q3:calc(100% - var(--p)*3);
+  position:relative;isolation:isolate;
+  background:var(--line);
+  clip-path:var(--edge);
+}
+.chip::before,.msg::before,.card::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:var(--paper);
+  clip-path:var(--fill);
+  transition:background-color .15s ease;
+}
+/* 角3段 */
+.chip,.card{
+  --edge:polygon(
+    0 var(--p3),var(--p1) var(--p3),var(--p1) var(--p2),var(--p2) var(--p2),var(--p2) var(--p1),var(--p3) var(--p1),var(--p3) 0,
+    var(--q3) 0,var(--q3) var(--p1),var(--q2) var(--p1),var(--q2) var(--p2),var(--q1) var(--p2),var(--q1) var(--p3),100% var(--p3),
+    100% var(--q3),var(--q1) var(--q3),var(--q1) var(--q2),var(--q2) var(--q2),var(--q2) var(--q1),var(--q3) var(--q1),var(--q3) 100%,
+    var(--p3) 100%,var(--p3) var(--q1),var(--p2) var(--q1),var(--p2) var(--q2),var(--p1) var(--q2),var(--p1) var(--q3),0 var(--q3));
+  --fill:polygon(
+    var(--p1) var(--p3),var(--p2) var(--p3),var(--p2) var(--p2),var(--p3) var(--p2),var(--p3) var(--p1),
+    var(--q3) var(--p1),var(--q3) var(--p2),var(--q2) var(--p2),var(--q2) var(--p3),var(--q1) var(--p3),
+    var(--q1) var(--q3),var(--q2) var(--q3),var(--q2) var(--q2),var(--q3) var(--q2),var(--q3) var(--q1),
+    var(--p3) var(--q1),var(--p3) var(--q2),var(--p2) var(--q2),var(--p2) var(--q3),var(--p1) var(--q3));
+}
+/* 角2段 */
+.msg{
+  --edge:polygon(
+    0 var(--p2),var(--p1) var(--p2),var(--p1) var(--p1),var(--p2) var(--p1),var(--p2) 0,
+    var(--q2) 0,var(--q2) var(--p1),var(--q1) var(--p1),var(--q1) var(--p2),100% var(--p2),
+    100% var(--q2),var(--q1) var(--q2),var(--q1) var(--q1),var(--q2) var(--q1),var(--q2) 100%,
+    var(--p2) 100%,var(--p2) var(--q1),var(--p1) var(--q1),var(--p1) var(--q2),0 var(--q2));
+  --fill:polygon(
+    var(--p1) var(--p2),var(--p2) var(--p2),var(--p2) var(--p1),var(--q2) var(--p1),var(--q2) var(--p2),var(--q1) var(--p2),
+    var(--q1) var(--q2),var(--q2) var(--q2),var(--q2) var(--q1),var(--p2) var(--q1),var(--p2) var(--q2),var(--p1) var(--q2));
+}
+
+/* 押せるもの */
+.chip{
+  --p:4px;
+  display:inline-flex;align-items:center;justify-content:center;
+  margin:0;padding:calc(.4rem + var(--p)) calc(1rem + var(--p));
+  border:0;color:var(--ink);
+  font:inherit;font-size:26px;line-height:1.15;text-decoration:none;white-space:nowrap;
+  cursor:pointer;
+  transition:background-color .15s ease;
+}
+.chip:hover,.chip:focus-visible{background:var(--ink)}
+.chip:hover::before,.chip:focus-visible::before{background:var(--hover)}
+.chip:focus-visible{outline:none;text-decoration:underline;text-underline-offset:5px}
+.chip .plus{color:var(--line);margin-left:.35em}
+.chip.back{color:var(--line)}
+@media (max-width:767px){
+  .chip{font-size:24px}
+}
+
+/* ボタンの横のひとこと(押せない) */
+.pair{display:flex;flex-direction:column;align-items:center;gap:.4rem}
+.msg{
+  --p:3px;
+  display:block;max-width:16em;padding:calc(.4rem + var(--p)) calc(.95rem + var(--p));
+  color:var(--line);font-size:16px;line-height:1.3;text-align:center;
+  user-select:none;
+}
+@supports (background:color-mix(in srgb,red,blue)){
+  .msg{background:color-mix(in srgb,var(--line) 55%,var(--paper))}
+}
+@media (min-width:640px){
+  .pair{flex-direction:row;gap:.6rem}
+  .msg{max-width:none;white-space:nowrap}
+}
+
+/* ---------- 3. 絵(2枚を重ねて、ふわっと入れ替える) ---------- */
 .me{all:unset;display:block;cursor:pointer;width:100%}
 .me:focus-visible{outline:3px dashed var(--line);outline-offset:8px}
 .sprites{display:block;position:relative;aspect-ratio:28 / 31}
@@ -83,7 +183,7 @@ main{height:100%;display:grid;place-items:center}
   100%{transform:translateY(0)}
 }
 
-/* まわりに浮かぶもの */
+/* ---------- 4. まわりに浮かぶボタン ---------- */
 .node{
   position:absolute;left:50%;top:50%;
   display:flex;justify-content:center;width:max-content;
@@ -102,100 +202,156 @@ main{height:100%;display:grid;place-items:center}
     opacity .6s ease-out calc(var(--i) * 90ms),
     visibility 0s;
 }
-.chip{
-  /* ドット風の角：--p が「ドット1つぶん」の大きさ(枠線の太さも同じ) */
-  --p:4px;
-  position:relative;isolation:isolate;
-  display:inline-flex;align-items:center;justify-content:center;
-  margin:0;padding:calc(.4rem + var(--p)) calc(1rem + var(--p));
-  border:0;background:var(--line);color:var(--ink);
-  clip-path:polygon(0 calc(var(--p)*3),calc(var(--p)*1) calc(var(--p)*3),calc(var(--p)*1) calc(var(--p)*2),calc(var(--p)*2) calc(var(--p)*2),calc(var(--p)*2) calc(var(--p)*1),calc(var(--p)*3) calc(var(--p)*1),calc(var(--p)*3) 0,calc(100% - var(--p)*3) 0,calc(100% - var(--p)*3) calc(var(--p)*1),calc(100% - var(--p)*2) calc(var(--p)*1),calc(100% - var(--p)*2) calc(var(--p)*2),calc(100% - var(--p)*1) calc(var(--p)*2),calc(100% - var(--p)*1) calc(var(--p)*3),100% calc(var(--p)*3),100% calc(100% - var(--p)*3),calc(100% - var(--p)*1) calc(100% - var(--p)*3),calc(100% - var(--p)*1) calc(100% - var(--p)*2),calc(100% - var(--p)*2) calc(100% - var(--p)*2),calc(100% - var(--p)*2) calc(100% - var(--p)*1),calc(100% - var(--p)*3) calc(100% - var(--p)*1),calc(100% - var(--p)*3) 100%,calc(var(--p)*3) 100%,calc(var(--p)*3) calc(100% - var(--p)*1),calc(var(--p)*2) calc(100% - var(--p)*1),calc(var(--p)*2) calc(100% - var(--p)*2),calc(var(--p)*1) calc(100% - var(--p)*2),calc(var(--p)*1) calc(100% - var(--p)*3),0 calc(100% - var(--p)*3));
-  font:inherit;font-size:26px;line-height:1.15;text-decoration:none;white-space:nowrap;
-  cursor:pointer;
-  transition:background-color .15s ease;
-}
-.chip::before{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:var(--paper);
-  clip-path:polygon(calc(var(--p)*1) calc(var(--p)*3),calc(var(--p)*2) calc(var(--p)*3),calc(var(--p)*2) calc(var(--p)*2),calc(var(--p)*3) calc(var(--p)*2),calc(var(--p)*3) calc(var(--p)*1),calc(100% - var(--p)*3) calc(var(--p)*1),calc(100% - var(--p)*3) calc(var(--p)*2),calc(100% - var(--p)*2) calc(var(--p)*2),calc(100% - var(--p)*2) calc(var(--p)*3),calc(100% - var(--p)*1) calc(var(--p)*3),calc(100% - var(--p)*1) calc(100% - var(--p)*3),calc(100% - var(--p)*2) calc(100% - var(--p)*3),calc(100% - var(--p)*2) calc(100% - var(--p)*2),calc(100% - var(--p)*3) calc(100% - var(--p)*2),calc(100% - var(--p)*3) calc(100% - var(--p)*1),calc(var(--p)*3) calc(100% - var(--p)*1),calc(var(--p)*3) calc(100% - var(--p)*2),calc(var(--p)*2) calc(100% - var(--p)*2),calc(var(--p)*2) calc(100% - var(--p)*3),calc(var(--p)*1) calc(100% - var(--p)*3));
-  transition:background-color .15s ease;
-}
-.node.show .chip:hover,.node.show .chip:focus-visible{background:var(--ink)}
-.node.show .chip:hover::before,.node.show .chip:focus-visible::before{background:var(--hover)}
-.chip:focus-visible{outline:none;text-decoration:underline;text-underline-offset:5px}
-.chip .plus{color:var(--line);margin-left:.35em}
-.chip.back{color:var(--line)}
 
-/* ボタンの横のひとこと(押せない) */
-.pair{display:flex;flex-direction:column;align-items:center;gap:.4rem}
-.msg{
-  --p:3px;
-  position:relative;isolation:isolate;
-  display:block;max-width:16em;padding:calc(.4rem + var(--p)) calc(.95rem + var(--p));
-  background:var(--line);
-  clip-path:polygon(0 calc(var(--p)*2),calc(var(--p)*1) calc(var(--p)*2),calc(var(--p)*1) calc(var(--p)*1),calc(var(--p)*2) calc(var(--p)*1),calc(var(--p)*2) 0,calc(100% - var(--p)*2) 0,calc(100% - var(--p)*2) calc(var(--p)*1),calc(100% - var(--p)*1) calc(var(--p)*1),calc(100% - var(--p)*1) calc(var(--p)*2),100% calc(var(--p)*2),100% calc(100% - var(--p)*2),calc(100% - var(--p)*1) calc(100% - var(--p)*2),calc(100% - var(--p)*1) calc(100% - var(--p)*1),calc(100% - var(--p)*2) calc(100% - var(--p)*1),calc(100% - var(--p)*2) 100%,calc(var(--p)*2) 100%,calc(var(--p)*2) calc(100% - var(--p)*1),calc(var(--p)*1) calc(100% - var(--p)*1),calc(var(--p)*1) calc(100% - var(--p)*2),0 calc(100% - var(--p)*2));
-  color:var(--line);font-size:16px;line-height:1.3;text-align:center;
-  user-select:none;
+/* ---------- 5. About(押すと下にひろがる) ---------- */
+.js .about:not(.open){display:none}
+.about{font-size:15px;line-height:1.8}
+.about-body{
+  width:100%;max-width:720px;margin:0 auto;
+  padding:calc(28px + var(--safe-top)) 16px calc(var(--foot) + 28px);
 }
-.msg::before{
-  content:"";position:absolute;inset:0;z-index:-1;
-  background:var(--paper);
-  clip-path:polygon(calc(var(--p)*1) calc(var(--p)*2),calc(var(--p)*2) calc(var(--p)*2),calc(var(--p)*2) calc(var(--p)*1),calc(100% - var(--p)*2) calc(var(--p)*1),calc(100% - var(--p)*2) calc(var(--p)*2),calc(100% - var(--p)*1) calc(var(--p)*2),calc(100% - var(--p)*1) calc(100% - var(--p)*2),calc(100% - var(--p)*2) calc(100% - var(--p)*2),calc(100% - var(--p)*2) calc(100% - var(--p)*1),calc(var(--p)*2) calc(100% - var(--p)*1),calc(var(--p)*2) calc(100% - var(--p)*2),calc(var(--p)*1) calc(100% - var(--p)*2));
+.about.open .about-body{animation:rise .5s cubic-bezier(.16,.9,.3,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.about a{color:inherit;text-underline-offset:3px;text-decoration-color:var(--line)}
+.about a:hover{text-decoration-thickness:2px}
+.about h2{margin:0 0 18px;font-size:30px;line-height:1.25;font-weight:normal}
+.about h2:focus{outline:none}
+.about h3{margin:0 0 .5em;font-size:20px;line-height:1.4;font-weight:normal}
+.about h3.section-title{margin:28px 0 12px;color:var(--line);font-size:16px}
+
+.card{--p:4px;padding:calc(1.1rem + var(--p)) calc(1.25rem + var(--p))}
+.card p{margin:0}
+.card p + p{margin-top:.7em}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:.2em 1.2em;margin:.8em 0 0}
+.facts dt{color:var(--line)}
+.facts dd{margin:0}
+
+.links{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+@media (min-width:600px){.links{grid-template-columns:1fr 1fr}}
+.links a.card{
+  display:flex;align-items:center;gap:12px;height:100%;
+  text-decoration:none;
+  transition:background-color .15s ease,transform .15s ease;
 }
-@supports (background:color-mix(in srgb,red,blue)){
-  .msg{background:color-mix(in srgb,var(--line) 55%,var(--paper))}
-}
-@media (min-width:640px){
-  .pair{flex-direction:row;gap:.6rem}
-  .msg{max-width:none;white-space:nowrap}
-}
-@media (max-width: 767px) {
-  .chip{font-size:24px}
+.links a.card:hover,.links a.card:focus-visible{background:var(--ink);outline:none}
+.links a.card:hover::before,.links a.card:focus-visible::before{background:var(--hover)}
+.links a.card:active{transform:translateY(1px)}
+.links .t{display:block;font-size:19px;line-height:1.35}
+.links .d{display:block;color:var(--line);font-size:13px;line-height:1.6;margin-top:2px}
+.links .go{margin-left:auto;color:var(--line);font-size:20px}
+
+.about-close{margin-top:28px;text-align:center}
+.about .chip{--p:3px;padding:calc(.3rem + var(--p)) calc(.9rem + var(--p));font-size:18px;line-height:1.2}
+@media (max-width:420px){
+  .about h2{font-size:26px}
+  .card{padding:calc(.9rem + var(--p)) calc(1rem + var(--p))}
 }
 
+/* ---------- 6. 下 ----------
+   高さぶんだけ上に引き上げて、いつもページのいちばん下に重ねる
+   (About がとじているときは最初の1画面の下、ひらくと About の下) */
 footer{
-  position:fixed;left:0;right:0;bottom:0;
-  padding:0 1rem calc(.9rem + env(safe-area-inset-bottom,0px));
+  position:relative;
+  height:var(--foot);margin-top:calc(var(--foot) * -1);
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 1rem calc(.9rem + var(--safe-bottom));
   text-align:center;font-size:16px;color:var(--line);
   transition:color var(--swap-time) ease;
 }
+footer p{margin:0}
 footer .legal a{color:inherit;text-decoration:none;margin-left:1em;font-size:14px}
 footer .legal a:hover,footer .legal a:focus-visible{text-decoration:underline;text-underline-offset:3px}
-.sr-only{
-  position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;
-  clip:rect(0 0 0 0);white-space:nowrap;border:0;
-}
+
 @media (prefers-reduced-motion:reduce){
-  .sprites.hop{animation:none}
+  .sprites.hop,.about.open .about-body{animation:none}
   .node,.node.show,.s,html,body,footer{transition:none}
 }
 </style>
 </head>
 <body>
 <main>
-  <div class="stage" id="stage">
-    <button class="me" id="me" type="button" aria-expanded="false" aria-label="絵をタップするとリンクが出ます">
-      <span class="sprites" id="sprites">
-        <img class="s s0" id="s0" alt="黒髪のドット絵のキャラクター" width="28" height="31" draggable="false"
-             src="/sozai/images/eee.png">
-        <img class="s s1" id="s1" alt="" width="28" height="31" draggable="false"
-             src="/sozai/images/eee_vrc.png">
-      </span>
-    </button>
+  <h1 class="sr-only">Super Hiko14</h1>
+
+  <div class="hero" id="hero">
+    <div class="stage" id="stage">
+      <button class="me" id="me" type="button" aria-expanded="false" aria-label="絵をタップするとリンクが出ます">
+        <span class="sprites" id="sprites">
+          <img class="s s0" alt="Super Hiko14のドット絵" width="28" height="31" draggable="false"
+               src="/sozai/images/eee.png">
+          <img class="s s1" alt="" width="28" height="31" draggable="false"
+               src="/sozai/images/eee_vrc.png">
+        </span>
+      </button>
+    </div>
   </div>
+
+  <!-- About：メニューの「About」を押すと、ここが下にひらく -->
+  <section class="about" id="about" aria-labelledby="aboutTitle">
+    <div class="about-body">
+      <h2 id="aboutTitle" tabindex="-1">About</h2>
+
+      <div class="card">
+        <h3>Super Hiko14</h3>
+        <p>あああ。</p>
+        <p><a href="https://kokyujene.super-hiko14.com" target="_blank" rel="noopener">高級ジェネ™</a> のサーバーオーナー。主にマインクラフト統合版をプレイしていて、コマンド･建築などを得意としている。</p>
+        <dl class="facts">
+          <dt>誕生日</dt><dd>8/14</dd>
+          <dt>MBTI</dt><dd>INFP-T</dd>
+        </dl>
+      </div>
+
+      <h3 class="section-title">サイト/サービス</h3>
+      <ul class="links">
+        <li><a class="card" href="https://kokyujene.super-hiko14.com" target="_blank" rel="noopener">
+          <span><span class="t">高級ジェネ™</span><span class="d">Minecraft 統合版のマルチプレイヤーサーバー</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="/monooki/">
+          <span><span class="t">物置場</span><span class="d">気まぐれに作ったツールたち</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://tsumiki.app" target="_blank" rel="noopener">
+          <span><span class="t">ツミキapp</span><span class="d">勉強や作業のお供に。勉強時間管理ツール</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://super-hiko14.me/diary/">
+          <span><span class="t">日記</span><span class="d">たまに更新が途絶える日々の記録</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://super-hiko14.me/blog/">
+          <span><span class="t">ブログ</span><span class="d">多分超不定期更新</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="/contact/">
+          <span><span class="t">お問い合わせ</span><span class="d">ご連絡はこちらから</span></span><span class="go" aria-hidden="true">›</span></a></li>
+      </ul>
+
+      <h3 class="section-title">SNS/リンク</h3>
+      <ul class="links">
+        <li><a class="card" href="https://www.youtube.com/@super-hiko14" target="_blank" rel="noopener">
+          <span><span class="t">YouTube</span><span class="d">@super-hiko14</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://x.com/KokyuJene" target="_blank" rel="noopener">
+          <span><span class="t">X</span><span class="d">@KokyuJene</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://misskey.io/@KokyuJene" target="_blank" rel="noopener">
+          <span><span class="t">Misskey</span><span class="d">@KokyuJene</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://note.com/kokyujene" target="_blank" rel="noopener">
+          <span><span class="t">note</span><span class="d">note.com/kokyujene</span></span><span class="go" aria-hidden="true">›</span></a></li>
+        <li><a class="card" href="https://github.com/super-hiko14" target="_blank" rel="noopener">
+          <span><span class="t">GitHub</span><span class="d">@super-hiko14</span></span><span class="go" aria-hidden="true">›</span></a></li>
+      </ul>
+
+      <p class="about-close"><button class="chip back" id="aboutClose" type="button">‹ とじる</button></p>
+    </div>
+  </section>
 </main>
 
 <nav class="sr-only" aria-label="リンク" id="plain"></nav>
-<footer>&copy; <span id="year"></span><span id="owner"></span><span class="legal"><a href="/terms/">利用規約</a><a href="/privacypolicy/">プライバシー</a></span></footer>
+<footer><p>&copy; <span id="year"></span> <span id="owner"></span><span class="legal"><a href="/terms/">利用規約</a><a href="/privacypolicy/">プライバシー</a></span></p></footer>
 
 <script>
 /* =============================================
-   url         → そのままリンク
-   items       → 押すと中身が出てくる(ボタンの次にボタン)
-   msg         → ボタンの横に出るひとこと
-   goto        → 別のモードに切り替える
+   ここを書きかえるとボタンが変わる
+     url   → そのままリンク
+     items → 押すと中身が出てくる(ボタンの次にボタン)
+     msg   → ボタンの横に出るひとこと
+     goto  → 別のモードに切り替える
+     about → 押すと下に About がひらく
+     back  → うすい色の「もどる」ボタンにする
 ============================================= */
-const BOOTH = "https://booth.pm/wish_list_names/8GQTEB5n";
+const COPYRIGHT_NAME = "Super Hiko14";
+const BACK_LABEL = "‹ もどる";
+// 同じタブで開くサイト(ここに書いたホストとサイト内のページ以外は、新しいタブで開く)
+const SAME_TAB_HOSTS = ["super-hiko14.me"];
 
 const MODES = {
   normal: {
@@ -210,15 +366,15 @@ const MODES = {
           { label: "@KokyuJene",    url: "https://www.youtube.com/@KokyuJene" },
       ]},
       { label: "見ちゃう?", items: [
-          { label: "ツミキapp", url: "https://tsumiki.app/",         msg: "使ってくれたら喜びます" },
+          { label: "ツミキapp", url: "https://tsumiki.app/",          msg: "使ってくれたら喜びます" },
           { label: "ofuse",     url: "https://ofuse.me/superhiko14/", msg: "お手紙やご支援喜びます" },
       ]},
       { label: "雑記", items: [
-          { label: "Blog", url: "https://super-hiko14.me/blog/",         msg: "適当に殴り書きしてます" },
-          { label: "日記",     url: "https://super-hiko14.me/diary/", msg: "更新がよく途絶える1行日記です" },
+          { label: "Blog", url: "https://super-hiko14.me/blog/",  msg: "適当に殴り書きしてます" },
+          { label: "日記", url: "https://super-hiko14.me/diary/", msg: "更新がよく途絶える1行日記です" },
       ]},
       { label: "いろいろ", items: [
-          { label: "About",        url: "/about/",   msg: "どんな人かとか" },
+          { label: "About",        about: true,      msg: "どんな人かとか" },
           { label: "物置場",       url: "/monooki/", msg: "気まぐれに作ったツールたち" },
           { label: "お問い合わせ", url: "/contact/", msg: "ご連絡はこちらから" },
       ]},
@@ -232,125 +388,132 @@ const MODES = {
       { label: "VRChat", url: "https://vrchat.com/home/user/usr_bfd025c8-1383-4436-92cf-f3066255a45e" },
       { label: "X",      url: "https://x.com/hiko14_vrc_" },
       { label: "見ちゃう?", items: [
-          { label: "Booth", url: BOOTH, msg: "よかったらぁ..." },
+          { label: "Booth", url: "https://booth.pm/wish_list_names/8GQTEB5n", msg: "よかったらぁ..." },
       ]},
       { label: "‹ 戻る", goto: "normal", back: true },
     ],
   },
 };
-const BACK_LABEL = "‹ もどる";
-const COPYRIGHT_NAME = "Super Hiko14";
 /* ============================================ */
 
-const stage = document.getElementById("stage");
-const me = document.getElementById("me");
-const sprites = document.getElementById("sprites");
-const plain = document.getElementById("plain");
+const $ = id => document.getElementById(id);
 const rootEl = document.documentElement;
-document.getElementById("year").textContent = new Date().getFullYear();
-document.getElementById("owner").textContent = " " + COPYRIGHT_NAME;
+const hero = $("hero"), stage = $("stage"), me = $("me"), sprites = $("sprites");
+const about = $("about"), aboutTitle = $("aboutTitle"), plain = $("plain");
+const reduceMotion = matchMedia("(prefers-reduced-motion:reduce)");
 
-/* ---------- DOM を作る ---------- */
-// 同じタブで開くサイト（ここに書いたホストは _blank を付けない。それ以外の外部リンクは新しいタブで開く）
-const SAME_TAB_HOSTS = ["super-hiko14.me"];
-const opensInNewTab = u => {
-  if (u.startsWith("mailto:") || u.startsWith("/")) return false;   // このサイトの中のページも同じタブ
-  try { return !SAME_TAB_HOSTS.includes(new URL(u).hostname); }
-  catch (_) { return true; }
-};
-function linkChip(it){
-  const a = document.createElement("a");
-  a.className = "chip"; a.href = it.url; a.textContent = it.label;
-  if (opensInNewTab(it.url)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
-  return a;
-}
-function buttonChip(label, plus){
-  const b = document.createElement("button");
-  b.type = "button"; b.className = "chip"; b.textContent = label;
-  if (plus) {
-    const p = document.createElement("span");
-    p.className = "plus"; p.textContent = "+"; p.setAttribute("aria-hidden","true");
-    b.appendChild(p); b.setAttribute("aria-haspopup","true");
-  }
-  return b;
-}
-function node(content){
-  const n = document.createElement("div");
-  n.className = "node"; n.appendChild(content); stage.appendChild(n);
-  return n;
-}
-function linkNode(it){
-  if (!it.msg) return node(linkChip(it));
-  const pair = document.createElement("div"); pair.className = "pair";
-  const m = document.createElement("span"); m.className = "msg"; m.textContent = it.msg;
-  pair.append(linkChip(it), m);
-  return node(pair);
-}
-
-const built = {};   // モードごとの { root, groups: Map(node → children), groupBack }
-const allNodes = [];
-for (const [key, mode] of Object.entries(MODES)) {
-  const b = built[key] = { root: [], groups: new Map(), groupBack: null };
-  mode.items.forEach(it => {
-    let n;
-    if (it.items) {
-      const btn = buttonChip(it.label, true);
-      n = node(btn);
-      b.groups.set(n, it.items.map(linkNode));
-      btn.addEventListener("click", e => { e.stopPropagation(); if (!busy) { state.group = n; render(); } });
-    } else if (it.goto) {
-      const btn = buttonChip(it.label, false);
-      if (it.back) btn.classList.add("back");
-      n = node(btn);
-      btn.addEventListener("click", e => { e.stopPropagation(); switchMode(it.goto); });
-    } else {
-      n = linkNode(it);
-    }
-    b.root.push(n);
-  });
-  if (b.groups.size) {
-    const bb = buttonChip(BACK_LABEL, false); bb.classList.add("back");
-    b.groupBack = node(bb);
-    bb.addEventListener("click", e => { e.stopPropagation(); if (!busy) { state.group = null; render(); } });
-  }
-  allNodes.push(...b.root, ...[...b.groups.values()].flat(), ...(b.groupBack ? [b.groupBack] : []));
-
-  // 検索・読み上げ用(見えない)
-  const flat = (items) => items.forEach(it => {
-    if (it.items) flat(it.items);
-    else if (it.url) { const a = document.createElement("a"); a.href = it.url; a.textContent = it.label; a.tabIndex = -1; plain.appendChild(a); }
-  });
-  flat(mode.items);
-}
+$("year").textContent = new Date().getFullYear();
+$("owner").textContent = COPYRIGHT_NAME;
 
 /* ---------- 状態 ---------- */
 const state = { mode: "normal", open: false, group: null };
-let busy = false;
+let busy = false;        // モード切り替えのアニメーション中
+let aboutOpen = false;
+
+/* ---------- ボタンを作る ---------- */
+const opensInNewTab = u => {
+  if (u.startsWith("mailto:") || u.startsWith("/")) return false;
+  try { return !SAME_TAB_HOSTS.includes(new URL(u).hostname); }
+  catch (_) { return true; }
+};
+function makeChip(it){
+  if (it.url) {
+    const a = document.createElement("a");
+    a.className = "chip"; a.href = it.url; a.textContent = it.label;
+    if (opensInNewTab(it.url)) { a.target = "_blank"; a.rel = "noopener noreferrer"; }
+    return a;
+  }
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "chip"; b.textContent = it.label;
+  if (it.back) b.classList.add("back");
+  if (it.items) {
+    const p = document.createElement("span");
+    p.className = "plus"; p.textContent = "+"; p.setAttribute("aria-hidden", "true");
+    b.appendChild(p); b.setAttribute("aria-haspopup", "true");
+  }
+  return b;
+}
+
+const allNodes = [];
+const aboutButtons = [];
+const built = {};   // モードごとの { root, groups: Map(node → children), groupBack }
+
+function makeNode(it, b){
+  const chip = makeChip(it);
+  let content = chip;
+  if (it.msg) {
+    content = document.createElement("div"); content.className = "pair";
+    const m = document.createElement("span"); m.className = "msg"; m.textContent = it.msg;
+    content.append(chip, m);
+  }
+  const n = document.createElement("div");
+  n.className = "node"; n.appendChild(content); stage.appendChild(n);
+  allNodes.push(n);
+
+  if (it.items) {
+    b.groups.set(n, it.items.map(child => makeNode(child, b)));
+    chip.addEventListener("click", () => { if (!busy) { state.group = n; render(); } });
+  } else if (it.goto) {
+    chip.addEventListener("click", () => switchMode(it.goto));
+  } else if (it.about) {
+    chip.setAttribute("aria-controls", "about");
+    chip.setAttribute("aria-expanded", "false");
+    aboutButtons.push(chip);
+    chip.addEventListener("click", () => setAbout(!aboutOpen));
+  }
+  return n;
+}
+
+// 検索・読み上げ用(見えない)のリンク一覧
+function addPlainLinks(items){
+  items.forEach(it => {
+    if (it.items) addPlainLinks(it.items);
+    else if (it.url) {
+      const a = document.createElement("a");
+      a.href = it.url; a.textContent = it.label; a.tabIndex = -1;
+      plain.appendChild(a);
+    }
+  });
+}
+
+for (const [key, mode] of Object.entries(MODES)) {
+  const b = built[key] = { root: [], groups: new Map(), groupBack: null };
+  b.root = mode.items.map(it => makeNode(it, b));
+  if (b.groups.size) {
+    b.groupBack = makeNode({ label: BACK_LABEL, back: true }, b);
+    b.groupBack.querySelector(".chip").addEventListener("click", () => {
+      if (!busy) { state.group = null; render(); }
+    });
+  }
+  addPlainLinks(mode.items);
+}
+
+/* ---------- 絵のまわりの楕円に並べる(最初の1画面からはみ出さないよう調整) ---------- */
+const WOBBLE = [1.0, 1.1, 0.98, 1.08, 1.04, 0.96];
+const EDGE = 10, FOOTER_SPACE = 36;
 
 function visibleSet(){
   if (!state.open) return [];
   const b = built[state.mode];
   return state.group ? [...b.groups.get(state.group), b.groupBack] : b.root;
 }
-
-/* ---------- 絵のまわりの楕円に並べる(はみ出さないよう調整) ---------- */
-const WOBBLE = [1.0, 1.1, 0.98, 1.08, 1.04, 0.96];
 function place(set){
   const r = me.getBoundingClientRect();
-  const cx = r.left + r.width/2, cy = r.top + r.height/2;
+  const area = hero.getBoundingClientRect();
+  const cx = r.left + r.width / 2, cy = r.top + r.height / 2;
   const rx = r.width * 0.57, ry = r.height * 0.6;
-  const n = set.length, M = 10, bottomSafe = 36;
+  const n = set.length;
+  const step = 360 / n;
+  const off = (n === 3 || n === 6 || n === 8) ? 0 : 0.5;   // 3・6・8個のときは真上にも置く
   set.forEach((c, i) => {
-    const step = 360 / n;
-    const off = (n === 3 || n === 6 || n === 8) ? 0 : 0.5;       // 3・6個のときは真上にも置く
     const a = (-90 + (i + off) * step) * Math.PI / 180;
     const k = WOBBLE[i % WOBBLE.length];
-    const hw = c.offsetWidth/2, hh = c.offsetHeight/2;
-    const pair = c.querySelector('.pair') ? 1 : 0;
+    const hw = c.offsetWidth / 2, hh = c.offsetHeight / 2;
+    const pair = c.querySelector(".pair") ? 1 : 0;
     let tx = cx + Math.cos(a) * (rx * k + hw * (0.9 + pair * 0.3));
     let ty = cy + Math.sin(a) * (ry * (k + pair * 0.14) + hh * (0.6 + pair * 0.5));
-    tx = Math.min(Math.max(tx, hw + M), innerWidth - hw - M);
-    ty = Math.min(Math.max(ty, hh + M), innerHeight - hh - M - bottomSafe);
+    tx = Math.min(Math.max(tx, area.left + hw + EDGE), area.right - hw - EDGE);
+    ty = Math.min(Math.max(ty, area.top + hh + EDGE), area.bottom - hh - EDGE - FOOTER_SPACE);
     c.style.left = (tx - r.left) + "px";
     c.style.top  = (ty - r.top) + "px";
     c.style.setProperty("--dx", (cx - tx) + "px");
@@ -374,14 +537,14 @@ function back(){
   if (state.group) state.group = null; else state.open = false;
   render();
 }
-me.addEventListener("click", e => {
-  e.stopPropagation();
+me.addEventListener("click", () => {
   if (busy) return;
   hop();
   if (!state.open) { state.open = true; state.group = null; render(); } else back();
 });
-document.addEventListener("click", e => {
-  if (busy || !state.open || e.target.closest(".node")) return;
+// 最初の1画面の、なにもないところを押したらとじる
+hero.addEventListener("click", e => {
+  if (busy || !state.open || e.target.closest(".node, .me")) return;
   state.open = false; state.group = null; render();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") back(); });
@@ -390,15 +553,10 @@ if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => plac
 
 /* ---------- モードの切り替え(背景・絵・ボタンが全部かわる) ---------- */
 function applyTheme(key){
-  const m = MODES[key], t = m.theme;
-  rootEl.style.setProperty("--bg", t.bg);
-  rootEl.style.setProperty("--ink", t.ink);
-  rootEl.style.setProperty("--line", t.line);
-  rootEl.style.setProperty("--paper", t.paper);
-  rootEl.style.setProperty("--hover", t.hover);
+  const m = MODES[key];
+  for (const [name, value] of Object.entries(m.theme)) rootEl.style.setProperty("--" + name, value);
+  $("themeColor").content = m.theme.bg;
   stage.classList.toggle("is-vrc", m.sprite === 1);
-  document.getElementById("s0").alt = m.sprite === 0 ? "Super Hiko14" : "";
-  document.getElementById("s1").alt = m.sprite === 1 ? "Super Hiko14(VRChat)" : "";
 }
 function switchMode(key){
   if (busy || key === state.mode) return;
@@ -413,6 +571,40 @@ function switchMode(key){
     }, 450);
   }, 380);
 }
+
+/* ---------- About をひらく・とじる ---------- */
+function whenBackAtTop(fn){
+  const t0 = performance.now();
+  (function tick(){
+    if (scrollY < 2 || performance.now() - t0 > 1500) fn();
+    else requestAnimationFrame(tick);
+  })();
+}
+function setAbout(open, instant){
+  const behavior = (instant || reduceMotion.matches) ? "auto" : "smooth";
+  if (open === aboutOpen) {
+    if (open) about.scrollIntoView({ behavior, block: "start" });
+    return;
+  }
+  aboutOpen = open;
+  aboutButtons.forEach(b => b.setAttribute("aria-expanded", String(open)));
+  if (open) {
+    about.classList.add("open");
+    history.replaceState(null, "", "#about");
+    about.scrollIntoView({ behavior, block: "start" });
+    aboutTitle.focus({ preventScroll: true });
+  } else {
+    history.replaceState(null, "", location.pathname + location.search);
+    me.focus({ preventScroll: true });
+    // 上までもどってからたたむ(途中でまた開かれたらそのまま)
+    const collapse = () => { if (!aboutOpen) about.classList.remove("open"); };
+    if (behavior === "auto" || scrollY < 2) { scrollTo(0, 0); collapse(); }
+    else { scrollTo({ top: 0, behavior }); whenBackAtTop(collapse); }
+  }
+}
+$("aboutClose").addEventListener("click", () => setAbout(false));
+addEventListener("hashchange", () => setAbout(location.hash === "#about"));
+if (location.hash === "#about") setAbout(true, true);   // /#about で直接ひらける
 </script>
 </body>
 </html>

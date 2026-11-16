@@ -9,3 +9,4 @@ apps/toieba-win/bin/
 apps/toieba-win/obj/
 apps/toieba-win/dist/
 apps/
+.claude/launch.json

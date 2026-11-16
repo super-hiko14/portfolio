@@ -91,21 +91,6 @@ header {
 #q::placeholder { color: var(--ph); font-size: 24px; font-family: var(--sans); }
 .box.inputbox:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 
-/* 予測サジェスト */
-#suggest { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-top: 10px; }
-#suggest:empty { display: none; }
-.sg-chip {
-  font-family: var(--mono); font-size: 12px;
-  background: var(--accent-soft); border: 1px solid transparent; color: var(--accent-ink);
-  border-radius: 999px; padding: 6px 12px; cursor: pointer; font-weight: 600;
-}
-.sg-chip:hover { border-color: var(--accent); }
-.sg-chip .sg-hint { font-family: var(--sans); font-weight: 400; color: var(--sub); margin-left: 6px; }
-.sg-chip:first-child::after {
-  content: "Tab"; font-family: var(--sans); font-weight: 600; font-size: 9.5px; letter-spacing: .04em;
-  margin-left: 8px; padding: 1px 5px; border-radius: 5px; border: 1px solid var(--line); color: var(--sub);
-}
-
 /* ブックマーク開閉トグル */
 #bmToggleWrap { display: flex; justify-content: center; margin-top: 10px; }
 #bmToggle {
@@ -176,7 +161,7 @@ kbd {
   border: 1px solid var(--line); border-bottom-width: 2px; border-radius: 5px;
   padding: 1px 5px; margin-right: 5px; color: var(--sub); background: var(--bg);
 }
-@media (hover: none) { .res-foot, .sg-chip:first-child::after { display: none; } }
+@media (hover: none) { .res-foot { display: none; } }
 
 @media (prefers-reduced-motion: no-preference) {
   .res-inner, .alt, .drawer { animation: rise .14s ease-out; }
@@ -402,7 +387,6 @@ html.app #q { padding: 19px 0; font-size: 22px; flex: 1; min-width: 0; }
 html.app #q::placeholder { font-size: 22px; }
 html.app .hdr-btns { gap: 6px; }
 html.app .icon-btn { background: transparent; }
-html.app #suggest { justify-content: flex-start; margin: 0; padding: 0 22px 14px; }
 html.app #result, html.app #alts, html.app .drawer, html.app #histwrap { margin-top: 0; border-top: 1px solid var(--line); }
 html.app .res-inner { padding: 18px 24px 16px; }
 html.app #alts { gap: 0; }
