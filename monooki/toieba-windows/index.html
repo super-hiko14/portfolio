@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>トイエバ for Windows — Super Hiko14</title>
+<meta name="description" content="どの画面からでも Alt+Space で呼び出せる、トイエバの Windows 版。計算・単位変換・日付・色・パスワード・ToDo・タイマーをひとつの入力欄で。">
+<link rel="canonical" href="https://super-hiko14.com/monooki/toieba-windows/">
+<meta name="theme-color" content="#dcede1">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="/favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Super Hiko14">
+<meta property="og:title" content="トイエバ for Windows — Super Hiko14">
+<meta property="og:description" content="どの画面からでも Alt+Space で呼び出せる、トイエバの Windows 版。">
+<meta property="og:url" content="https://super-hiko14.com/monooki/toieba-windows/">
+<meta property="og:image" content="https://super-hiko14.com/monooki/toieba-windows/icon.png">
+<meta name="twitter:card" content="summary">
+<link rel="stylesheet" href="/sozai/site.css">
+<style>
+.head img.app{image-rendering:auto}
+.dl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:14px}
+.dl .chip{font-size:20px;padding:calc(.45rem + var(--p)) calc(1.3rem + var(--p))}
+.dl small{color:var(--line);font-size:13px;line-height:1.6}
+.steps{margin:.2em 0 0;padding:0;list-style:none;counter-reset:s}
+.steps li{position:relative;padding-left:2.2em}
+.steps li + li{margin-top:.7em}
+.steps li::before{
+  counter-increment:s;content:counter(s);
+  position:absolute;left:0;top:.15em;width:1.55em;height:1.55em;
+  display:grid;place-items:center;background:var(--line);color:var(--paper);font-size:13px;line-height:1;
+}
+.steps small{display:block;color:var(--line);font-size:13px;line-height:1.7}
+kbd{font-family:inherit;font-size:.9em;padding:0 .35em;background:var(--hover);box-shadow:inset 0 -2px 0 var(--soft)}
+.keys{display:grid;grid-template-columns:auto 1fr;gap:.35em 1em;margin:.3em 0 0}
+.keys dt{white-space:nowrap}
+.keys dd{margin:0;color:var(--line)}
+.hash{font-size:11px;color:var(--line);overflow-wrap:anywhere}
+.log dt{font-size:16px}
+.log dd{margin:.1em 0 .6em;color:var(--line)}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="top"><a class="chip back" href="/monooki/">‹ 物置場</a></div>
+
+  <header class="head">
+    <img class="app" src="icon.png" alt="" width="72" height="72">
+    <div>
+      <p class="eyebrow">super-hiko14.com/monooki/toieba-windows</p>
+      <h1>トイエバ for Windows</h1>
+    </div>
+  </header>
+
+  <section class="card">
+    <p class="lead">どの画面からでも <kbd>Alt</kbd>+<kbd>Space</kbd> で呼び出せる、<a href="/monooki/toieba/">トイエバ</a> の Windows 版です。計算・単位変換・日付・色・パスワード・ToDo・タイマーを、ひとつの入力欄で。</p>
+    <div class="dl">
+      <a class="chip" id="dl" href="Toieba.exe" download>ダウンロード ›</a>
+      <small><span id="ver">v1.1.0</span> · 1.4 MB · Windows 10 / 11 (64 ビット)</small>
+    </div>
+  </section>
+
+  <h2 class="section-title">インストール</h2>
+  <section class="card">
+    <ol class="steps">
+      <li>ダウンロードした <code>Toieba.exe</code> を開く
+        <small>「Windows によって PC が保護されました」と出たら、「詳細情報」→「実行」を押してください (コード署名をしていないため表示されます)。</small></li>
+      <li>「インストール」を押す
+        <small>管理者権限はいりません。「Windows の起動時に開始する」をオンにしておくと、パソコンをつけたらすぐ使えます。</small></li>
+      <li><kbd>Alt</kbd>+<kbd>Space</kbd> で呼び出す
+        <small>ほかのアプリがこのキーを使っているときは、自動で別のキーに切り替えて知らせます。キーはトレイのアイコン →「設定」でいつでも変えられます。</small></li>
+    </ol>
+    <p class="note">「.NET Desktop Runtime が必要です」と出たら、案内に従ってインストールしてください (<a href="https://dotnet.microsoft.com/download/dotnet/10.0" target="_blank" rel="noopener">.NET 10 のダウンロード</a> → 「.NET デスクトップ ランタイム」の x64)。表示には Windows に標準で入っている WebView2 を使います。</p>
+  </section>
+
+  <h2 class="section-title">使い方</h2>
+  <section class="card">
+    <dl class="keys">
+      <dt><kbd>Alt</kbd>+<kbd>Space</kbd></dt><dd>出す / しまう</dd>
+      <dt><kbd>Enter</kbd></dt><dd>結果をコピーして閉じる (ToDo の追加などは確定)</dd>
+      <dt><kbd>Shift</kbd>+<kbd>Enter</kbd></dt><dd>パスワードなどを作り直す</dd>
+      <dt><kbd>Tab</kbd></dt><dd>候補を入れる / 別の解釈に切り替える</dd>
+      <dt><kbd>Esc</kbd></dt><dd>入力を消す → もう一度で閉じる</dd>
+    </dl>
+    <p class="note">タイマーが終わると、閉じていても通知と音で知らせます。テーマや言語は入力欄の歯車 (または「設定」と入力) から。中身はブラウザ版と同じページなので、ブラウザ版を更新するとアプリも自動で新しくなります。</p>
+  </section>
+
+  <h2 class="section-title">アンインストール</h2>
+  <section class="card">
+    <p>Windows の「設定」→「アプリ」→「インストールされているアプリ」から「トイエバ」を選んで、アンインストールしてください。設定や ToDo などのデータも消すか選べます。</p>
+  </section>
+
+  <h2 class="section-title">データについて</h2>
+  <section class="card">
+    <ul class="summary">
+      <li>アプリの中では <code>super-hiko14.com</code> のトイエバのページを表示しています。</li>
+      <li>入力した内容・ToDo・ブックマークは、このパソコンの中だけに保存されます (ブラウザ版とは別)。</li>
+      <li>新しいバージョンがあるかどうか、1 日に 1 回このページの情報を確認します (設定でオフにできます)。</li>
+    </ul>
+    <p class="note">くわしくは <a href="/privacypolicy/">プライバシーポリシー</a>・<a href="/terms/">利用規約</a> をご覧ください。無料・無保証で配布しています。</p>
+  </section>
+
+  <h2 class="section-title">更新履歴</h2>
+  <section class="card">
+    <dl class="log">
+      <dt>v1.1.0 <small class="muted">2026-11-19</small></dt>
+      <dd>公開しました。セットアップ画面・設定画面・更新の確認を追加。</dd>
+    </dl>
+    <p class="hash">SHA-256: 3849efbe101db51705eae17acd3654f82443b9493523121f24961cc5db1a3e73</p>
+  </section>
+</div>
+
+<footer class="foot">
+  <span>&copy; 2026 Super Hiko14</span>
+  <a href="/terms/">利用規約</a>
+  <a href="/privacypolicy/">プライバシーポリシー</a>
+</footer>
+</body>
+</html>

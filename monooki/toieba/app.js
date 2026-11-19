@@ -36,6 +36,7 @@ const STR = {
     aCheck: '完了切り替え', aDelete: '削除', aRestart: 'リスタート',
     hintNote: 'たとえばこんな入力ができる (クリックで試す):',
     noteApp: k => k + ' で呼び出し・Esc で閉じる。終了はトレイアイコンから',
+    appSettings: 'アプリの設定 (呼び出しキー・起動時に開始)', getWindows: 'Windows 版 — どの画面からでも Alt+Space で呼び出せます',
   },
   en: {
     title: 'Toieba — type it, get it', mark: 'TOIEBA', placeholder: 'e.g. 3980 + 10%',
@@ -53,6 +54,7 @@ const STR = {
     aCheck: 'Toggle done', aDelete: 'Delete', aRestart: 'Restart',
     hintNote: 'Things you can type (click to try):',
     noteApp: k => k + ' to summon · Esc to close. Quit from the tray icon',
+    appSettings: 'App settings (hotkey, start with Windows)', getWindows: 'Windows app — summon it anywhere with Alt+Space',
   },
 };
 // 使い方の例
@@ -112,9 +114,26 @@ function applyI18n() {
   for (const el of document.querySelectorAll('[data-i18n]')) el.textContent = t(el.dataset.i18n);
   for (const el of document.querySelectorAll('[data-i18n-ph]')) el.placeholder = t(el.dataset.i18nPh);
   for (const el of document.querySelectorAll('[data-i18n-title]')) { el.title = t(el.dataset.i18nTitle); el.setAttribute('aria-label', el.title); }
-  $('#setNote').textContent = isApp ? t('noteApp')(hostInfo.hotkey) : '';
+  renderSetNote();
   buildHints();
   renderBookmarks();
+}
+// 設定のいちばん下のひとこと。アプリの中ならアプリの設定へ、ブラウザなら Windows 版へ案内する
+function renderSetNote() {
+  const note = $('#setNote');
+  note.textContent = '';
+  if (isApp) {
+    note.append(t('noteApp')(hostInfo.hotkey));
+    if (!hostInfo.version) return;   // 古いアプリは「アプリの設定」を開けない
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'set-link'; b.textContent = t('appSettings') + ' ›';
+    b.addEventListener('click', () => post({ type: 'appSettings' }));
+    note.append(document.createElement('br'), b);
+  } else if (/Windows/.test(navigator.userAgent)) {
+    const a = document.createElement('a');
+    a.className = 'set-link'; a.href = '/monooki/toieba-windows/'; a.textContent = t('getWindows') + ' ›';
+    note.append(a);
+  }
 }
 darkMq.addEventListener('change', () => { if (settings.theme === 'auto') applySettings(); });
 
