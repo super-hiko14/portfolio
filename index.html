@@ -215,6 +215,8 @@ body{
 /* ---------- 4. まわりに浮かぶボタン ---------- */
 .node{
   position:absolute;left:50%;top:50%;
+  z-index:2;   /* 絵(.bob)の透明な四角より上に置く。下だとボタンが押せない・ホバーしない */
+  pointer-events:none;   /* 消えていく途中のボタンが、新しいボタンへのクリックを横取りしないように */
   display:flex;justify-content:center;width:max-content;
   transform:translate(-50%,-50%) translate(var(--dx,0px),var(--dy,0px)) scale(.3);
   opacity:0;visibility:hidden;
@@ -225,7 +227,7 @@ body{
 }
 .node.show{
   transform:translate(-50%,-50%);
-  opacity:1;visibility:visible;
+  opacity:1;visibility:visible;pointer-events:auto;
   transition:
     transform .7s cubic-bezier(.16,.9,.3,1) calc(var(--i) * 90ms),
     opacity .6s ease-out calc(var(--i) * 90ms),
@@ -234,6 +236,9 @@ body{
 
 /* ---------- 5. About(押すと下にひろがる) ---------- */
 .js .about:not(.open){display:none}
+/* About がとじている間は、最初の1画面だけ。スクロールもひっぱり(バウンド)もさせない
+   (iPhone の Safari はツールバーの出し入れで高さが変わり、少し動いてしまうことがある) */
+html.js:not(.about-open),html.js:not(.about-open) body{overflow:hidden;overscroll-behavior:none}
 .about{font-size:15px;line-height:1.8}
 .about-body{
   width:100%;max-width:760px;margin:0 auto;
@@ -378,8 +383,10 @@ footer{
   padding:0 1rem calc(.9rem + var(--safe-bottom));
   text-align:center;font-size:16px;color:var(--line);
   transition:color var(--swap-time) ease;
+  pointer-events:none;   /* 画面幅いっぱいの透明な帯が、下のほうのボタンをふさがないように */
 }
 footer p{margin:0}
+footer a{pointer-events:auto}
 footer .legal a{color:inherit;text-decoration:none;margin-left:1em;font-size:14px}
 footer .legal a:hover,footer .legal a:focus-visible{text-decoration:underline;text-underline-offset:3px}
 
@@ -790,6 +797,7 @@ function setAbout(open, instant){
   aboutOpen = open;
   aboutButtons.forEach(b => b.setAttribute("aria-expanded", String(open)));
   if (open) {
+    rootEl.classList.add("about-open");
     about.classList.add("open");
     history.replaceState(null, "", "#about");
     about.scrollIntoView({ behavior, block: "start" });
@@ -798,7 +806,7 @@ function setAbout(open, instant){
     history.replaceState(null, "", location.pathname + location.search);
     me.focus({ preventScroll: true });
     // 上までもどってからたたむ(途中でまた開かれたらそのまま)
-    const collapse = () => { if (!aboutOpen) about.classList.remove("open"); };
+    const collapse = () => { if (!aboutOpen) { about.classList.remove("open"); rootEl.classList.remove("about-open"); } };
     if (behavior === "auto" || scrollY < 2) { scrollTo(0, 0); collapse(); }
     else { scrollTo({ top: 0, behavior }); whenBackAtTop(collapse); }
   }
